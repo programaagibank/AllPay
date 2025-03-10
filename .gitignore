@@ -1,0 +1,46 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Build directories
+/build/
+/target/
+
+# Arquivos de compilação do Java
+*.class
+*.log
+
+# Arquivos temporários e de cache
+*.swp
+*.swo
+*~
+
+# Arquivos do Maven (caso use Maven)
+.mvn/
+target/
+
+# Arquivos do Gradle (caso use Gradle)
+.gradle/
+build/
+
+# Diretórios de testes
+test-classes/
+test-output/
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de configuração do sistema
+.vscode/
+
+# Arquivos de configuração de compilação do Java
+*.jar
+*.war
+*.ear
+
+# Arquivos de configuração do JDK
+hs_err_pid*
