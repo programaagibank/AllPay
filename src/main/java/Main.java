@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class Main {
-    static final String URL = "URL AQUI";
+    static final String URL = System.getenv("DB_URL");
     static final String USER = System.getenv("DB_USER");
     static final String PASSWORD = System.getenv("DB_PASSWORD");
 
