@@ -31,7 +31,7 @@ public class Main {
 //            ---------
 
             //itera e printa cada linha da tabela
-            //result.next vem como um ponteiro para cada linha da caoluta
+            //result.next vem como um ponteiro para cada linha da coluna
             while (resultSet.next()) {
                 //pega as colunas
                 String id = resultSet.getString("id_usuario");
