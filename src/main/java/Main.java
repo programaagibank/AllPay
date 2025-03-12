@@ -1,6 +1,7 @@
 import com.allpay.projeto.controller.UserController;
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
+import com.allpay.projeto.model.ModelFaturaDAO;
 import com.allpay.projeto.model.PaymentModelDAO;
 import com.allpay.projeto.view.FrontEntrada;
 
@@ -20,8 +21,8 @@ public class Main {
 //        GerarComprovantePagamento(1);
 //        PaymentModelDAO.GerarComprovantePagamento();
 //        FrontEntrada.main(args);
-        new UserController().select();
-
+//        new UserController().select();
+        new ModelFaturaDAO().buscarFaturas();
     }
 
     public static void GerarComprovantePagamento(int VarIdPagamento) {
@@ -89,5 +90,3 @@ public class Main {
         }
     }
 }
-
-
