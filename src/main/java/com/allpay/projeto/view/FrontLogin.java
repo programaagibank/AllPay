@@ -1,3 +1,5 @@
+package com.allpay.projeto.view;
+
 public class FrontLogin {
     public static void main(String[] args) {
 

@@ -1,3 +1,5 @@
+package com.allpay.projeto.view;
+
 public class FrontSignUp {
     public static void main(String[] args) {
         System.out.println("╔════════════════════════════════════╗");
