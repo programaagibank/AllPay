@@ -1,53 +1,93 @@
+import com.allpay.projeto.controller.UserController;
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
+import com.allpay.projeto.model.PaymentModelDAO;
+import com.allpay.projeto.view.FrontEntrada;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class Main {
     static final String URL = System.getenv("DB_URL");
     static final String USER = System.getenv("DB_USER");
     static final String PASSWORD = System.getenv("DB_PASSWORD");
+    public static final String RESET = "\u001B[0m";
+    public static final String GREEN = "\u001B[32m";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+//        GerarComprovantePagamento(1);
+//        PaymentModelDAO.GerarComprovantePagamento();
+//        FrontEntrada.main(args);
+        new UserController().select();
 
+    }
+
+    public static void GerarComprovantePagamento(int VarIdPagamento) {
         try {
             DataBaseConnection dbConnect = new MySQLDataBaseConnection(URL, USER, PASSWORD);
-
             dbConnect.connect();
-            System.out.println("Conexao feita");
-            //sql teste
-            String sql = "SELECT id_usuario, nome_usuario FROM usuario";
-            //forca o uso do banco allpay
             dbConnect.getConnection().createStatement().execute("USE allpay");
-            //prepare e executa o sql
+
+            int idPagamento = VarIdPagamento;
+
+            String sql = """
+                SELECT 
+                    p.valor_pago, 
+                    p.data_pagamento, 
+                    p.tipo_pagamento, 
+                    u.nome_usuario, 
+                    f.nome_recebedor, 
+                    f.descricao, 
+                    f.data_vencimento,
+                    ib.nome_instituicao
+                FROM pagamento p
+                JOIN fatura f ON p.id_fatura = f.id_fatura
+                JOIN usuario u ON f.id_usuario = u.id_usuario
+                JOIN conta c ON u.id_usuario = c.id_usuario
+                JOIN instituicao_bancaria ib ON c.id_instituicao = ib.id_instituicao
+                WHERE p.id_pagamento = ?;
+            """;
+
             PreparedStatement statement = dbConnect.getConnection().prepareStatement(sql);
+            statement.setInt(1, idPagamento);
             ResultSet resultSet = statement.executeQuery();
 
-//            --------
-//            teste
-//            Map<String, Object> row = getRow(resultSet);
-//            System.out.println("ID: " + row.get("id") + ", Name: " + row.get("name"));
-//            ---------
+            if (resultSet.next()) {
+                double valorPago = resultSet.getDouble("valor_pago");
+                String dataPagamento = resultSet.getString("data_pagamento");
+                String tipoPagamento = resultSet.getString("tipo_pagamento");
+                String nomeUsuario = resultSet.getString("nome_usuario");
+                String nomeRecebedor = resultSet.getString("nome_recebedor");
+                String descricao = resultSet.getString("descricao");
+                String dataVencimento = resultSet.getString("data_vencimento");
+                String nomeInstituicao = resultSet.getString("nome_instituicao");
 
-            //itera e printa cada linha da tabela
-            //result.next vem como um ponteiro para cada linha da coluna
-            while (resultSet.next()) {
-                //pega as colunas
-                String id = resultSet.getString("id_usuario");
-                String nome = resultSet.getString("nome_usuario");
-
-                // Imprimindo os dados
-                System.out.println(id + " - " + nome);
+                System.out.println("═════ COMPROVANTE DE PAGAMENTO ═════");
+                System.out.println("ID do Pagamento: " + idPagamento);
+                System.out.println("Pago com: " + nomeInstituicao);
+                System.out.println("════════════════════════════════════");
+                System.out.println("Nome do Usuário: " + nomeUsuario);
+                System.out.println("Nome do Recebedor: " + nomeRecebedor);
+                System.out.println("Descrição: " + descricao);
+                System.out.println("════════════════════════════════════");
+                System.out.println("Valor Pago: R$ " + valorPago);
+                System.out.println("Tipo de Pagamento: " + tipoPagamento);
+                System.out.println("Data de Vencimento: " + dataVencimento);
+                System.out.println("Data do Pagamento: " + dataPagamento);
+                System.out.println("════════════════════════════════════");
+            } else {
+                System.out.println("Pagamento não encontrado para o ID: " + idPagamento);
             }
 
             resultSet.close();
             statement.close();
             dbConnect.closeConnection();
-            System.out.println("Conexao finalizada");
         } catch (Exception e) {
-            //mostra no console onde que deu o erro com base na execuçao
             e.printStackTrace();
         }
     }
 }
+
+
