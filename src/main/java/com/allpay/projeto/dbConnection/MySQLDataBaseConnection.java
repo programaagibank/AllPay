@@ -11,6 +11,12 @@ public class MySQLDataBaseConnection implements DataBaseConnection {
   private String url;
   private String user;
   private String password;
+
+  public MySQLDataBaseConnection() {
+    this.url = System.getenv("DB_URL");
+    this.user = System.getenv("DB_USER");
+    this.password = System.getenv("DB_PASSWORD");
+  }
   public MySQLDataBaseConnection(String url, String user, String password) {
     this.url = url;
     this.user = user;
