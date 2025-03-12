@@ -12,33 +12,35 @@ public class UserModelDAO implements ModelDAO {
     private DataBaseConnection dbConnect;
     @Override
     public ResultSet select() {
-        ResultSet resultSet = null;
         try {
             this.dbConnect = new MySQLDataBaseConnection();
-
             this.dbConnect.connect();
-            System.out.println("Conexao feita");
+
             //sql teste
             String sql = "SELECT id_usuario, nome_usuario FROM usuario";
             //forca o uso do banco allpay
             dbConnect.getConnection().createStatement().execute("USE allpay");
             //prepare e executa o sql
             PreparedStatement statement = this.dbConnect.getConnection().prepareStatement(sql);
-            resultSet = statement.executeQuery();
 
-            //itera e printa cada linha da tabela
-            //result.next vem como um ponteiro para cada linha da coluna
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                //pega as colunas
+                String id = resultSet.getString("id_usuario");
+                String nome = resultSet.getString("nome_usuario");
 
+                // Imprimindo os dados
+                System.out.println(id + " - " + nome);
+            }
             resultSet.close();
             statement.close();
-            this.dbConnect.closeConnection();
-//            System.out.println("Conexao finalizada");
-//            return resultSet;
+            dbConnect.connect();
+
         } catch (Exception e) {
             //mostra no console onde que deu o erro com base na execuçao
-            System.out.println("Erro no SQL: " + e.getMessage());
+            System.out.println("Erro: " + e.getMessage());
             e.printStackTrace();
         }
-        return resultSet;
+        return null;
     }
 }
