@@ -1,5 +1,6 @@
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
+import com.allpay.projeto.model.ModelFaturaDAO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +13,11 @@ public class Main {
     public static void main(String[] args) {
 
         try {
+
+            ModelFaturaDAO consulta = new ModelFaturaDAO();
+
+            consulta.buscarFaturas();
+
             DataBaseConnection dbConnect = new MySQLDataBaseConnection(URL, USER, PASSWORD);
 
             dbConnect.connect();
