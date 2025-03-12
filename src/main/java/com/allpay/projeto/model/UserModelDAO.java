@@ -12,7 +12,7 @@ public class UserModelDAO implements ModelDAO {
     private DataBaseConnection dbConnect;
     @Override
     public ResultSet select() {
-
+        ResultSet resultSet = null;
         try {
             this.dbConnect = new MySQLDataBaseConnection();
 
@@ -24,34 +24,21 @@ public class UserModelDAO implements ModelDAO {
             dbConnect.getConnection().createStatement().execute("USE allpay");
             //prepare e executa o sql
             PreparedStatement statement = this.dbConnect.getConnection().prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-
-//            --------
-//            teste
-//            Map<String, Object> row = getRow(resultSet);
-//            System.out.println("ID: " + row.get("id") + ", Name: " + row.get("name"));
-//            ---------
+            resultSet = statement.executeQuery();
 
             //itera e printa cada linha da tabela
             //result.next vem como um ponteiro para cada linha da coluna
-            while (resultSet.next()) {
-                //pega as colunas
-                String id = resultSet.getString("id_usuario");
-                String nome = resultSet.getString("nome_usuario");
-
-                // Imprimindo os dados
-                System.out.println(id + " - " + nome);
-            }
 
             resultSet.close();
             statement.close();
             this.dbConnect.closeConnection();
-            System.out.println("Conexao finalizada");
-            return resultSet;
+//            System.out.println("Conexao finalizada");
+//            return resultSet;
         } catch (Exception e) {
             //mostra no console onde que deu o erro com base na execuçao
+            System.out.println("Erro no SQL: " + e.getMessage());
             e.printStackTrace();
-            return null;
         }
+        return resultSet;
     }
 }

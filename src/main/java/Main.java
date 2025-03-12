@@ -1,5 +1,7 @@
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
+import com.allpay.projeto.model.PaymentModelDAO;
+import com.allpay.projeto.view.FrontEntrada;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,8 +16,10 @@ public class Main {
     public static final String GREEN = "\u001B[32m";
 
     public static void main(String[] args) throws InterruptedException {
-        AcessoInicial();
-        GerarComprovantePagamento(1);
+//        GerarComprovantePagamento(1);
+//        PaymentModelDAO.GerarComprovantePagamento();
+//        FrontEntrada.main(args);
+
     }
 
     public static void GerarComprovantePagamento(int VarIdPagamento) {
@@ -82,93 +86,6 @@ public class Main {
             e.printStackTrace();
         }
     }
-
-    public static void AcessoInicial() throws InterruptedException {
-
-        System.out.println(GREEN + "████████████▓   ▓█   ▒█░  ▒█████████████████████████");
-        System.out.println("████████████▒   ▒█    █      ███████████████████████");
-        System.out.println("██         ▓▒   ▒█    ███    ▓▓         ▒▒   ░█    ▓");
-        System.out.println("█    ░░    ▓▒   ▒█    █      █    ██░   ▒█▒       ▒█");
-        System.out.println("▓   ░██░   ▓▒   ░█    █   ░███    ▒▓    ▒██▒     ▒██");
-        System.out.println("█░         ▓▒   ░█    █████████         ▒███░   ░███");
-        System.out.println("████▓▓▓███████████████████████████████████     ░████");
-        System.out.println("██████████████████████████████████████████   ▒██████" + RESET);
-
-        System.out.println("\nCarregando...");
-        for (int i = 0; i <= 20; i++) {
-            int progress = (i * 100) / 20;
-            System.out.print(GREEN + "\r[" + "█".repeat(i) + " ".repeat(20 - i) + "] " + progress + "%");
-            Thread.sleep(200);
-        }
-        System.out.println(RESET + "\n✅ Carregamento concluído!\n");
-
-        Scanner sc = new Scanner(System.in);
-        int opcaoEntrada = 0;
-
-        do {
-            try {
-
-                System.out.println(GREEN + "╔══════════════════╗");
-                System.out.println("║ 1. Login         ║");
-                System.out.println("║ 2. Cadastro      ║");
-                System.out.println("║ 3. Sair          ║");
-                System.out.println("╚══════════════════╝"+ RESET);
-                System.out.print("Escolha uma opção: ");
-
-                opcaoEntrada = sc.nextInt();
-
-                if (opcaoEntrada == 1) {
-                    System.out.println("Você escolheu Login. Vamos te redirecionar.");
-                    Login();
-                } else if (opcaoEntrada == 2) {
-                    System.out.println("Você escolheu Cadastro. Vamos te redirecionar.");
-                    SignUp();
-                } else if (opcaoEntrada == 3) {
-                    System.out.println("Você escolheu Sair. Obrigado por usar o allPay.");
-                } else {
-                    System.out.println("Opção inválida! Tente novamente.");
-                }
-
-            } catch (InputMismatchException e) {
-                System.out.println("Erro: Entrada inválida! Digite um número inteiro.");
-                sc.nextLine();
-            } catch (Exception e) {
-                System.out.println("Ocorreu um erro inesperado: " + e.getMessage());
-                sc.nextLine();
-            }
-
-        } while (opcaoEntrada != 3);
-
-        sc.close();
-    }
-
-    public static void Login() {
-
-        System.out.println("╔════════════════════════════════════╗");
-        System.out.println("║               Login                ║");
-        System.out.println("╚════════════════════════════════════╝");
-        System.out.println();
-
-        System.out.println("Digite o seu CPF ou CNPJ:");
-
-        System.out.println("Digite sua senha:");
-    }
-
-    public static void SignUp() {
-        System.out.println("╔════════════════════════════════════╗");
-        System.out.println("║               Cadastro             ║");
-        System.out.println("╚════════════════════════════════════╝");
-        System.out.println();
-
-        System.out.println("Digite o seu CPF ou CNPJ:");
-
-        System.out.println("Digite o seu e-mail:");
-
-        System.out.println("Digite sua senha:");
-
-    }
-
-
 }
 
 
