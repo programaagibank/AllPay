@@ -70,7 +70,7 @@ public class ModelFaturaDAO {
                 String status_fatura = rs.getString("status_fatura");
                 String descricao = rs.getString("descricao");
 
-                //System.out.println(id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
+                System.out.println(id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
             }
         }
         catch (SQLException e) {

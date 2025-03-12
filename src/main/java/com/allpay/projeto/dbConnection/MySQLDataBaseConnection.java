@@ -23,13 +23,6 @@ public class MySQLDataBaseConnection implements DataBaseConnection {
     this.password = password;
   }
 
-  public MySQLDataBaseConnection() {
-
-    this.url = System.getenv("DB_URL");
-    this.user = System.getenv("DB_USER");
-    this.password = System.getenv("DB_PASSWORD");
-  }
-
   @Override
   public void connect() throws SQLException {
     this.connection = DriverManager.getConnection(url, user, password);
