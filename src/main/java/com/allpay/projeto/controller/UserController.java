@@ -56,4 +56,9 @@ public class UserController {
 
     }
 
+    public boolean autenticar(String id_usuario, String senha_acesso) {
+
+        return userModel.selectById(id_usuario,senha_acesso);
+
+    }
 }

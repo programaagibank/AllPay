@@ -1,6 +1,5 @@
 package com.allpay.projeto.model;
 
-import com.allpay.projeto.DatabaseConnection2;
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
 import com.allpay.projeto.interfaces.ModelDAO;
@@ -49,11 +48,11 @@ public class UserModelDAO implements ModelDAO {
         String sql = "INSERT INTO usuario (id_usuario, nome_usuario, senha_acesso, email) VALUES (?, ?, ?, ?)";
         String use = "USE allpay;";
         try {
-            DatabaseConnection2 conn = new DatabaseConnection2();
+            MySQLDataBaseConnection conn = new MySQLDataBaseConnection();
             conn.connect();
-            conn.getConn().createStatement().execute(use);
+            conn.getConnection().createStatement().execute(use);
 
-            PreparedStatement stmt = conn.getConn().prepareStatement(sql);
+            PreparedStatement stmt = conn.getConnection().prepareStatement(sql);
 
             stmt.setString(1, id_usuario);
             stmt.setString(2, nome_usuario);
@@ -67,5 +66,42 @@ public class UserModelDAO implements ModelDAO {
             System.out.println("Erro ao salvar usuário: " + e.getMessage());
         }
     }
+
+    public Boolean selectById(String id, String senha){
+        String sql = "SELECT * FROM usuario WHERE id_usuario = ? AND senha_acesso = ?";
+        try {
+            MySQLDataBaseConnection conn = new MySQLDataBaseConnection();
+            conn.connect();
+
+            PreparedStatement stmt = conn.getConnection().prepareStatement(sql);
+            stmt.setString(1, id);
+            stmt.setString(2, senha);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                System.out.println("Login bem-sucedido!");
+                rs.close();
+                stmt.close();
+                conn.closeConnection();
+                return true;
+            } else {
+                System.out.println("Credenciais inválidas. Tente novamente.");
+                rs.close();
+                stmt.close();
+                conn.closeConnection();
+                return false;
+            }
+
+
+
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao autenticar usuário: " + e.getMessage());
+            return false;
+        }
+
+    }
 }
+
 
