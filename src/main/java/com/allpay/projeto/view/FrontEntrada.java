@@ -38,7 +38,6 @@ import java.util.Scanner;
                     System.out.println("║ 3. Sair          ║");
                     System.out.println("╚══════════════════╝"+ RESET);
                     System.out.print("Escolha uma opção: ");
-
                     opcaoEntrada = sc.nextInt();
 
                     if (opcaoEntrada == 1) {

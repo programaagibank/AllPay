@@ -1,5 +1,6 @@
 package com.allpay.projeto.model;
 
+import com.allpay.projeto.DatabaseConnection2;
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
 import com.allpay.projeto.interfaces.ModelDAO;
@@ -13,15 +14,15 @@ public class UserModelDAO implements ModelDAO {
     @Override
     public ResultSet select() {
         try {
-            this.dbConnect = new MySQLDataBaseConnection();
-            this.dbConnect.connect();
+            dbConnect = new MySQLDataBaseConnection();
+            dbConnect.connect();
 
             //sql teste
             String sql = "SELECT id_usuario, nome_usuario FROM usuario";
             //forca o uso do banco allpay
             dbConnect.getConnection().createStatement().execute("USE allpay");
             //prepare e executa o sql
-            PreparedStatement statement = this.dbConnect.getConnection().prepareStatement(sql);
+            PreparedStatement statement = dbConnect.getConnection().prepareStatement(sql);
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -43,4 +44,28 @@ public class UserModelDAO implements ModelDAO {
         }
         return null;
     }
+
+    public void insert(String id_usuario, String nome_usuario, String senha_acesso, String email){
+        String sql = "INSERT INTO usuario (id_usuario, nome_usuario, senha_acesso, email) VALUES (?, ?, ?, ?)";
+        String use = "USE allpay;";
+        try {
+            DatabaseConnection2 conn = new DatabaseConnection2();
+            conn.connect();
+            conn.getConn().createStatement().execute(use);
+
+            PreparedStatement stmt = conn.getConn().prepareStatement(sql);
+
+            stmt.setString(1, id_usuario);
+            stmt.setString(2, nome_usuario);
+            stmt.setString(3, senha_acesso);
+            stmt.setString(4, email);
+
+            stmt.executeUpdate();
+            System.out.println("Usuário salvo com sucesso!");
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao salvar usuário: " + e.getMessage());
+        }
+    }
 }
+
