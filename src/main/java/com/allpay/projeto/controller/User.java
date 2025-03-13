@@ -1,9 +1,6 @@
-package com.allpay.projeto;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+package com.allpay.projeto.controller;
 
-class User {
+public class User {
     private String nome_usuario;
     private String id_usuario;
     private String senha_acesso;
@@ -30,26 +27,26 @@ class User {
         System.out.println("Email: " + email);
     }
 
-    public void salvarNoBanco() {
-        String sql = "INSERT INTO usuario (id_usuario, nome_usuario, senha_acesso, email) VALUES (?, ?, ?, ?)";
-        String use = "USE allpay;";
-        try {
-            DatabaseConnection2 conn = new DatabaseConnection2();
-            conn.connect();
-            conn.getConn().createStatement().execute(use);
-
-            PreparedStatement stmt = conn.getConn().prepareStatement(sql);
-
-            stmt.setString(1, this.id_usuario);
-            stmt.setString(2, this.nome_usuario);
-            stmt.setString(3, this.senha_acesso);
-            stmt.setString(4, this.email);
-
-            stmt.executeUpdate();
-            System.out.println("Usuário salvo com sucesso!");
-
-        } catch (SQLException e) {
-            System.out.println("Erro ao salvar usuário: " + e.getMessage());
-        }
-    }
+//    public void salvarNoBanco() {
+//        String sql = "INSERT INTO usuario (id_usuario, nome_usuario, senha_acesso, email) VALUES (?, ?, ?, ?)";
+//        String use = "USE allpay;";
+//        try {
+//            DatabaseConnection2 conn = new DatabaseConnection2();
+//            conn.connect();
+//            conn.getConn().createStatement().execute(use);
+//
+//            PreparedStatement stmt = conn.getConn().prepareStatement(sql);
+//
+//            stmt.setString(1, this.id_usuario);
+//            stmt.setString(2, this.nome_usuario);
+//            stmt.setString(3, this.senha_acesso);
+//            stmt.setString(4, this.email);
+//
+//            stmt.executeUpdate();
+//            System.out.println("Usuário salvo com sucesso!");
+//
+//        } catch (SQLException e) {
+//            System.out.println("Erro ao salvar usuário: " + e.getMessage());
+//        }
+//    }
     }
