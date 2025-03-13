@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class DatabaseConnection2 {
     Connection conn;
-    private String URL;
-    private String USER;
-    private String PASSWORD;
+    private final String URL;
+    private final String USER;
+    private final String PASSWORD;
     public DatabaseConnection2(){
         this.URL = System.getenv("DB_URL");
         this.USER = System.getenv("DB_USER");
