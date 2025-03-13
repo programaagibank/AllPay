@@ -11,6 +11,11 @@ public class PaymentModelDAO {
   static final String USER = System.getenv("DB_USER");
   static final String PASSWORD = System.getenv("DB_PASSWORD");
 
+  public void realizarPagamento() {
+
+
+  }
+
   public static void GerarComprovantePagamento() {
     try {
       DataBaseConnection dbConnect = new MySQLDataBaseConnection(URL, USER, PASSWORD);
