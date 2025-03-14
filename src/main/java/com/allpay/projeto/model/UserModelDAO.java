@@ -59,6 +59,7 @@ public class UserModelDAO implements ModelDAO {
             stmt.setString(3, senha_acesso);
             stmt.setString(4, email);
 
+
             stmt.executeUpdate();
             System.out.println("Usuário salvo com sucesso!");
 
