@@ -18,6 +18,7 @@ public class FrontLogin {
         System.out.println("Digite sua senha:");
         String senha_acesso = sc.nextLine();
 
+
         boolean auth = new UserController().autenticar(id_usuario,senha_acesso);
 
         if (auth) {
