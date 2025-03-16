@@ -3,16 +3,19 @@ package com.allpay.projeto.controller;
 import com.allpay.projeto.model.UserModelDAO;
 
 import java.sql.ResultSet;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class UserController {
-    private UserModelDAO userModel;
+    private static UserModelDAO userModel;
+    private HashMap<String, String> data;
 
     public UserController(){
-        this.userModel =  new UserModelDAO();
+        userModel =  new UserModelDAO();
     }
-    public void select(){
-      this.userModel.select();
+
+    public HashMap<String, String> getUserInfo(){
+      return this.data;
       }
 
     public void insert(String cpfTemp, String nomeTemp, String senhaTemp, String emailTemp ){
@@ -58,7 +61,14 @@ public class UserController {
 
     public boolean autenticar(String id_usuario, String senha_acesso) {
 
-        return userModel.selectById(id_usuario,senha_acesso);
+        HashMap<String, String> data = userModel.selectById(id_usuario,senha_acesso);
+        if (!data.isEmpty()) {
+            System.out.println("Authenticado!");
+            this.data = data;
+            return true;
+        } else {
+            return false;
+        }
 
     }
 }
