@@ -14,7 +14,7 @@ public class BankAccountModelDAO {
   public BankAccountModelDAO(){
     dbConnect = new MySQLDataBaseConnection();
   }
-  public HashMap<String, String> selectById(String id){
+  public HashMap<String, String> findUserBankAccount(String id){
     String sql = """
             SELECT ib.nome_instituicao, CONCAT(U.id_usuario, ' - ', ib.id_instituicao) AS conta, C.limite, C.saldo_usuario
             FROM usuario U

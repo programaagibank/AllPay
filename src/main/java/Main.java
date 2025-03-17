@@ -26,8 +26,7 @@ public class Main {
 //        new UserController().select();
 //        new ModelFaturaDAO().buscarFaturas();
 
-        HashMap<String, String> teste = new BankAccountModelDAO().selectById("11223344556");
-        System.out.println(teste.get("nome_instituicao") + " | " + teste.get("conta") + " | " + teste.get("limite") + " | " + teste.get("saldo_usuario"));
+
     }
 
     public static void GerarComprovantePagamento(int VarIdPagamento) {
