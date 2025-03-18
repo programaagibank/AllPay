@@ -24,7 +24,7 @@ import java.util.Scanner;
                 System.out.print(AZUL + "\r[" + "█".repeat(i) + " ".repeat(20 - i) + "] " + progress + "%");
                 Thread.sleep(200);
             }
-            System.out.println(RESET + "\n✅ Carregamento concluído!\n");
+            System.out.println(RESET + "\n✔ Carregamento concluído!\n");
 
             Scanner sc = new Scanner(System.in);
             int opcaoEntrada = 0;

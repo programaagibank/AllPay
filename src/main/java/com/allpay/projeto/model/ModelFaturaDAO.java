@@ -70,7 +70,14 @@ public class ModelFaturaDAO {
                 String status_fatura = rs.getString("status_fatura");
                 String descricao = rs.getString("descricao");
 
-                System.out.println(id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
+                System.out.println("=================================");
+                System.out.printf("Usuário: %s%n", id_usuario);
+                System.out.printf("ID Fatura: %d%n", id_fatura);
+                System.out.printf("Valor: R$ %,.2f%n", (double) valor_fatura);
+                System.out.printf("Recebedor: %s%n", nome_recebedor);
+                System.out.printf("Status: %s%n", status_fatura);
+                System.out.printf("Descrição: %s%n", descricao);
+                System.out.println("=================================");
             }
         }
         catch (SQLException e) {
