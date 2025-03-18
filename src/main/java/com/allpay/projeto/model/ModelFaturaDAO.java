@@ -45,7 +45,10 @@ public class ModelFaturaDAO {
                 String status_fatura = rs.getString("status_fatura");
                 String descricao = rs.getString("descricao");
 
-                System.out.println(id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
+                int i = 0;
+                i ++;
+
+                System.out.println(i + " - " + id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
 
                 this.data.add(new SimpleEntry<>(id_fatura, valor_fatura));
             }
@@ -127,8 +130,12 @@ public class ModelFaturaDAO {
         return this.data;
     }
 
-    public void efetuarPagamento (String id_usuarioOut, int id_fatura, float valor_fatura, float saldo_usuario) {
+    public float efetuarPagamento (String id_usuarioOut, int id_fatura, float valor_fatura, float saldo_usuario) {
 
+        float saldo_restante = 0;
 
+        saldo_restante =  saldo_usuario - this.data.get(id_fatura).getValue();
+
+        return saldo_restante;
     }
 }

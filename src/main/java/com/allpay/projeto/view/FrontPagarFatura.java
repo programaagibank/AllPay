@@ -19,7 +19,7 @@ public class FrontPagarFatura {
         }
         System.out.println("\r✔ Concluído!");
         System.out.println("Essas são suas faturas:");
-        new ModelFaturaDAO().buscarFaturas();
+        //new ModelFaturaDAO().buscarFaturas();
         System.out.println("Selecione qual deseja pagar:");
         //preciso do metodo de pagamento pra terminar o front
     }

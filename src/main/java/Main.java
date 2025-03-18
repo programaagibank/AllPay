@@ -4,6 +4,7 @@ import com.allpay.projeto.interfaces.DataBaseConnection;
 import com.allpay.projeto.model.ModelFaturaDAO;
 
 import java.sql.Connection;
+import java.util.Scanner;
 
 public class Main {
     static final String URL = System.getenv("DB_URL");
@@ -87,11 +88,14 @@ public class Main {
 //            statement.close();
 //            dbConnect.closeConnection();
 
+            Scanner sc = new Scanner(System.in);
+
             ModelFaturaDAO model = new ModelFaturaDAO();
             model.buscarFaturasByUserId("45678912345");
 
             System.out.println("Fatura q vc quer pagar: ");
-            int id = sc.nextInt();
+            int id;
+            System.out.println(model.efetuarPagamento("45678912345", id = sc.nextInt() - 1, 399, 500));
 
         } catch (Exception e) {
             e.printStackTrace();
