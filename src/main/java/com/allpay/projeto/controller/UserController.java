@@ -31,7 +31,6 @@ public class UserController {
             nomeTemp = sc.nextLine();
         }
 
-        System.out.println(senhaTemp);
         while (!senhaTemp.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$")) {
             System.out.println("Senha inválida! A senha deve conter pelo menos:");
             System.out.println("- Uma letra minúscula");
