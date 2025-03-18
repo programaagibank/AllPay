@@ -53,10 +53,10 @@ import java.util.Scanner;
 
                 } catch (InputMismatchException e) {
                     System.out.println("Erro: Entrada inválida! Digite um número inteiro.");
-                    sc.nextLine();
+                    break;
                 } catch (Exception e) {
                     System.out.println("Ocorreu um erro inesperado: " + e.getMessage());
-                    sc.nextLine();
+                    break;
                 }
 
             } while (opcaoEntrada != 3);
