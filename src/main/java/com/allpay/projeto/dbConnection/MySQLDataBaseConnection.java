@@ -33,7 +33,7 @@ public class MySQLDataBaseConnection implements DataBaseConnection {
     // Verifica se a conexão está aberta e tenta fechá-la
     if (this.connection != null && !this.connection.isClosed()) {
       this.connection.close();
-      System.out.println("Conexão fechada com sucesso!");
+//      System.out.println("Conexão fechada com sucesso!");
     }
   }
 

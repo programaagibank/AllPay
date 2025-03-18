@@ -1,12 +1,14 @@
 import com.allpay.projeto.controller.UserController;
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
+//import com.allpay.projeto.model.BankAccountModelDAO;
 import com.allpay.projeto.model.ModelFaturaDAO;
 import com.allpay.projeto.model.PaymentModelDAO;
 import com.allpay.projeto.view.FrontEntrada;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -20,9 +22,12 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
 //        GerarComprovantePagamento(1);
 //        PaymentModelDAO.GerarComprovantePagamento();
-        FrontEntrada.main(args);
+//        FrontEntrada.main(args);
 //        new UserController().select();
 //        new ModelFaturaDAO().buscarFaturas();
+
+      //  HashMap<String, String> teste = new BankAccountModelDAO().selectById("11223344556");
+      //  System.out.println(teste.get("nome_instituicao") + " | " + teste.get("conta") + " | " + teste.get("limite") + " | " + teste.get("saldo_usuario"));
     }
 
     public static void GerarComprovantePagamento(int VarIdPagamento) {

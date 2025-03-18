@@ -1,10 +1,20 @@
 package com.allpay.projeto.controller;
 
 public class User {
-    private String nome_usuario;
     private String id_usuario;
-    private String senha_acesso;
+    private String nome_usuario;
     private String email;
+    private String senha_acesso;
+
+    public User(String id_usuario ,String nome_usuario, String email, String senha_acesso) {
+        this.id_usuario = id_usuario;
+        this.nome_usuario = nome_usuario;
+        this.email = email;
+        this.senha_acesso = senha_acesso;
+    }
+
+    public User(String cpf) {
+    }
 
     public String getNome() { return nome_usuario; }
     public String getId_usuario() { return id_usuario; }
