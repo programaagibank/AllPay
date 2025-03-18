@@ -1,70 +1,72 @@
 package com.allpay.projeto.model;
 import java.math.BigInteger;
 import java.sql.*;
-
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.AbstractMap.SimpleEntry;
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
+import com.allpay.projeto.interfaces.DataBaseConnection;
 
 import javax.imageio.plugins.jpeg.JPEGImageReadParam;
 
 public class ModelFaturaDAO {
 
-    String url;
-    String user;
-    String password;
-    Connection conn;
+    DataBaseConnection conn;
+    ArrayList<SimpleEntry<Integer, Float>> data;
 
     public ModelFaturaDAO() {
 
-        this.url = System.getenv("DB_URL");
-        this.user = System.getenv("DB_USER");
-        this.password = System.getenv("DB_PASSWORD");
+        this.conn = new MySQLDataBaseConnection();
+        this.data = new ArrayList<>();
     }
 
     float result = 0;
 
-    public float buscarFaturasByUserId ( String id_usuarioOut) {
+    public ArrayList<SimpleEntry<Integer, Float>> buscarFaturasByUserId ( String id_usuarioOut) {
 
-        String query = "SELECT * fatura WHERE id_usuario = ?";
+        String query = "SELECT * FROM fatura WHERE id_usuario = ?";
 
         try {
 
-            conn = DriverManager.getConnection(url, user, password);
-            conn.createStatement().execute("USE allpay");
+            conn.connect();
 
-            PreparedStatement stmt = conn.prepareStatement(query);
+            PreparedStatement stmt = conn.getConnection().prepareStatement(query);
             stmt.setString(1, id_usuarioOut);
 
             ResultSet rs = stmt.executeQuery();
 
+            //System.out.println(data.get(0).getKey());
             while (rs.next()) {
 
                 String id_usuario = rs.getString("id_usuario");
                 int id_fatura = rs.getInt("id_fatura");
-                int valor_fatura = rs.getInt("valor_fatura");
+                float valor_fatura = rs.getInt("valor_fatura");
                 String nome_recebedor = rs.getString("nome_recebedor");
                 String status_fatura = rs.getString("status_fatura");
                 String descricao = rs.getString("descricao");
 
-                result = valor_fatura;
+                System.out.println(id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
+
+                this.data.add(new SimpleEntry<>(id_fatura, valor_fatura));
             }
         } catch (SQLException e) {
 
             e.printStackTrace();
         }
 
-        return result;
+        return this.data;
     }
 
-    public float buscarFaturasNoUser (int id_faturaOut) {
+    public ArrayList<SimpleEntry<Integer, Float>> buscarFaturasNoUser (int id_faturaOut) {
 
         String query = "SELECT * FROM fatura WHERE id_fatura = ? and WHERE id_usuario = null";
 
         try {
 
-            conn = DriverManager.getConnection(url, user, password);
-            conn.createStatement().execute("USE allpay");
+            conn.connect();
+            conn.getConnection().createStatement().execute("USE allpay");
 
-            PreparedStatement stmt = conn.prepareStatement(query);
+            PreparedStatement stmt = conn.getConnection().prepareStatement(query);
             stmt.setInt(1, id_faturaOut);
 
             ResultSet rs = stmt.executeQuery();
@@ -73,12 +75,12 @@ public class ModelFaturaDAO {
 
                 String id_usuario = rs.getString("id_usuario");
                 int id_fatura = rs.getInt("id_fatura");
-                int valor_fatura = rs.getInt("valor_fatura");
+                float valor_fatura = rs.getInt("valor_fatura");
                 String nome_recebedor = rs.getString("nome_recebedor");
                 String status_fatura = rs.getString("status_fatura");
                 String descricao = rs.getString("descricao");
 
-                result = valor_fatura;
+                this.data.add(new SimpleEntry<>(id_fatura, valor_fatura));
 
                 //System.out.println(id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
             }
@@ -87,18 +89,18 @@ public class ModelFaturaDAO {
             e.printStackTrace();
         }
 
-        return result;
+        return this.data;
     }
 
-    public float buscarFaturas (String id_usuarioOut) {
+    public ArrayList<SimpleEntry<Integer, Float>> buscarFaturas (String id_usuarioOut) {
 
         String query = "SELECT * FROM fatura WHERE id_usuario = ?";
 
         try{
-            conn = DriverManager.getConnection(url, user, password);
-            conn.createStatement().execute("USE allpay");
+            conn.connect();
+            conn.getConnection().createStatement().execute("USE allpay");
 
-            PreparedStatement stmt = conn.prepareStatement(query);
+            PreparedStatement stmt = conn.getConnection().prepareStatement(query);
             stmt.setString(1, id_usuarioOut);
 
             ResultSet rs = stmt.executeQuery();
@@ -112,7 +114,7 @@ public class ModelFaturaDAO {
                 String status_fatura = rs.getString("status_fatura");
                 String descricao = rs.getString("descricao");
 
-                result = valor_fatura;
+                this.data.add(new SimpleEntry<>(id_fatura, valor_fatura));
 
                 //System.out.println(id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
             }
@@ -122,6 +124,11 @@ public class ModelFaturaDAO {
             e.printStackTrace();
         }
 
-        return result;
+        return this.data;
+    }
+
+    public void efetuarPagamento (String id_usuarioOut, int id_fatura, float valor_fatura, float saldo_usuario) {
+
+
     }
 }
