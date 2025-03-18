@@ -20,7 +20,6 @@ public class FrontLogin {
 
 
         System.out.println(AZUL + "╔════════════════════════════════════╗");
-
         System.out.println("║               Login                ║");
         System.out.println("╚════════════════════════════════════╝" + RESET);
         System.out.println();

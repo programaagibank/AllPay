@@ -28,10 +28,10 @@ public class FrontPrincipal {
 
                 if (opcaoEntrada == 1) {
                     System.out.println("Você escolheu Pagar fatura. Vamos te redirecionar.");
-                    //FrontPagarFatura.main(args);
+                    FrontPagarFatura.main(args);
                 } else if (opcaoEntrada == 2) {
                     System.out.println("Você escolheu Buscar fatura. Vamos te redirecionar.");
-                    //FrontBuscarFatura.main(args);
+                    FrontBuscarFatura.main(args);
                 } else if (opcaoEntrada == 3) {
                     System.out.println("Você escolheu Informações allPay. Vamos te redirecionar.");
                 } else if (opcaoEntrada == 4) {
