@@ -4,12 +4,12 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
     public class FrontEntrada {
         public static final String RESET = "\u001B[0m";
-        public static final String GREEN = "\u001B[32m";
+        public static final String AZUL = "\u001B[34m";
 
         public static void main(String[] args) throws InterruptedException {
-            // ASCII Art em verde
+           
             System.out.println("Olá! Você está usando o ");
-            System.out.println(GREEN + "████████████▓   ▓█   ▒█░  ▒█████████████████████████");
+            System.out.println(AZUL + "████████████▓   ▓█   ▒█░  ▒█████████████████████████");
             System.out.println("████████████▒   ▒█    █      ███████████████████████");
             System.out.println("██         ▓▒   ▒█    ███    ▓▓         ▒▒   ░█    ▓");
             System.out.println("█    ░░    ▓▒   ▒█    █      █    ██░   ▒█▒       ▒█");
@@ -21,7 +21,7 @@ import java.util.Scanner;
             System.out.println("\nCarregando...");
             for (int i = 0; i <= 20; i++) {
                 int progress = (i * 100) / 20;
-                System.out.print(GREEN + "\r[" + "█".repeat(i) + " ".repeat(20 - i) + "] " + progress + "%");
+                System.out.print(AZUL + "\r[" + "█".repeat(i) + " ".repeat(20 - i) + "] " + progress + "%");
                 Thread.sleep(200);
             }
             System.out.println(RESET + "\n✅ Carregamento concluído!\n");
@@ -31,8 +31,7 @@ import java.util.Scanner;
 
             do {
                 try {
-                    // Apenas as opções dentro da box ficam verdes
-                    System.out.println(GREEN + "╔══════════════════╗");
+                    System.out.println(AZUL + "╔══════════════════╗");
                     System.out.println("║ 1. Login         ║");
                     System.out.println("║ 2. Cadastro      ║");
                     System.out.println("║ 3. Sair          ║");
