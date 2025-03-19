@@ -6,6 +6,8 @@ import com.allpay.projeto.interfaces.DataBaseConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BankAccountModelDAO {
@@ -48,5 +50,28 @@ public class BankAccountModelDAO {
       System.out.println("Erro ao buscar");
     }
     return dados;
+  }
+
+  public void saldoUpdate (float saldo_restante, String id_usuarioOut) {
+
+    String query = "UPDATE conta SET saldo_usuario = ? WHERE id_usuario = ?";
+
+    if (saldo_restante != 0) {
+      try {
+
+        dbConnect.connect();
+        dbConnect.getConnection().createStatement().execute("USE allpay");
+
+        PreparedStatement stmt = dbConnect.getConnection().prepareStatement(query);
+        stmt.setFloat(1, saldo_restante);
+        stmt.setString(2, id_usuarioOut);
+
+        stmt.executeUpdate();
+
+      } catch (SQLException e) {
+
+        e.printStackTrace();
+      }
+    }
   }
 }

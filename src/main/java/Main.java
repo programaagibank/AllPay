@@ -1,9 +1,12 @@
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
 //import com.allpay.projeto.model.BankAccountModelDAO;
+import com.allpay.projeto.model.BankAccountModelDAO;
 import com.allpay.projeto.model.ModelFaturaDAO;
 
 import java.sql.Connection;
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -88,14 +91,23 @@ public class Main {
 //            statement.close();
 //            dbConnect.closeConnection();
 
+
             Scanner sc = new Scanner(System.in);
 
             ModelFaturaDAO model = new ModelFaturaDAO();
-            model.buscarFaturasByUserId("45678912345");
 
+            ArrayList<AbstractMap.SimpleEntry<Integer, Float>> entry = model.getData();
+
+            model.buscarFaturasByUserId("00000000001");
+
+            System.out.println(model.data.get(0));
             System.out.println("Fatura q vc quer pagar: ");
             int id;
-            System.out.println(model.efetuarPagamento("45678912345", id = sc.nextInt() - 1, 399, 500));
+            BankAccountModelDAO conta = new BankAccountModelDAO();
+
+
+            float efetuarPagamento = model.efetuarPagamento("00000000001", id = sc.nextInt() - 1, model.data.get(id).getValue(), 150);
+            conta.saldoUpdate(efetuarPagamento, "00000000001");
 
         } catch (Exception e) {
             e.printStackTrace();

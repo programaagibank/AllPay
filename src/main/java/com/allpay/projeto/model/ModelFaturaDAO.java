@@ -12,12 +12,17 @@ import javax.imageio.plugins.jpeg.JPEGImageReadParam;
 public class ModelFaturaDAO {
 
     DataBaseConnection conn;
-    ArrayList<SimpleEntry<Integer, Float>> data;
+    public ArrayList<SimpleEntry<Integer, Float>> data;
 
     public ModelFaturaDAO() {
 
         this.conn = new MySQLDataBaseConnection();
         this.data = new ArrayList<>();
+    }
+
+    public ArrayList<SimpleEntry<Integer, Float>> getData () {
+
+        return data;
     }
 
     float result = 0;
@@ -34,7 +39,7 @@ public class ModelFaturaDAO {
             stmt.setString(1, id_usuarioOut);
 
             ResultSet rs = stmt.executeQuery();
-
+            int i = 0;
             //System.out.println(data.get(0).getKey());
             while (rs.next()) {
 
@@ -45,7 +50,6 @@ public class ModelFaturaDAO {
                 String status_fatura = rs.getString("status_fatura");
                 String descricao = rs.getString("descricao");
 
-                int i = 0;
                 i ++;
 
                 System.out.println(i + " - " + id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
@@ -134,8 +138,37 @@ public class ModelFaturaDAO {
 
         float saldo_restante = 0;
 
-        saldo_restante =  saldo_usuario - this.data.get(id_fatura).getValue();
+        if (saldo_usuario >= this.data.get(id_fatura).getValue()) {
+
+            saldo_restante = saldo_usuario - this.data.get(id_fatura).getValue();
+
+            atualizarStatus_fatura(this.data.get(id_fatura).getKey());
+        } else {
+
+            System.out.println("Saldo insuficiente!");
+        }
 
         return saldo_restante;
+    }
+
+    public void atualizarStatus_fatura (int id_fatura) {
+
+        String query = "UPDATE fatura SET status_fatura = 'PAGA' WHERE id_fatura = ?";
+
+        try {
+
+            conn.connect();
+            conn.getConnection().createStatement().execute("USE allpay");
+
+            PreparedStatement stmt = conn.getConnection().prepareStatement(query);
+
+            stmt.setInt(1, id_fatura);
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
     }
 }
