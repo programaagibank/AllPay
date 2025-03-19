@@ -76,12 +76,41 @@ public class UserController {
 
         HashMap<String, String> data = userModel.selectById(id_usuario,senha_acesso);
         if (!data.isEmpty()) {
-            System.out.println("Authenticado!");
+            System.out.println("Autenticado!");
             this.data = data;
             return true;
         } else {
             return false;
         }
+
+    }
+
+    public static void logout() {
+        System.out.println("Você escolheu Sair. Obrigado por usar o allPay.");
+        System.out.println("Encerrando sessão...");
+        System.exit(0);
+    }
+
+    public int confirmarInfos(int numConfirmacao){
+        Scanner sc = new Scanner(System.in);
+        do{
+
+            if (numConfirmacao == 1){
+                return 1;
+            }
+            else if (numConfirmacao == 3){
+                System.out.println("Encerrando sessão...");
+                logout();
+                return 3;
+            } else if (numConfirmacao == 2) {
+                System.out.println("Recomeçando...");
+                return 2;
+            }else {
+                System.out.println("Opção inválida!");
+                return 4;
+            }
+
+        }while(numConfirmacao != 1 && numConfirmacao != 2 && numConfirmacao != 3);
 
     }
 }

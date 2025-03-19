@@ -1,5 +1,7 @@
 package com.allpay.projeto.view;
 
+import com.allpay.projeto.controller.UserController;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -35,7 +37,7 @@ public class FrontPrincipal {
                 } else if (opcaoEntrada == 3) {
                     System.out.println("Você escolheu Informações allPay. Vamos te redirecionar.");
                 } else if (opcaoEntrada == 4) {
-                    System.out.println("Você escolheu Sair. Obrigado por usar o allPay.");
+                    UserController.logout();
                 }
                 else {
                     System.out.println("Opção inválida! Tente novamente.");

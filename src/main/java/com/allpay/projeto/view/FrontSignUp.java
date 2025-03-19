@@ -27,9 +27,17 @@ public class FrontSignUp {
         System.out.println("Digite sua senha:");
         String senhaTemp = userController.validarSenha(sc.nextLine());
 
-//        instacia usercontroler new UserController.insert(cpf,nome,senha,email)
-//        chama funcao de inserir e passa os dados para os parametros
-          userController.insert(cpfTemp, nomeTemp, senhaTemp, emailTemp);
+        System.out.println("Confirme suas informações!");
+        System.out.println("1 - Avançar\n2 - Recomeçar\n3 - Sair");
 
+        int confirmacaoCadastro = userController.confirmarInfos(sc.nextInt());
+        if (confirmacaoCadastro == 4) {
+            while (confirmacaoCadastro != 1 && confirmacaoCadastro != 2 && confirmacaoCadastro != 3) {
+                System.out.println("Confirme suas informações!");
+                System.out.println("1 - Avançar\n2 - Recomeçar\n3 - Sair");
+                confirmacaoCadastro = userController.confirmarInfos(sc.nextInt());
+            }
+                userController.insert(cpfTemp, nomeTemp, senhaTemp, emailTemp);
+        }
     }
-}
+    }

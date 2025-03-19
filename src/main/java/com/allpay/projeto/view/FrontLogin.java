@@ -40,7 +40,7 @@ public class FrontLogin {
                         userInfo.get("email"),
                         userInfo.get("senha_acesso"));
                 teste.mostrarInfos();
-                break;
+                FrontPrincipal.main(args);
             } else {
                 tentativas++;
                 System.out.println("Credenciais inválidas. Tentativas restantes: " + (MAX_TENTATIVAS - tentativas));
