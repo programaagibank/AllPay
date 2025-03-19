@@ -5,8 +5,10 @@ import com.allpay.projeto.controller.UserController;
 import java.util.Scanner;
 
 public class FrontSignUp {
+    public static UserController userController;
     public static final String RESET = "\u001B[0m";
     public static final String AZUL = "\u001B[34m";
+    public FrontSignUp(){userController = new UserController();}
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.println(AZUL + "╔════════════════════════════════════╗");
@@ -16,6 +18,7 @@ public class FrontSignUp {
 
         System.out.println("Digite o seu CPF ou CNPJ:");
         String cpfTemp = sc.nextLine();
+
         System.out.println("Digite o seu Nome");
         String nomeTemp = sc.nextLine();
         System.out.println("Digite o seu e-mail:");
@@ -26,7 +29,7 @@ public class FrontSignUp {
 
 //        instacia usercontroler new UserController.insert(cpf,nome,senha,email)
 //        chama funcao de inserir e passa os dados para os parametros
-        new UserController().insert(cpfTemp, nomeTemp, senhaTemp, emailTemp);
+        userController.insert(cpfTemp, nomeTemp, senhaTemp, emailTemp);
 
     }
 }

@@ -22,7 +22,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
 //        GerarComprovantePagamento(1);
 //        PaymentModelDAO.GerarComprovantePagamento();
-//        FrontEntrada.main(args);
+        FrontEntrada.main(args);
 //        new UserController().select();
 //        new ModelFaturaDAO().buscarFaturas();
 
