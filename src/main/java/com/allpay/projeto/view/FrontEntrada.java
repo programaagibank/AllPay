@@ -1,66 +1,104 @@
 package com.allpay.projeto.view;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
-    public class FrontEntrada {
-        public static final String RESET = "\u001B[0m";
-        public static final String AZUL = "\u001B[34m";
+import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
-        public static void main(String[] args) throws InterruptedException {
-           
-            System.out.println("Olá! Você está usando o ");
-            System.out.println(AZUL + "████████████▓   ▓█   ▒█░  ▒█████████████████████████");
-            System.out.println("████████████▒   ▒█    █      ███████████████████████");
-            System.out.println("██         ▓▒   ▒█    ███    ▓▓         ▒▒   ░█    ▓");
-            System.out.println("█    ░░    ▓▒   ▒█    █      █    ██░   ▒█▒       ▒█");
-            System.out.println("▓   ░██░   ▓▒   ░█    █   ░███    ▒▓    ▒██▒     ▒██");
-            System.out.println("█░         ▓▒   ░█    █████████         ▒███░   ░███");
-            System.out.println("████▓▓▓███████████████████████████████████     ░████");
-            System.out.println("██████████████████████████████████████████   ▒██████" + RESET);
+public class FrontEntrada extends Application {
 
-            System.out.println("\nCarregando...");
-            for (int i = 0; i <= 20; i++) {
-                int progress = (i * 100) / 20;
-                System.out.print(AZUL + "\r[" + "█".repeat(i) + " ".repeat(20 - i) + "] " + progress + "%");
-                Thread.sleep(200);
-            }
-            System.out.println(RESET + "\n✔ Carregamento concluído!\n");
+    @Override
+    public void start(Stage primaryStage) {
+        String title = "allPay - Tela de Entrada";
+        VBox layout = new VBox(20);
+        layout.setAlignment(Pos.CENTER);
+        layout.setStyle("-fx-background-color: #1c1c1c;");
 
-            Scanner sc = new Scanner(System.in);
-            int opcaoEntrada = 0;
+        Button btnLogin = new Button("Login");
+        Button btnCadastro = new Button("Cadastro");
+        Button btnSair = new Button("Sair");
 
-            do {
-                try {
-                    System.out.println(AZUL + "╔══════════════════╗");
-                    System.out.println("║ 1. Login         ║");
-                    System.out.println("║ 2. Cadastro      ║");
-                    System.out.println("║ 3. Sair          ║");
-                    System.out.println("╚══════════════════╝"+ RESET);
-                    System.out.print("Escolha uma opção: ");
-                    opcaoEntrada = sc.nextInt();
+        String buttonStyle = "-fx-background-color: #333333; " +
+                "-fx-text-fill: #FFFFFF; " +
+                "-fx-font-size: 14px; " +
+                "-fx-padding: 10px 20px; " +
+                "-fx-border-radius: 20px; " +
+                "-fx-background-radius: 20px;";
 
-                    if (opcaoEntrada == 1) {
-                        System.out.println("Você escolheu Login. Vamos te redirecionar.");
-//                        FrontLogin.main(args);
-                    } else if (opcaoEntrada == 2) {
-                        System.out.println("Você escolheu Cadastro. Vamos te redirecionar.");
-                        FrontSignUp.main(args);
-                    } else if (opcaoEntrada == 3) {
-                        System.out.println("Você escolheu Sair. Obrigado por usar o allPay.");
-                    } else {
-                        System.out.println("Opção inválida! Tente novamente.");
-                    }
+        btnLogin.setStyle(buttonStyle);
+        btnCadastro.setStyle(buttonStyle);
+        btnSair.setStyle(buttonStyle);
 
-                } catch (InputMismatchException e) {
-                    System.out.println("Erro: Entrada inválida! Digite um número inteiro.");
-                    break;
-                } catch (Exception e) {
-                    System.out.println("Ocorreu um erro inesperado: " + e.getMessage());
-                    break;
+        btnLogin.setOnAction(e -> {
+            System.out.println("Você escolheu Login.");
+        });
+
+        btnCadastro.setOnAction(e -> {
+            System.out.println("Você escolheu Cadastro.");
+        });
+
+        btnSair.setOnAction(e -> {
+            System.out.println("Você escolheu Sair.");
+            primaryStage.close();
+        });
+
+        loadingScreen(primaryStage, layout, btnLogin, btnCadastro, btnSair);
+    }
+
+    private void loadingScreen(Stage primaryStage, VBox layout, Button btnLogin, Button btnCadastro, Button btnSair) {
+        Stage loadingStage = new Stage();
+        StackPane loadingLayout = new StackPane();
+        loadingLayout.setStyle("-fx-background-color: #1c1c1c;");
+
+        Text titleText = new Text("allPay");
+        titleText.setFont(Font.font("Arial", 50));
+        titleText.setFill(Color.WHITE);
+
+        ProgressBar progressBar = new ProgressBar();
+        progressBar.setStyle("-fx-accent: #2196F3; -fx-background-color: #333333;");
+        progressBar.setPrefWidth(300);
+
+        loadingLayout.getChildren().addAll(titleText, progressBar);
+        titleText.setTranslateY(-50);
+
+        Scene loadingScene = new Scene(loadingLayout, 400, 300);
+        loadingStage.setTitle("Carregando...");
+        loadingStage.setScene(loadingScene);
+        loadingStage.show();
+
+        new Thread(() -> {
+            try {
+                long startTime = System.currentTimeMillis();
+                long endTime = startTime + 2000; // 5 segundos
+
+                while (System.currentTimeMillis() < endTime) {
+                    double progress = (System.currentTimeMillis() - startTime) / 3000.0;
+                    javafx.application.Platform.runLater(() -> progressBar.setProgress(progress));
+                    Thread.sleep(50); // A cada 50ms atualiza a barra
                 }
 
-            } while (opcaoEntrada != 3);
-
-            sc.close();
-        }
+                javafx.application.Platform.runLater(() -> {
+                    loadingStage.close();
+                    layout.getChildren().addAll(btnLogin, btnCadastro, btnSair);
+                    Scene mainScene = new Scene(layout, 400, 300);
+                    primaryStage.setScene(mainScene);
+                    primaryStage.setTitle("allPay");
+                    primaryStage.show();
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
