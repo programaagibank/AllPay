@@ -1,5 +1,6 @@
 package com.allpay.projeto.view;
 
+import com.allpay.projeto.controller.User;
 import com.allpay.projeto.controller.UserController;
 
 import java.util.InputMismatchException;
@@ -8,6 +9,7 @@ import java.util.Scanner;
 public class FrontPrincipal {
     public static final String RESET = "\u001B[0m";
     public static final String AZUL = "\u001B[34m";
+    public User user;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -37,7 +39,7 @@ public class FrontPrincipal {
                 } else if (opcaoEntrada == 3) {
                     System.out.println("Você escolheu Informações allPay. Vamos te redirecionar.");
                 } else if (opcaoEntrada == 4) {
-                    UserController.logout();
+                    UserController.exit();
                 }
                 else {
                     System.out.println("Opção inválida! Tente novamente.");
@@ -52,6 +54,7 @@ public class FrontPrincipal {
             }
 
         } while (opcaoEntrada != 4);
+
 
         sc.close();
     }

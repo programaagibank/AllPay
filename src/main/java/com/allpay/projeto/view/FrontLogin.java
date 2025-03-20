@@ -34,12 +34,12 @@ public class FrontLogin {
                 autenticado = true;
                 System.out.println("Login bem-sucedido!");
                 HashMap<String, String> userInfo = userController.getUserInfo();
-                User teste = new User(
+                User.setUserData(
                         userInfo.get("id_usuario"),
                         userInfo.get("nome_usuario"),
                         userInfo.get("email"),
                         userInfo.get("senha_acesso"));
-                teste.mostrarInfos();
+                User.mostrarInfos();
                 FrontPrincipal.main(args);
             } else {
                 tentativas++;
