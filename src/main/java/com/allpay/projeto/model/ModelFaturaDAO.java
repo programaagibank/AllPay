@@ -49,15 +49,16 @@ public class ModelFaturaDAO {
 
     }
 
-    public void buscarFaturas () {
+    public void buscarFaturas (String id_usuarioOut) {
 
-        String query = "SELECT * FROM fatura WHERE id_usuario = '45678912345'";
+        String query = "SELECT * FROM fatura WHERE id_usuario = ?";
 
         try{
             conn = DriverManager.getConnection(url, user, password);
             conn.createStatement().execute("USE allpay");
 
             PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, id_usuarioOut);
 
             ResultSet rs = stmt.executeQuery();
 

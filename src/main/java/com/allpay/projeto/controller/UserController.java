@@ -16,7 +16,7 @@ public class UserController {
 
     public HashMap<String, String> getUserInfo(){
       return this.data;
-      }
+    }
 
     public void insert(String cpfTemp, String nomeTemp, String senhaTemp, String emailTemp ){
         // Salvar no banco de dados
@@ -85,7 +85,7 @@ public class UserController {
 
     }
 
-    public static void logout() {
+    public static void exit() {
         System.out.println("Você escolheu Sair. Obrigado por usar o allPay.");
         System.out.println("Encerrando sessão...");
         System.exit(0);
@@ -100,7 +100,7 @@ public class UserController {
             }
             else if (numConfirmacao == 3){
                 System.out.println("Encerrando sessão...");
-                logout();
+                exit();
                 return 3;
             } else if (numConfirmacao == 2) {
                 System.out.println("Recomeçando...");
