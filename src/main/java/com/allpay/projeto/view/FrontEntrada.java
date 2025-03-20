@@ -41,7 +41,7 @@ import java.util.Scanner;
 
                     if (opcaoEntrada == 1) {
                         System.out.println("Você escolheu Login. Vamos te redirecionar.");
-                        FrontLogin.main(args);
+//                        FrontLogin.main(args);
                     } else if (opcaoEntrada == 2) {
                         System.out.println("Você escolheu Cadastro. Vamos te redirecionar.");
                         FrontSignUp.main(args);

@@ -27,6 +27,7 @@ public class FrontLogin {
         while (tentativas < MAX_TENTATIVAS) {
             System.out.println("Digite o seu CPF ou CNPJ:");
             String id_usuario = sc.nextLine();
+
             System.out.println("Digite sua senha:");
             String senha_acesso = sc.nextLine();
 
