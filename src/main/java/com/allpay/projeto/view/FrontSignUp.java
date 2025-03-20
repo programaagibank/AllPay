@@ -5,11 +5,11 @@ import com.allpay.projeto.controller.UserController;
 import java.util.Scanner;
 
 public class FrontSignUp {
-    public static UserController userController;
     public static final String RESET = "\u001B[0m";
     public static final String AZUL = "\u001B[34m";
-    public FrontSignUp(){userController = new UserController();}
+
     public static void main(String[] args) {
+        UserController userController = new UserController();
         Scanner sc = new Scanner(System.in);
         System.out.println(AZUL + "╔════════════════════════════════════╗");
         System.out.println("║               Cadastro             ║");
@@ -17,19 +17,27 @@ public class FrontSignUp {
         System.out.println();
 
         System.out.println("Digite o seu CPF ou CNPJ:");
-        String cpfTemp = sc.nextLine();
+        String  cpfTemp = sc.nextLine();
+        cpfTemp = userController.validarId(cpfTemp);
 
         System.out.println("Digite o seu Nome");
-        String nomeTemp = sc.nextLine();
+        String nomeTemp = userController.validarNome(sc.nextLine());
         System.out.println("Digite o seu e-mail:");
-        String emailTemp = sc.nextLine();
-
+        String emailTemp = userController.validarEmail(sc.nextLine());
         System.out.println("Digite sua senha:");
-        String senhaTemp = sc.nextLine();
+        String senhaTemp = userController.validarSenha(sc.nextLine());
 
-//        instacia usercontroler new UserController.insert(cpf,nome,senha,email)
-//        chama funcao de inserir e passa os dados para os parametros
-        userController.insert(cpfTemp, nomeTemp, senhaTemp, emailTemp);
+        System.out.println("Confirme suas informações!");
+        System.out.println("1 - Avançar\n2 - Recomeçar\n3 - Sair");
 
+        int confirmacaoCadastro = userController.confirmarInfos(sc.nextInt());
+        if (confirmacaoCadastro == 4) {
+            while (confirmacaoCadastro != 1 && confirmacaoCadastro != 2 && confirmacaoCadastro != 3) {
+                System.out.println("Confirme suas informações!");
+                System.out.println("1 - Avançar\n2 - Recomeçar\n3 - Sair");
+                confirmacaoCadastro = userController.confirmarInfos(sc.nextInt());
+            }
+                userController.insert(cpfTemp, nomeTemp, senhaTemp, emailTemp);
+        }
     }
-}
+    }
