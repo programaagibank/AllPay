@@ -47,6 +47,7 @@ import java.util.Scanner;
                         FrontSignUp.main(args);
                     } else if (opcaoEntrada == 3) {
                         System.out.println("Você escolheu Sair. Obrigado por usar o allPay.");
+                        return;
                     } else {
                         System.out.println("Opção inválida! Tente novamente.");
                     }
