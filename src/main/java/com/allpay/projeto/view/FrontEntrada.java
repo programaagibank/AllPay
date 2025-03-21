@@ -1,12 +1,13 @@
 package com.allpay.projeto.view;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -16,86 +17,105 @@ public class FrontEntrada extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        String title = "allPay - Tela de Entrada";
+        String title = "Allpay";
+
         VBox layout = new VBox(20);
-        layout.setAlignment(Pos.CENTER);
-        layout.setStyle("-fx-background-color: #1c1c1c;");
+        layout.setAlignment(Pos.TOP_CENTER);
+        layout.setPadding(new Insets(150, 0, 0, 0));
+
+        setBackground(layout, "/images/backgroundImage.png");
+
+        ImageView logo = new ImageView(new Image(getClass().getResource("/images/logoAllpay.png").toExternalForm()));
+        logo.setFitWidth(200);
+        logo.setPreserveRatio(true);
+
+        Region spacer = new Region();
+        spacer.setPrefHeight(120);
 
         Button btnLogin = new Button("Login");
         Button btnCadastro = new Button("Cadastro");
         Button btnSair = new Button("Sair");
 
-        String buttonStyle = "-fx-background-color: #333333; " +
+        String buttonStyle = "-fx-background-color: #FFFFFF; " +
+                "-fx-text-fill: #000000; " +
+                "-fx-font-size: 18px; " +
+                "-fx-padding: 5px 20px; " +
+                "-fx-border-radius: 5px; " +
+                "-fx-background-radius: 5px; " +
+                "-fx-min-width: 250px; " +
+                "-fx-min-height: 40px; " +
+                "-fx-font-family: 'Montserrat'; " +
+                "-fx-font-weight: bold;";
+
+        String sairButtonStyle = "-fx-background-color: #000000; " +
                 "-fx-text-fill: #FFFFFF; " +
-                "-fx-font-size: 14px; " +
-                "-fx-padding: 10px 20px; " +
-                "-fx-border-radius: 20px; " +
-                "-fx-background-radius: 20px;";
+                "-fx-font-size: 18px; " +
+                "-fx-padding: 5px 20px; " +
+                "-fx-border-radius: 5px; " +
+                "-fx-background-radius: 5px; " +
+                "-fx-min-width: 250px; " +
+                "-fx-min-height: 40px; " +
+                "-fx-font-family: 'Montserrat'; " +
+                "-fx-font-weight: bold;";
 
         btnLogin.setStyle(buttonStyle);
         btnCadastro.setStyle(buttonStyle);
-        btnSair.setStyle(buttonStyle);
+        btnSair.setStyle(sairButtonStyle);
 
-        btnLogin.setOnAction(e -> {
-            System.out.println("Você escolheu Login.");
-        });
+        btnLogin.setOnAction(e -> System.out.println("Você escolheu Login."));
+        btnCadastro.setOnAction(e -> System.out.println("Você escolheu Cadastro."));
+        btnSair.setOnAction(e -> System.exit(0));
 
-        btnCadastro.setOnAction(e -> {
-            System.out.println("Você escolheu Cadastro.");
-        });
+        layout.getChildren().addAll(logo, spacer, btnLogin, btnCadastro, btnSair);
 
-        btnSair.setOnAction(e -> {
-            System.out.println("Você escolheu Sair.");
-            primaryStage.close();
-        });
-
-        loadingScreen(primaryStage, layout, btnLogin, btnCadastro, btnSair);
+        showSplashScreen(primaryStage, layout);
     }
 
-    private void loadingScreen(Stage primaryStage, VBox layout, Button btnLogin, Button btnCadastro, Button btnSair) {
-        Stage loadingStage = new Stage();
-        StackPane loadingLayout = new StackPane();
-        loadingLayout.setStyle("-fx-background-color: #1c1c1c;");
+    private void showSplashScreen(Stage primaryStage, VBox mainLayout) {
+        Stage splashStage = new Stage();
+        VBox splashLayout = new VBox(40);
+        splashLayout.setAlignment(Pos.CENTER);
 
-        Text titleText = new Text("allPay");
-        titleText.setFont(Font.font("Arial", 50));
-        titleText.setFill(Color.WHITE);
+        setBackground(splashLayout, "/images/backgroundImage.png");
 
-        ProgressBar progressBar = new ProgressBar();
-        progressBar.setStyle("-fx-accent: #2196F3; -fx-background-color: #333333;");
-        progressBar.setPrefWidth(300);
+        ImageView logo = new ImageView(new Image(getClass().getResource("/images/logoAllpay.png").toExternalForm()));
+        logo.setFitWidth(200);
+        logo.setPreserveRatio(true);
 
-        loadingLayout.getChildren().addAll(titleText, progressBar);
-        titleText.setTranslateY(-50);
+        Text text = new Text("Sua revolução em Open Finance!");
+        text.setFont(Font.font("Montserrat", 16));
+        text.setFill(Color.WHITE);
 
-        Scene loadingScene = new Scene(loadingLayout, 400, 300);
-        loadingStage.setTitle("Carregando...");
-        loadingStage.setScene(loadingScene);
-        loadingStage.show();
+        splashLayout.getChildren().addAll(logo, text);
+
+        Scene splashScene = new Scene(splashLayout, 320, 620);
+        splashStage.setScene(splashScene);
+        splashStage.setResizable(false);
+        splashStage.show();
 
         new Thread(() -> {
             try {
-                long startTime = System.currentTimeMillis();
-                long endTime = startTime + 2000; // 5 segundos
-
-                while (System.currentTimeMillis() < endTime) {
-                    double progress = (System.currentTimeMillis() - startTime) / 3000.0;
-                    javafx.application.Platform.runLater(() -> progressBar.setProgress(progress));
-                    Thread.sleep(50); // A cada 50ms atualiza a barra
-                }
-
+                Thread.sleep(2000);
                 javafx.application.Platform.runLater(() -> {
-                    loadingStage.close();
-                    layout.getChildren().addAll(btnLogin, btnCadastro, btnSair);
-                    Scene mainScene = new Scene(layout, 400, 300);
+                    splashStage.close();
+                    Scene mainScene = new Scene(mainLayout, 320, 600);
                     primaryStage.setScene(mainScene);
-                    primaryStage.setTitle("allPay");
+                    primaryStage.setTitle("Allpay");
+                    primaryStage.setResizable(false);
                     primaryStage.show();
                 });
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    private void setBackground(Region layout, String imagePath) {
+        Image backgroundImage = new Image(getClass().getResource(imagePath).toExternalForm());
+        BackgroundImage bgImage = new BackgroundImage(backgroundImage,
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER, new BackgroundSize(100, 100, true, true, true, true));
+        layout.setBackground(new Background(bgImage));
     }
 
     public static void main(String[] args) {
