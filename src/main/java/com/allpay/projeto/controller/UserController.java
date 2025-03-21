@@ -68,6 +68,16 @@ public class UserController {
         } else {
             return false;
         }
+    }
 
+    public static String escolherMetodoPag (int choice) {
+
+        String metodo_pag;
+
+        String[] opcoes = {"PIX", "CRÉDITO", "DÉBITO", "TED", "BOLETO"};
+
+        metodo_pag = opcoes[choice];
+
+        return metodo_pag;
     }
 }

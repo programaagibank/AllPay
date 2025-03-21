@@ -29,7 +29,7 @@ public class ModelFaturaDAO {
 
     public ArrayList<SimpleEntry<Integer, Float>> buscarFaturasByUserId ( String id_usuarioOut) {
 
-        String query = "SELECT * FROM fatura WHERE id_usuario = ?";
+        String query = "SELECT * FROM fatura WHERE id_usuario = ? and status_fatura <> 'PAGA'";
 
         try {
 
@@ -134,18 +134,39 @@ public class ModelFaturaDAO {
         return this.data;
     }
 
-    public float efetuarPagamento (String id_usuarioOut, int id_fatura, float valor_fatura, float saldo_usuario) {
+    public float efetuarPagamentoCartao (String id_usuarioOut, int id_fatura, float valor_fatura, float limite_usuario, String senha_transacao, int id_instituicao) {
 
+        BankAccountModelDAO conta = new BankAccountModelDAO();
+        float limite_restante = 0;
+        boolean validacao = conta.validarSenha(senha_transacao, id_usuarioOut, id_instituicao);
+
+        if (limite_usuario >= this.data.get(id_fatura).getValue() && validacao == true) {
+
+            limite_restante = limite_usuario - this.data.get(id_fatura).getValue();
+
+            atualizarStatus_fatura(this.data.get(id_fatura).getKey());
+        } else {
+
+            System.out.println("Transação negada!");
+        }
+
+        return limite_restante;
+    }
+
+    public float efetuarPagamento (String id_usuarioOut, int id_fatura, float valor_fatura, float saldo_usuario, String senha_transacao, int id_instituicao) {
+
+        BankAccountModelDAO conta = new BankAccountModelDAO();
         float saldo_restante = 0;
+        boolean validacao = conta.validarSenha(senha_transacao, id_usuarioOut, id_instituicao);
 
-        if (saldo_usuario >= this.data.get(id_fatura).getValue()) {
+        if (saldo_usuario >= this.data.get(id_fatura).getValue() && validacao == true) {
 
             saldo_restante = saldo_usuario - this.data.get(id_fatura).getValue();
 
             atualizarStatus_fatura(this.data.get(id_fatura).getKey());
         } else {
 
-            System.out.println("Saldo insuficiente!");
+            System.out.println("Transação negada!");
         }
 
         return saldo_restante;

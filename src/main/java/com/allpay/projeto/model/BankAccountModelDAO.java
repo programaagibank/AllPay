@@ -52,9 +52,135 @@ public class BankAccountModelDAO {
     return dados;
   }
 
+  public float escolherBancoCartao (String id_usuario, int id_instituicao) {
+
+    String query = "SELECT limite FROM conta WHERE id_instituicao = ? and id_usuario = ?";
+
+    float saldo = 0;
+
+    try {
+
+      dbConnect.connect();
+      dbConnect.getConnection().createStatement().execute("USE allpay");
+
+      PreparedStatement stmt = dbConnect.getConnection().prepareStatement(query);
+      stmt.setInt(1, id_instituicao);
+      stmt.setString(2, id_usuario);
+
+      ResultSet rs = stmt.executeQuery();
+
+      if (rs.next()) {
+        saldo = rs.getFloat("limite");
+      } else {
+        // Caso o resultado esteja vazio, você pode definir um valor padrão ou lançar um erro
+        System.out.println("Nenhum limite encontrado para o usuário e instituição fornecidos.");
+      }
+
+    } catch (SQLException e) {
+
+      e.printStackTrace();
+    }
+
+    return saldo;
+  }
+
+  public float escolherBanco (String id_usuario, int id_instituicao) {
+
+    String query = "SELECT saldo_usuario FROM conta WHERE id_instituicao = ? and id_usuario = ?";
+
+    float saldo = 0;
+
+    try {
+
+      dbConnect.connect();
+      dbConnect.getConnection().createStatement().execute("USE allpay");
+
+      PreparedStatement stmt = dbConnect.getConnection().prepareStatement(query);
+      stmt.setInt(1, id_instituicao);
+      stmt.setString(2, id_usuario);
+
+      ResultSet rs = stmt.executeQuery();
+
+      if (rs.next()) {
+        saldo = rs.getFloat("saldo_usuario");
+      } else {
+        // Caso o resultado esteja vazio, você pode definir um valor padrão ou lançar um erro
+        System.out.println("Nenhum saldo encontrado para o usuário e instituição fornecidos.");
+      }
+
+    } catch (SQLException e) {
+
+      e.printStackTrace();
+    }
+
+    return saldo;
+  }
+
+  public boolean validarSenha (String senha_transacao, String id_usuario, int id_instituicao) {
+
+    String query = "SELECT senha_transacao FROM conta WHERE id_instituicao = ? and id_usuario = ?";
+    String senha_transacao_bd = "";
+
+    try {
+
+      dbConnect.connect();
+      dbConnect.getConnection().createStatement().execute("USE allpay");
+
+      PreparedStatement stmt = dbConnect.getConnection().prepareStatement(query);
+      stmt.setInt(1, id_instituicao);
+      stmt.setString(2, id_usuario);
+
+      ResultSet rs = stmt.executeQuery();
+      if (rs.next()) {
+
+        senha_transacao_bd = rs.getString("senha_transacao");
+      } else {
+
+        System.out.println("Senha não encontrada");
+      }
+
+
+    } catch (SQLException e) {
+
+      e.printStackTrace();
+    }
+
+      boolean validacao = false;
+
+    if (senha_transacao.equals(senha_transacao_bd)) {
+
+      validacao = true;
+    } else System.out.println("Senha inválida");
+
+    return validacao;
+  }
+
   public void saldoUpdate (float saldo_restante, String id_usuarioOut) {
 
     String query = "UPDATE conta SET saldo_usuario = ? WHERE id_usuario = ?";
+
+    if (saldo_restante != 0) {
+      try {
+
+        dbConnect.connect();
+        dbConnect.getConnection().createStatement().execute("USE allpay");
+
+        PreparedStatement stmt = dbConnect.getConnection().prepareStatement(query);
+        stmt.setFloat(1, saldo_restante);
+        stmt.setString(2, id_usuarioOut);
+
+        stmt.executeUpdate();
+
+      } catch (SQLException e) {
+
+        e.printStackTrace();
+      }
+    }
+  }
+
+  public void limiteUpdate (float saldo_restante, String id_usuarioOut) {
+
+    String query = "UPDATE conta SET limite = ? WHERE id_usuario = ?";
 
     if (saldo_restante != 0) {
       try {

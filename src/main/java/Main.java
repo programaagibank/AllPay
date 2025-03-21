@@ -1,8 +1,10 @@
+import com.allpay.projeto.controller.UserController;
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
 //import com.allpay.projeto.model.BankAccountModelDAO;
 import com.allpay.projeto.model.BankAccountModelDAO;
 import com.allpay.projeto.model.ModelFaturaDAO;
+import com.allpay.projeto.model.UserModelDAO;
 
 import java.sql.Connection;
 import java.util.AbstractMap;
@@ -98,15 +100,20 @@ public class Main {
 
             ArrayList<AbstractMap.SimpleEntry<Integer, Float>> entry = model.getData();
 
-            model.buscarFaturasByUserId("00000000001");
-
-            System.out.println(model.data.get(0));
-            System.out.println("Fatura q vc quer pagar: ");
-            int id;
             BankAccountModelDAO conta = new BankAccountModelDAO();
 
+            model.buscarFaturasByUserId("00000000001");
 
-            float efetuarPagamento = model.efetuarPagamento("00000000001", id = sc.nextInt() - 1, model.data.get(id).getValue(), 150);
+            System.out.println("Fatura q vc quer pagar: ");
+            int id;
+
+            String met = UserController.escolherMetodoPag(sc.nextInt());
+
+            if (met.equals(""))
+            float escolherBanco = conta.escolherBanco("00000000001", 3);
+            float escolherBancoCartao = conta.escolherBancoCartao("00000000001", 3);
+            float efetuarPagamentoCartao = model.efetuarPagamentoCartao("00000000001", id = sc.nextInt() - 1, model.data.get(id).getValue(), escolherBancoCartao, "77", 3);
+            float efetuarPagamento = model.efetuarPagamento("00000000001", id = sc.nextInt() - 1, model.data.get(id).getValue(),  escolherBanco, "77", 3);
             conta.saldoUpdate(efetuarPagamento, "00000000001");
 
         } catch (Exception e) {
