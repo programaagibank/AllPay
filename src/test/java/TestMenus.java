@@ -1,10 +1,9 @@
-import com.allpay.projeto.view.FrontEntrada;
+import com.allpay.projeto.view.FrontEntradaOld;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
-import java.util.InputMismatchException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,7 +27,7 @@ public class TestMenus {
         //teste: selecionar opcao 1 do menu
         ByteArrayInputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
-        FrontEntrada.main(new String[]{});
+        FrontEntradaOld.main(new String[]{});
         System.out.println("Saída capturada: " + outputStream.toString());
 
 
@@ -44,7 +43,7 @@ public class TestMenus {
         //teste: selecionar opcao 1 do menu
         ByteArrayInputStream inputStream = new ByteArrayInputStream("2\n".getBytes());
         System.setIn(inputStream);
-        FrontEntrada.main(new String[]{});
+        FrontEntradaOld.main(new String[]{});
         System.out.println("Saída capturada: " + outputStream.toString());
 
         String expectOutPut =  "Você escolheu Cadastro. Vamos te redirecionar.";// O que queremos testar
@@ -59,7 +58,7 @@ public class TestMenus {
         //teste: selecionar opcao 1 do menu
         ByteArrayInputStream inputStream = new ByteArrayInputStream("3\n".getBytes());
         System.setIn(inputStream);
-        FrontEntrada.main(new String[]{});
+        FrontEntradaOld.main(new String[]{});
         System.out.println("Saída capturada: " + outputStream.toString());
 
         String expectOutPut = "Você escolheu Sair. Obrigado por usar o allPay.";// O que queremos testar
@@ -73,7 +72,7 @@ public class TestMenus {
         //teste: selecionar opcao 1 do menu
         ByteArrayInputStream inputStream = new ByteArrayInputStream("4\n".getBytes());
         System.setIn(inputStream);
-        FrontEntrada.main(new String[]{});
+        FrontEntradaOld.main(new String[]{});
         System.out.println("Saída capturada: " + outputStream.toString());
 
         String expectOutPut = "Opção inválida! Tente novamente.";// O que queremos testar
@@ -93,7 +92,7 @@ public class TestMenus {
         System.setOut(new PrintStream(outputStream));
 
         // Executa o código
-        FrontEntrada.main(new String[]{});
+        FrontEntradaOld.main(new String[]{});
 
         // Verifica se a mensagem de erro foi exibida
         String saidaPrograma = outputStream.toString();
