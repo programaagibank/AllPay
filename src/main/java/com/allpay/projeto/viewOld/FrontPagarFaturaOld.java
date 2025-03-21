@@ -1,11 +1,11 @@
-package com.allpay.projeto.view;
-
-import java.util.Scanner;
+package com.allpay.projeto.viewOld;
 
 import com.allpay.projeto.controller.User;
 import com.allpay.projeto.model.ModelFaturaDAO;
 
-public class FrontPagarFatura {
+import java.util.Scanner;
+
+public class FrontPagarFaturaOld {
     public static final String RESET = "\u001B[0m";
     public static final String AZUL = "\u001B[34m";
     public static void main(String[] args) throws InterruptedException {

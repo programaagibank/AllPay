@@ -1,10 +1,10 @@
-package com.allpay.projeto.view;
+package com.allpay.projeto.viewOld;
 
 import com.allpay.projeto.controller.UserController;
 
 import java.util.Scanner;
 
-public class FrontSignUp {
+public class FrontSignUpOld {
     public static final String RESET = "\u001B[0m";
     public static final String AZUL = "\u001B[34m";
 

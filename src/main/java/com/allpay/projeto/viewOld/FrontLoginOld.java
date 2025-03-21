@@ -1,4 +1,4 @@
-package com.allpay.projeto.view;
+package com.allpay.projeto.viewOld;
 
 import com.allpay.projeto.controller.User;
 import com.allpay.projeto.controller.UserController;
@@ -6,7 +6,7 @@ import com.allpay.projeto.controller.UserController;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class FrontLogin {
+public class FrontLoginOld {
     private static UserController userController = new UserController();
     public static final String RESET = "\u001B[0m";
     public static final String AZUL = "\u001B[34m";
@@ -41,7 +41,7 @@ public class FrontLogin {
                         userInfo.get("email"),
                         userInfo.get("senha_acesso"));
                 User.mostrarInfos();
-                FrontPrincipal.main(args);
+                FrontPrincipalOld.main(args);
             } else {
                 tentativas++;
                 System.out.println("Credenciais inválidas. Tentativas restantes: " + (MAX_TENTATIVAS - tentativas));
