@@ -29,6 +29,7 @@ public class FrontPrincipalOld {
                 System.out.println("╚═════════════════════════════╝"+ RESET);
                 System.out.print("Escolha uma opção: ");
                 opcaoEntrada = sc.nextInt();
+                sc.nextLine();
 
                 if (opcaoEntrada == 1) {
                     System.out.println("Você escolheu Pagar fatura. Vamos te redirecionar.");

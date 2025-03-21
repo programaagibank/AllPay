@@ -1,5 +1,7 @@
 package com.allpay.projeto.viewOld;
 
+import com.allpay.projeto.controller.FaturaController;
+import com.allpay.projeto.controller.User;
 import com.allpay.projeto.model.ModelFaturaDAO;
 
 import java.util.ArrayList;
@@ -14,8 +16,10 @@ public class FrontBuscarFaturaOld {
         System.out.println("║            Buscar Fatura           ║");
         System.out.println("╚════════════════════════════════════╝" + RESET);
         System.out.println();
-
-        new ModelFaturaDAO().buscarFaturasByUserId("00000000001");
+        // controller que tem a chamada da model fatura dao
+        // scann para ler
+        new FaturaController().buscarFaturasByUserId(User.getId_usuario());
+        sc.nextLine();
         System.out.println("Digite o id de pagamento da fatura: ");
     }
 }

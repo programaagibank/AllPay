@@ -8,6 +8,8 @@ import com.allpay.projeto.interfaces.DataBaseConnection;
 import com.allpay.projeto.model.BankAccountModelDAO;
 import com.allpay.projeto.model.ModelFaturaDAO;
 import com.allpay.projeto.model.UserModelDAO;
+import com.allpay.projeto.view.FrontEntrada;
+import com.allpay.projeto.viewOld.FrontEntradaOld;
 
 import java.sql.Connection;
 import java.util.AbstractMap;
@@ -27,20 +29,20 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         //GerarComprovantePagamento(1);
         //PaymentModelDAO.GerarComprovantePagamento();
-        //FrontEntrada.main(args);
+        FrontEntradaOld.main(args);
         //new UserController().select();
         //new ModelFaturaDAO().buscarFaturasByUserId("45678912345");
 
         //HashMap<String, String> teste = new BankAccountModelDAO().selectById("11223344556");
         //System.out.println(teste.get("nome_instituicao") + " | " + teste.get("conta") + " | " + teste.get("limite") + " | " + teste.get("saldo_usuario"));
-        GerarComprovantePagamento();
+//        GerarComprovantePagamento();
     }
 
-    public static void GerarComprovantePagamento(/*int VarIdPagamento*/) {
-        try {
-            DataBaseConnection dbConnect = new MySQLDataBaseConnection(URL, USER, PASSWORD);
-            dbConnect.connect();
-            dbConnect.getConnection().createStatement().execute("USE allpay");
+//    public static void GerarComprovantePagamento(/*int VarIdPagamento*/) {
+//        try {
+//            DataBaseConnection dbConnect = new MySQLDataBaseConnection(URL, USER, PASSWORD);
+//            dbConnect.connect();
+//            dbConnect.getConnection().createStatement().execute("USE allpay");
 
 //            int idPagamento = VarIdPagamento;
 //
@@ -97,44 +99,44 @@ public class Main {
 //            statement.close();
 //            dbConnect.closeConnection();
 
-
-            Scanner sc = new Scanner(System.in);
-
-            ModelFaturaDAO model = new ModelFaturaDAO();
-
-            ArrayList<HashMap<String,String>> entry = model.getData();
-
-            BankAccountModelDAO conta = new BankAccountModelDAO();
-            ArrayList<HashMap<String,String>> dataConta = conta.findUserBankAccount("00000000001");
-
-            model.buscarFaturasByUserId("00000000001");
-
-            System.out.println("Fatura q vc quer pagar: ");
-            int id;
-            id = sc.nextInt() - 1;
-
-            System.out.println("Método de pagamento: ");
-            String met = FaturaController.escolherMetodoPag(sc.nextInt() - 1);
-            System.out.println("Selecionado: " + met);
-            BankAccountController bankControler = new BankAccountController();
-            bankControler.findUserBankAccount();
-
-            if (!"CRÉDITO".equals(met)) {
-                System.out.println("main");
-                float escolherBanco = conta.escolherBanco("00000000001", 3);
-
-                float teste = Float.parseFloat(model.data.get(id).get("valor_fatura"));
-                float efetuarPagamento = model.efetuarPagamento("00000000001", id, teste ,  escolherBanco, "77", 3);
-                conta.saldoUpdate(efetuarPagamento, "00000000001");
-            }
-            else {
-
-                float escolherBancoCartao = conta.escolherBancoCartao("00000000001", 3);
-                float efetuarPagamentoCartao = model.efetuarPagamentoCartao("00000000001", id, Float.parseFloat(model.data.get(id).get("limite")), escolherBancoCartao, "77", 3);
-                conta.limiteUpdate(efetuarPagamentoCartao, "00000000001");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//
+//            Scanner sc = new Scanner(System.in);
+//
+//            ModelFaturaDAO model = new ModelFaturaDAO();
+//
+//            ArrayList<HashMap<String,String>> entry = model.getData();
+//
+//            BankAccountModelDAO conta = new BankAccountModelDAO();
+//            ArrayList<HashMap<String,String>> dataConta = conta.findUserBankAccount("00000000001");
+//
+//            model.buscarFaturasByUserId("00000000001");
+//
+//            System.out.println("Fatura q vc quer pagar: ");
+//            int id;
+//            id = sc.nextInt() - 1;
+//
+//            System.out.println("Método de pagamento: ");
+//            String met = FaturaController.escolherMetodoPag(sc.nextInt() - 1);
+//            System.out.println("Selecionado: " + met);
+//            BankAccountController bankControler = new BankAccountController();
+//            bankControler.findUserBankAccount();
+//
+//            if (!"CRÉDITO".equals(met)) {
+//                System.out.println("main");
+//                float escolherBanco = conta.escolherBanco("00000000001", 3);
+//
+//                float teste = Float.parseFloat(model.data.get(id).get("valor_fatura"));
+//                float efetuarPagamento = model.efetuarPagamento("00000000001", id, teste ,  escolherBanco, "77", 3);
+//                conta.saldoUpdate(efetuarPagamento, "00000000001");
+//            }
+//            else {
+//
+//                float escolherBancoCartao = conta.escolherBancoCartao("00000000001", 3);
+//                float efetuarPagamentoCartao = model.efetuarPagamentoCartao("00000000001", id, Float.parseFloat(model.data.get(id).get("limite")), escolherBancoCartao, "77", 3);
+//                conta.limiteUpdate(efetuarPagamentoCartao, "00000000001");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
