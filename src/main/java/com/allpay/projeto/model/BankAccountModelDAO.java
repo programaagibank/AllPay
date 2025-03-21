@@ -16,7 +16,7 @@ public class BankAccountModelDAO {
   public BankAccountModelDAO(){
     dbConnect = new MySQLDataBaseConnection();
   }
-  public HashMap<String, String> findUserBankAccount(String id){
+  public ArrayList<HashMap<String,String>> findUserBankAccount(String id){
     String sql = """
             SELECT ib.nome_instituicao, CONCAT(U.id_usuario, ' - ', ib.id_instituicao) AS conta, C.limite, C.saldo_usuario
             FROM usuario U
@@ -24,7 +24,8 @@ public class BankAccountModelDAO {
             INNER JOIN instituicao_bancaria ib ON ib.id_instituicao = C.id_instituicao
             WHERE U.id_usuario = ?;
             """;
-    HashMap<String, String> dados = new HashMap<>();
+
+    ArrayList<HashMap<String,String>> bancosDisponiveis = new ArrayList();
 
     try {
       dbConnect.connect();
@@ -34,14 +35,15 @@ public class BankAccountModelDAO {
 
       ResultSet rs = stmt.executeQuery();
 
-      if(rs.next()) {
+      while (rs.next()) {
+        HashMap<String, String> dados = new HashMap<>();
         dados.put("nome_instituicao", rs.getString("nome_instituicao"));
         dados.put("conta", rs.getString("conta"));
         dados.put("limite", rs.getString("limite"));
         dados.put("saldo_usuario", rs.getString("saldo_usuario"));
-      } else {
-        System.out.println("Voce nao tem cadastro em nenhuma parceira");
+        bancosDisponiveis.add(dados);
       }
+
       rs.close();
       stmt.close();
       dbConnect.closeConnection();
@@ -49,7 +51,7 @@ public class BankAccountModelDAO {
     } catch (SQLException e) {
       System.out.println("Erro ao buscar");
     }
-    return dados;
+    return bancosDisponiveis;
   }
 
   public float escolherBancoCartao (String id_usuario, int id_instituicao) {
@@ -85,7 +87,7 @@ public class BankAccountModelDAO {
   }
 
   public float escolherBanco (String id_usuario, int id_instituicao) {
-
+    System.out.println("escolherbanco");
     String query = "SELECT saldo_usuario FROM conta WHERE id_instituicao = ? and id_usuario = ?";
 
     float saldo = 0;

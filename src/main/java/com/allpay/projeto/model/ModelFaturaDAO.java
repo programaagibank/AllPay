@@ -4,6 +4,8 @@ import java.sql.*;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.HashMap;
+
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
 
@@ -12,7 +14,7 @@ import javax.imageio.plugins.jpeg.JPEGImageReadParam;
 public class ModelFaturaDAO {
 
     DataBaseConnection conn;
-    public ArrayList<SimpleEntry<Integer, Float>> data;
+    public ArrayList<HashMap<String,String>> data;
 
     public ModelFaturaDAO() {
 
@@ -20,14 +22,14 @@ public class ModelFaturaDAO {
         this.data = new ArrayList<>();
     }
 
-    public ArrayList<SimpleEntry<Integer, Float>> getData () {
+    public ArrayList<HashMap<String,String>> getData () {
 
         return data;
     }
 
     float result = 0;
 
-    public ArrayList<SimpleEntry<Integer, Float>> buscarFaturasByUserId ( String id_usuarioOut) {
+    public ArrayList<HashMap<String,String>> buscarFaturasByUserId ( String id_usuarioOut) {
 
         String query = "SELECT * FROM fatura WHERE id_usuario = ? and status_fatura <> 'PAGA'";
 
@@ -39,22 +41,20 @@ public class ModelFaturaDAO {
             stmt.setString(1, id_usuarioOut);
 
             ResultSet rs = stmt.executeQuery();
-            int i = 0;
             //System.out.println(data.get(0).getKey());
             while (rs.next()) {
 
-                String id_usuario = rs.getString("id_usuario");
-                int id_fatura = rs.getInt("id_fatura");
-                float valor_fatura = rs.getInt("valor_fatura");
-                String nome_recebedor = rs.getString("nome_recebedor");
-                String status_fatura = rs.getString("status_fatura");
-                String descricao = rs.getString("descricao");
+                HashMap<String,String> dados = new HashMap<>();
+                dados.put("id_usuario", rs.getString("id_usuario"));
+                dados.put("id_fatura", rs.getString("id_fatura"));
+                dados.put("valor_fatura", rs.getString("valor_fatura"));
+                dados.put("nome_recebedor", rs.getString("nome_recebedor"));
+                dados.put("status_fatura", rs.getString("status_fatura"));
+                dados.put("descricao", rs.getString("descricao"));
+                System.out.println(dados.put("id_fatura", rs.getString("id_fatura")));
+                //System.out.println(i + " - " + id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
 
-                i ++;
-
-                System.out.println(i + " - " + id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
-
-                this.data.add(new SimpleEntry<>(id_fatura, valor_fatura));
+                this.data.add(dados);
             }
         } catch (SQLException e) {
 
@@ -64,7 +64,7 @@ public class ModelFaturaDAO {
         return this.data;
     }
 
-    public ArrayList<SimpleEntry<Integer, Float>> buscarFaturasNoUser (int id_faturaOut) {
+    public ArrayList<HashMap<String,String>> buscarFaturasNoUser (int id_faturaOut) {
 
         String query = "SELECT * FROM fatura WHERE id_fatura = ? and WHERE id_usuario = null";
 
@@ -80,14 +80,17 @@ public class ModelFaturaDAO {
 
             while (rs.next()) {
 
-                String id_usuario = rs.getString("id_usuario");
-                int id_fatura = rs.getInt("id_fatura");
-                float valor_fatura = rs.getInt("valor_fatura");
-                String nome_recebedor = rs.getString("nome_recebedor");
-                String status_fatura = rs.getString("status_fatura");
-                String descricao = rs.getString("descricao");
+                HashMap<String,String> dados = new HashMap<>();
+                dados.put("id_usuario", rs.getString("id_usuario"));
+                dados.put("id_fatura", rs.getString("id_fatura"));
+                dados.put("valor_fatura", rs.getString("valor_fatura"));
+                dados.put("nome_recebedor", rs.getString("nome_recebedor"));
+                dados.put("status_fatura", rs.getString("status_fatura"));
+                dados.put("descricao", rs.getString("descricao"));
 
-                this.data.add(new SimpleEntry<>(id_fatura, valor_fatura));
+                //System.out.println(i + " - " + id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
+
+                this.data.add(dados);
 
                 //System.out.println(id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
             }
@@ -99,7 +102,7 @@ public class ModelFaturaDAO {
         return this.data;
     }
 
-    public ArrayList<SimpleEntry<Integer, Float>> buscarFaturas (String id_usuarioOut) {
+    public ArrayList<HashMap<String,String>> buscarFaturas (String id_usuarioOut) {
 
         String query = "SELECT * FROM fatura WHERE id_usuario = ?";
 
@@ -114,14 +117,17 @@ public class ModelFaturaDAO {
 
             while (rs.next()) {
 
-                String id_usuario = rs.getString("id_usuario");
-                int id_fatura = rs.getInt("id_fatura");
-                float valor_fatura = rs.getFloat("valor_fatura");
-                String nome_recebedor = rs.getString("nome_recebedor");
-                String status_fatura = rs.getString("status_fatura");
-                String descricao = rs.getString("descricao");
+                HashMap<String,String> dados = new HashMap<>();
+                dados.put("id_usuario", rs.getString("id_usuario"));
+                dados.put("id_fatura", rs.getString("id_fatura"));
+                dados.put("valor_fatura", rs.getString("valor_fatura"));
+                dados.put("nome_recebedor", rs.getString("nome_recebedor"));
+                dados.put("status_fatura", rs.getString("status_fatura"));
+                dados.put("descricao", rs.getString("descricao"));
 
-                this.data.add(new SimpleEntry<>(id_fatura, valor_fatura));
+                //System.out.println(i + " - " + id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
+
+                this.data.add(dados);
 
                 //System.out.println(id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
             }
@@ -139,12 +145,14 @@ public class ModelFaturaDAO {
         BankAccountModelDAO conta = new BankAccountModelDAO();
         float limite_restante = 0;
         boolean validacao = conta.validarSenha(senha_transacao, id_usuarioOut, id_instituicao);
+        float valor_faturaConvert = Float.parseFloat(data.get(id_fatura).get("valor_fatura"));
+        int id_faturaConvert = Integer.parseInt(data.get(id_fatura).get("id_fatura"));
 
-        if (limite_usuario >= this.data.get(id_fatura).getValue() && validacao == true) {
+        if (limite_usuario >= valor_faturaConvert && validacao == true) {
 
-            limite_restante = limite_usuario - this.data.get(id_fatura).getValue();
+            limite_restante = limite_usuario - valor_faturaConvert;
 
-            atualizarStatus_fatura(this.data.get(id_fatura).getKey());
+            atualizarStatus_fatura(id_faturaConvert);
         } else {
 
             System.out.println("Transação negada!");
@@ -154,16 +162,18 @@ public class ModelFaturaDAO {
     }
 
     public float efetuarPagamento (String id_usuarioOut, int id_fatura, float valor_fatura, float saldo_usuario, String senha_transacao, int id_instituicao) {
-
+        System.out.println("aqui");
         BankAccountModelDAO conta = new BankAccountModelDAO();
         float saldo_restante = 0;
         boolean validacao = conta.validarSenha(senha_transacao, id_usuarioOut, id_instituicao);
+        float valor_faturaConvert = Float.parseFloat(data.get(id_fatura).get("valor_fatura"));
+        int id_faturaConvert = Integer.parseInt(data.get(id_fatura).get("id_fatura"));
 
-        if (saldo_usuario >= this.data.get(id_fatura).getValue() && validacao == true) {
+        if (saldo_usuario >= valor_faturaConvert && validacao == true) {
 
-            saldo_restante = saldo_usuario - this.data.get(id_fatura).getValue();
+            saldo_restante = saldo_usuario - valor_faturaConvert;
 
-            atualizarStatus_fatura(this.data.get(id_fatura).getKey());
+            atualizarStatus_fatura(id_faturaConvert);
         } else {
 
             System.out.println("Transação negada!");

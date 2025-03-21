@@ -1,5 +1,8 @@
 package com.allpay.projeto.viewOld;
 
+import com.allpay.projeto.model.ModelFaturaDAO;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FrontBuscarFaturaOld {
@@ -12,6 +15,7 @@ public class FrontBuscarFaturaOld {
         System.out.println("╚════════════════════════════════════╝" + RESET);
         System.out.println();
 
+        new ModelFaturaDAO().buscarFaturasByUserId("00000000001");
         System.out.println("Digite o id de pagamento da fatura: ");
     }
 }
