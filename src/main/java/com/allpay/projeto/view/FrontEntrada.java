@@ -9,8 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
+import javafx.scene.text.*;
 import javafx.stage.Stage;
 
 public class FrontEntrada extends Application {
@@ -29,17 +28,21 @@ public class FrontEntrada extends Application {
         logo.setFitWidth(200);
         logo.setPreserveRatio(true);
 
+        Text text = new Text("Sua revolução em Open Finance!");
+        text.setFont(Font.font("Montserrat", FontWeight.BOLD, 16));
+        text.setFill(Color.WHITE);
+
         Region spacer = new Region();
         spacer.setPrefHeight(120);
 
-        Button btnLogin = new Button("Login");
-        Button btnCadastro = new Button("Cadastro");
-        Button btnSair = new Button("Sair");
+        Button btnLogin = new Button("LOGIN");
+        Button btnCadastro = new Button("CADASTRO");
+        Button btnSair = new Button("SAIR");
 
         String buttonStyle = "-fx-background-color: #FFFFFF; " +
                 "-fx-text-fill: #000000; " +
-                "-fx-font-size: 18px; " +
-                "-fx-padding: 5px 20px; " +
+                "-fx-font-size: 14px; " +
+                "-fx-padding: 10px 20px; " +
                 "-fx-border-radius: 5px; " +
                 "-fx-background-radius: 5px; " +
                 "-fx-min-width: 250px; " +
@@ -49,8 +52,8 @@ public class FrontEntrada extends Application {
 
         String sairButtonStyle = "-fx-background-color: #000000; " +
                 "-fx-text-fill: #FFFFFF; " +
-                "-fx-font-size: 18px; " +
-                "-fx-padding: 5px 20px; " +
+                "-fx-font-size: 14px; " +
+                "-fx-padding: 10px 20px; " +
                 "-fx-border-radius: 5px; " +
                 "-fx-background-radius: 5px; " +
                 "-fx-min-width: 250px; " +
@@ -62,52 +65,26 @@ public class FrontEntrada extends Application {
         btnCadastro.setStyle(buttonStyle);
         btnSair.setStyle(sairButtonStyle);
 
-        btnLogin.setOnAction(e -> System.out.println("Você escolheu Login."));
-        btnCadastro.setOnAction(e -> System.out.println("Você escolheu Cadastro."));
+        btnLogin.setOnAction(e -> {
+            primaryStage.close();
+            FrontLogin frontLogin = new FrontLogin();
+            frontLogin.start(new Stage());
+        });
+
+        btnCadastro.setOnAction(e -> {
+            primaryStage.close();
+            FrontSignUp frontSignUp = new FrontSignUp();
+            frontSignUp.start(new Stage());
+        });
         btnSair.setOnAction(e -> System.exit(0));
 
-        layout.getChildren().addAll(logo, spacer, btnLogin, btnCadastro, btnSair);
+        layout.getChildren().addAll(logo, text, spacer, btnLogin, btnCadastro, btnSair);
 
-        showSplashScreen(primaryStage, layout);
-    }
-
-    private void showSplashScreen(Stage primaryStage, VBox mainLayout) {
-        Stage splashStage = new Stage();
-        VBox splashLayout = new VBox(40);
-        splashLayout.setAlignment(Pos.CENTER);
-
-        setBackground(splashLayout, "/images/backgroundImage.png");
-
-        ImageView logo = new ImageView(new Image(getClass().getResource("/images/logoAllpay.png").toExternalForm()));
-        logo.setFitWidth(200);
-        logo.setPreserveRatio(true);
-
-        Text text = new Text("Sua revolução em Open Finance!");
-        text.setFont(Font.font("Montserrat", 16));
-        text.setFill(Color.WHITE);
-
-        splashLayout.getChildren().addAll(logo, text);
-
-        Scene splashScene = new Scene(splashLayout, 320, 620);
-        splashStage.setScene(splashScene);
-        splashStage.setResizable(false);
-        splashStage.show();
-
-        new Thread(() -> {
-            try {
-                Thread.sleep(2000);
-                javafx.application.Platform.runLater(() -> {
-                    splashStage.close();
-                    Scene mainScene = new Scene(mainLayout, 320, 600);
-                    primaryStage.setScene(mainScene);
-                    primaryStage.setTitle("Allpay");
-                    primaryStage.setResizable(false);
-                    primaryStage.show();
-                });
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        Scene mainScene = new Scene(layout, 320, 600);
+        primaryStage.setScene(mainScene);
+        primaryStage.setTitle("Allpay");
+        primaryStage.setResizable(false);
+        primaryStage.show();
     }
 
     private void setBackground(Region layout, String imagePath) {
