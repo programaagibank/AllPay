@@ -1,4 +1,4 @@
-package com.allpay.projeto.view;
+package com.allpay.projeto.viewOld;
 
 import com.allpay.projeto.controller.User;
 import com.allpay.projeto.controller.UserController;
@@ -6,7 +6,7 @@ import com.allpay.projeto.controller.UserController;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class FrontPrincipal {
+public class FrontPrincipalOld {
     public static final String RESET = "\u001B[0m";
     public static final String AZUL = "\u001B[34m";
     public User user;
@@ -29,13 +29,14 @@ public class FrontPrincipal {
                 System.out.println("╚═════════════════════════════╝"+ RESET);
                 System.out.print("Escolha uma opção: ");
                 opcaoEntrada = sc.nextInt();
+                sc.nextLine();
 
                 if (opcaoEntrada == 1) {
                     System.out.println("Você escolheu Pagar fatura. Vamos te redirecionar.");
-                    FrontPagarFatura.main(args);
+                    FrontPagarFaturaOld.main(args);
                 } else if (opcaoEntrada == 2) {
                     System.out.println("Você escolheu Buscar fatura. Vamos te redirecionar.");
-                    FrontBuscarFatura.main(args);
+                    FrontBuscarFaturaOld.main(args);
                 } else if (opcaoEntrada == 3) {
                     System.out.println("Você escolheu Informações allPay. Vamos te redirecionar.");
                 } else if (opcaoEntrada == 4) {

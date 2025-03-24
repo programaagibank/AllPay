@@ -3,6 +3,7 @@ package com.allpay.projeto.controller;
 import com.allpay.projeto.model.UserModelDAO;
 
 import java.sql.ResultSet;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -16,23 +17,36 @@ public class UserController {
 
     public HashMap<String, String> getUserInfo(){
       return this.data;
-      }
+    }
 
     public void insert(String cpfTemp, String nomeTemp, String senhaTemp, String emailTemp ){
+        // Salvar no banco de dados
+        this.userModel.insert(cpfTemp, nomeTemp, senhaTemp, emailTemp);
+    }
+
+    public String validarId(String id_temp){
         Scanner sc = new Scanner(System.in);
 
-        while (!cpfTemp.matches("\\d+") || (cpfTemp.length() != 11 && cpfTemp.length() != 13)) {
+        while (!id_temp.matches("\\d+") || (id_temp.length() != 11 && id_temp.length() != 13)) {
             System.out.println("CPF ou CNPJ inválido! Digite novamente: ");
-            cpfTemp = sc.nextLine();
+            id_temp = sc.nextLine();
         }
+        return id_temp;
+    }
 
-        while (!nomeTemp.matches("[a-zA-ZÀ-ÿ\\s]+")){
+    public String validarNome(String nome_temp){
+        Scanner sc = new Scanner(System.in);
+
+        while (!nome_temp.matches("[a-zA-ZÀ-ÿ\\s]+")){
             System.out.println("Nome só pode ser composto por letras! Digite novamente: ");
-            nomeTemp = sc.nextLine();
+            nome_temp = sc.nextLine();
         }
+        return nome_temp;
+    }
 
-        System.out.println(senhaTemp);
-        while (!senhaTemp.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$")) {
+    public String validarSenha(String senha_temp){
+        Scanner sc = new Scanner(System.in);
+        while (!senha_temp.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$")) {
             System.out.println("Senha inválida! A senha deve conter pelo menos:");
             System.out.println("- Uma letra minúscula");
             System.out.println("- Uma letra maiúscula");
@@ -40,35 +54,65 @@ public class UserController {
             System.out.println("- Um caractere especial (@#$%^&+=!)");
             System.out.println("- Ter no mínimo 8 caracteres");
 
-            senhaTemp = sc.nextLine(); // Solicita uma nova senha
+            senha_temp = sc.nextLine(); // Solicita uma nova senha
         }
+        return senha_temp;
+    }
+    public String validarEmail(String email_temp){
+        Scanner sc = new Scanner(System.in);
 
-        while (!emailTemp.matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")) {
+        while (!email_temp.matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")) {
             System.out.println("Email inválido! O email deve:");
             System.out.println("- Conter '@'");
             System.out.println("- Ter apenas letras minúsculas e números");
             System.out.println("- Ter um ponto seguido de pelo menos 2 letras minúsculas");
             System.out.println("- Ter um formato válido (ex: exemplo@email.com)");
 
-            emailTemp = sc.nextLine();
+            email_temp = sc.nextLine();
         }
-
-        // Salvar no banco de dados
-        this.userModel.insert(cpfTemp, nomeTemp, senhaTemp, emailTemp);
-
-
+    return email_temp;
     }
 
     public boolean autenticar(String id_usuario, String senha_acesso) {
 
         HashMap<String, String> data = userModel.selectById(id_usuario,senha_acesso);
         if (!data.isEmpty()) {
-            System.out.println("Authenticado!");
+            System.out.println("Autenticado!");
             this.data = data;
             return true;
         } else {
             return false;
         }
+    }
+
+
+
+    public static void exit() {
+        System.out.println("Você escolheu Sair. Obrigado por usar o allPay.");
+        System.out.println("Encerrando sessão...");
+        System.exit(0);
+    }
+
+    public int confirmarInfos(int numConfirmacao){
+        Scanner sc = new Scanner(System.in);
+        do{
+
+            if (numConfirmacao == 1){
+                return 1;
+            }
+            else if (numConfirmacao == 3){
+                System.out.println("Encerrando sessão...");
+                exit();
+                return 3;
+            } else if (numConfirmacao == 2) {
+                System.out.println("Recomeçando...");
+                return 2;
+            }else {
+                System.out.println("Opção inválida!");
+                return 4;
+            }
+
+        }while(numConfirmacao != 1 && numConfirmacao != 2 && numConfirmacao != 3);
 
     }
 }
