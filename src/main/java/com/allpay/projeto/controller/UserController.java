@@ -3,6 +3,7 @@ package com.allpay.projeto.controller;
 import com.allpay.projeto.model.UserModelDAO;
 
 import java.sql.ResultSet;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -82,8 +83,9 @@ public class UserController {
         } else {
             return false;
         }
-
     }
+
+
 
     public static void exit() {
         System.out.println("Você escolheu Sair. Obrigado por usar o allPay.");
