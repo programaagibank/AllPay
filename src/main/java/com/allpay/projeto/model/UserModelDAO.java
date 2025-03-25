@@ -15,6 +15,9 @@ public class UserModelDAO implements InterfaceUserModelDAO {
     public UserModelDAO(){
         dbConnect = new MySQLDataBaseConnection();
     }
+    public UserModelDAO(DataBaseConnection dbConnect) {
+        this.dbConnect = dbConnect;
+    }
 
     public void insert(String id_usuario, String nome_usuario, String senha_acesso, String email){
         String sql = "INSERT INTO usuario (id_usuario, nome_usuario, senha_acesso, email) VALUES (?, ?, ?, ?)";

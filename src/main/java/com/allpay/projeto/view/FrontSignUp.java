@@ -145,8 +145,8 @@ public class FrontSignUp extends Application {
 
         btnVoltar.setOnAction(e -> {
             primaryStage.close();
-            FrontEntrada frontEntrada = new FrontEntrada();
-            frontEntrada.start(new Stage());
+            FrontEntrada frontEntradaOld = new FrontEntrada();
+            frontEntradaOld.start(new Stage());
         });
 
         layout.getChildren().addAll(lblTitulo, txtCpfCnpj, txtNome, txtEmail, txtSenha, txtConfirmarSenha, errorPane, btnAvancar, btnVoltar);

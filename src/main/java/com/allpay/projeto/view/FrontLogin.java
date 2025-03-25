@@ -116,8 +116,8 @@ public class FrontLogin extends Application {
 
         btnVoltar.setOnAction(e -> {
             primaryStage.close();
-            FrontEntrada frontEntrada = new FrontEntrada();
-            frontEntrada.start(new Stage());
+            FrontEntrada frontEntradaOld = new FrontEntrada();
+            frontEntradaOld.start(new Stage());
         });
 
         Region spacer = new Region();

@@ -58,11 +58,4 @@ public class TestUser {
     assertNull(User.getEmail(), "O email do usuário deve ser nulo após logout");
     assertNull(User.getSenha(), "A senha do usuário deve ser nula após logout");
   }
-  @Test
-  public void testDivideByZero() {
-    Runnable res = (int n1,int n2) -> n1/n2;
-    // Verificando se a exceção ArithmeticException é lançada
-    assertThrows(ArithmeticException.class, () -> {
-      10/0; // Aqui estamos tentando dividir 10 por 0
-    }, "Deve lançar uma ArithmeticException ao dividir por zero");
 }

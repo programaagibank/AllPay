@@ -13,12 +13,17 @@ import javax.imageio.plugins.jpeg.JPEGImageReadParam;
 
 public class ModelFaturaDAO {
 
-    DataBaseConnection conn;
+    private DataBaseConnection conn;
     public ArrayList<HashMap<String,String>> data;
 
     public ModelFaturaDAO() {
 
-        this.conn = new MySQLDataBaseConnection();
+        conn = new MySQLDataBaseConnection();
+        this.data = new ArrayList<>();
+    }
+    public ModelFaturaDAO(DataBaseConnection conn) {
+
+        this.conn = conn;
         this.data = new ArrayList<>();
     }
 
