@@ -1,4 +1,4 @@
-import com.allpay.projeto.viewOld.FrontEntradaOld;
+import com.allpay.projeto.view.FrontEntrada;
 import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayInputStream;
@@ -30,7 +30,7 @@ class TestFrontEntradaOld {
         System.setIn(new ByteArrayInputStream(input.getBytes()));
 
         // Executa o código
-        FrontEntradaOld.main(new String[]{});
+        FrontEntrada.main(new String[]{});
 
         // Captura a saída do console
         String saida = outputStream.toString();
@@ -44,7 +44,7 @@ class TestFrontEntradaOld {
         String input = "2\n3\n";
         System.setIn(new ByteArrayInputStream(input.getBytes()));
 
-        FrontEntradaOld.main(new String[]{});
+        FrontEntrada.main(new String[]{});
         String saida = outputStream.toString();
         assertTrue(saida.contains("Você escolheu Cadastro. Vamos te redirecionar."));
     }
@@ -54,7 +54,7 @@ class TestFrontEntradaOld {
         String input = "3\n"; // Garante que há uma entrada válida para evitar erro
         System.setIn(new ByteArrayInputStream(input.getBytes()));
 
-        FrontEntradaOld.main(new String[]{});
+        FrontEntrada.main(new String[]{});
         String saida = outputStream.toString();
         assertTrue(saida.contains("Você escolheu Sair. Obrigado por usar o allPay."));
     }
