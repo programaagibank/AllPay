@@ -25,7 +25,7 @@ public class FrontEntrada extends Application {
         setBackground(layout, "/images/backgroundImage.png");
 
         ImageView logo = new ImageView(new Image(getClass().getResource("/images/logoAllpay.png").toExternalForm()));
-        logo.setFitWidth(200);
+        logo.setFitWidth(280);
         logo.setPreserveRatio(true);
 
         Text text = new Text("Sua revolução em Open Finance!");

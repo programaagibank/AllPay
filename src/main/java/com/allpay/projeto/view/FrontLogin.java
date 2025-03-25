@@ -104,8 +104,10 @@ public class FrontLogin extends Application {
                         userInfo.get("nome_usuario"),
                         userInfo.get("email"),
                         userInfo.get("senha_acesso"));
-                User.mostrarInfos();
-                //FrontPrincipal.start(primaryStage); // Navegar para a tela principal
+
+                Stage stage = (Stage) btnLogin.getScene().getWindow();
+                stage.close();
+                new FrontPrincipal("70191820602", "Amanda").start(new Stage());
             } else {
                 lblErro.setText("Credenciais inválidas. Tente Novamente.");
                 lblErro.setVisible(true);

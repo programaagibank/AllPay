@@ -86,8 +86,8 @@ public class FrontSignUp extends Application {
                 "-fx-font-family: 'Montserrat'; " +
                 "-fx-font-weight: bold;");
 
-        Button btnSair = new Button("Sair");
-        btnSair.setStyle("-fx-background-color: #000000; " +
+        Button btnVoltar = new Button("Voltar");
+        btnVoltar.setStyle("-fx-background-color: #000000; " +
                 "-fx-text-fill: #FFFFFF; " +
                 "-fx-font-size: 14px; " +
                 "-fx-padding: 10px 20px; " +
@@ -124,11 +124,16 @@ public class FrontSignUp extends Application {
                 lblErro.setTextFill(Color.LIGHTGREEN);
                 lblErro.setVisible(true);
 
+
                 txtCpfCnpj.clear();
                 txtNome.clear();
                 txtEmail.clear();
                 txtSenha.clear();
                 txtConfirmarSenha.clear();
+
+                Stage stage = (Stage) btnAvancar.getScene().getWindow();
+                stage.close();
+                new FrontEntrada().start(new Stage());
 
             } catch (IllegalArgumentException ex) {
                 lblErro.setText(ex.getMessage());
@@ -138,13 +143,13 @@ public class FrontSignUp extends Application {
         });
 
 
-        btnSair.setOnAction(e -> {
+        btnVoltar.setOnAction(e -> {
             primaryStage.close();
             FrontEntrada frontEntrada = new FrontEntrada();
             frontEntrada.start(new Stage());
         });
 
-        layout.getChildren().addAll(lblTitulo, txtCpfCnpj, txtNome, txtEmail, txtSenha, txtConfirmarSenha, errorPane, btnAvancar, btnSair);
+        layout.getChildren().addAll(lblTitulo, txtCpfCnpj, txtNome, txtEmail, txtSenha, txtConfirmarSenha, errorPane, btnAvancar, btnVoltar);
 
         Scene scene = new Scene(layout, 320, 600);
         primaryStage.setScene(scene);
