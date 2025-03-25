@@ -2,6 +2,7 @@ package com.allpay.projeto.view;
 
 import com.allpay.projeto.controller.User;
 import com.allpay.projeto.controller.UserController;
+import com.allpay.projeto.view.FrontSignUp;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -62,7 +63,25 @@ public class FrontLogin extends Application {
                 "-fx-font-family: 'Montserrat'; " +
                 "-fx-font-weight: bold;");
 
+        Button btnCadastro = new Button("Cadastro");
+        btnCadastro.setOnAction(e -> {
+            Stage stage = (Stage) btnCadastro.getScene().getWindow();
+            stage.close();
+            new FrontSignUp().start(new Stage());
+        });
+        btnCadastro.setStyle("-fx-background-color: #FFFFFF; " +
+                "-fx-text-fill: #000000; " +
+                "-fx-font-size: 14px; " +
+                "-fx-padding: 10px 20px; " +
+                "-fx-border-radius: 5px; " +
+                "-fx-background-radius: 5px; " +
+                "-fx-min-width: 250px; " +
+                "-fx-min-height: 40px; " +
+                "-fx-font-family: 'Montserrat'; " +
+                "-fx-font-weight: bold;");
+
         Button btnVoltar = new Button("Voltar");
+
         btnVoltar.setStyle("-fx-background-color: #000000; " +
                 "-fx-text-fill: #FFFFFF; " +
                 "-fx-font-size: 14px; " +
@@ -103,10 +122,10 @@ public class FrontLogin extends Application {
         spacer.setPrefHeight(40);
 
         Region spacer2 = new Region();
-        spacer2.setPrefHeight(40);
+        spacer2.setPrefHeight(20);
 
 
-        layout.getChildren().addAll(lblTitulo, spacer, txtCpfCnpj, txtSenha, lblErro, spacer2, btnLogin, btnVoltar);
+        layout.getChildren().addAll(lblTitulo, spacer, txtCpfCnpj, txtSenha, lblErro, spacer2, btnLogin, btnCadastro, btnVoltar);
 
         Scene scene = new Scene(layout, 320, 600);
         primaryStage.setScene(scene);

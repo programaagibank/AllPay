@@ -14,6 +14,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class FrontSignUp extends Application {
@@ -35,32 +36,43 @@ public class FrontSignUp extends Application {
         TextField txtCpfCnpj = new TextField();
         txtCpfCnpj.setPromptText("CPF ou CNPJ");
         txtCpfCnpj.setMaxWidth(250);
-        txtCpfCnpj.setStyle("-fx-font-size: 14px; -fx-padding: 10px;");
+        txtCpfCnpj.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);");
 
         TextField txtNome = new TextField();
         txtNome.setPromptText("Nome");
         txtNome.setMaxWidth(250);
-        txtNome.setStyle("-fx-font-size: 14px; -fx-padding: 10px;");
+        txtNome.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);");
 
         TextField txtEmail = new TextField();
         txtEmail.setPromptText("E-mail");
         txtEmail.setMaxWidth(250);
-        txtEmail.setStyle("-fx-font-size: 14px; -fx-padding: 10px;");
+        txtEmail.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);");
 
         PasswordField txtSenha = new PasswordField();
         txtSenha.setPromptText("Senha");
         txtSenha.setMaxWidth(250);
-        txtSenha.setStyle("-fx-font-size: 14px; -fx-padding: 10px;");
+        txtSenha.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);");
 
         PasswordField txtConfirmarSenha = new PasswordField();
         txtConfirmarSenha.setPromptText("Confirmar Senha");
         txtConfirmarSenha.setMaxWidth(250);
-        txtConfirmarSenha.setStyle("-fx-font-size: 14px; -fx-padding: 10px;");
+        txtConfirmarSenha.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);");
+
 
         Label lblErro = new Label();
-        lblErro.setFont(Font.font("Montserrat", FontWeight.BOLD, 14));
+        lblErro.setFont(Font.font("Montserrat", FontWeight.BOLD, 12));
         lblErro.setTextFill(Color.LIGHTCYAN);
         lblErro.setVisible(false);
+        lblErro.setWrapText(true);
+        lblErro.setMaxWidth(250);
+        lblErro.setTextAlignment(TextAlignment.CENTER);
+        lblErro.setAlignment(Pos.TOP_CENTER);
+
+        StackPane errorPane = new StackPane(lblErro);
+        errorPane.setMinHeight(55);
+        errorPane.setPrefHeight(55);
+        errorPane.setMaxHeight(55);
+        errorPane.setMaxWidth(250);
 
         Button btnAvancar = new Button("Avançar");
         btnAvancar.setStyle("-fx-background-color: #FFFFFF; " +
@@ -73,7 +85,6 @@ public class FrontSignUp extends Application {
                 "-fx-min-height: 40px; " +
                 "-fx-font-family: 'Montserrat'; " +
                 "-fx-font-weight: bold;");
-
 
         Button btnSair = new Button("Sair");
         btnSair.setStyle("-fx-background-color: #000000; " +
@@ -88,20 +99,40 @@ public class FrontSignUp extends Application {
                 "-fx-font-weight: bold;");
 
         btnAvancar.setOnAction(e -> {
-            String cpfCnpj = txtCpfCnpj.getText();
-            String nome = txtNome.getText();
-            String email = txtEmail.getText();
+            String cpfCnpj = txtCpfCnpj.getText().trim();
+            String nome = txtNome.getText().trim();
+            String email = txtEmail.getText().trim().toLowerCase();
             String senha = txtSenha.getText();
             String confirmarSenha = txtConfirmarSenha.getText();
 
-            if (senha.equals(confirmarSenha)) {
+            lblErro.setVisible(false);
+
+            try {
+
+                cpfCnpj = userController.validarId(cpfCnpj);
+                nome = userController.validarNome(nome);
+                email = userController.validarEmail(email);
+                senha = userController.validarSenha(senha);
+
+                if (!senha.equals(confirmarSenha)) {
+                    throw new IllegalArgumentException("As senhas não coincidem!");
+                }
+
                 userController.insert(cpfCnpj, nome, senha, email);
+
                 lblErro.setText("Cadastro realizado com sucesso!");
                 lblErro.setTextFill(Color.LIGHTGREEN);
                 lblErro.setVisible(true);
-            } else {
-                lblErro.setText("As senhas não coincidem!");
-                lblErro.setTextFill(Color.LIGHTCYAN);
+
+                txtCpfCnpj.clear();
+                txtNome.clear();
+                txtEmail.clear();
+                txtSenha.clear();
+                txtConfirmarSenha.clear();
+
+            } catch (IllegalArgumentException ex) {
+                lblErro.setText(ex.getMessage());
+                lblErro.setTextFill(Color.LIGHTCORAL);
                 lblErro.setVisible(true);
             }
         });
@@ -113,10 +144,7 @@ public class FrontSignUp extends Application {
             frontEntrada.start(new Stage());
         });
 
-        Region spacer = new Region();
-        spacer.setPrefHeight(5);
-
-        layout.getChildren().addAll(lblTitulo, txtCpfCnpj, txtNome, txtEmail, txtSenha, txtConfirmarSenha, lblErro, spacer, btnAvancar, btnSair);
+        layout.getChildren().addAll(lblTitulo, txtCpfCnpj, txtNome, txtEmail, txtSenha, txtConfirmarSenha, errorPane, btnAvancar, btnSair);
 
         Scene scene = new Scene(layout, 320, 600);
         primaryStage.setScene(scene);

@@ -9,7 +9,6 @@ import com.allpay.projeto.model.BankAccountModelDAO;
 import com.allpay.projeto.model.ModelFaturaDAO;
 import com.allpay.projeto.model.UserModelDAO;
 import com.allpay.projeto.view.FrontEntrada;
-import com.allpay.projeto.viewOld.FrontEntradaOld;
 
 import java.sql.Connection;
 import java.util.AbstractMap;
@@ -29,7 +28,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         //GerarComprovantePagamento(1);
         //PaymentModelDAO.GerarComprovantePagamento();
-        FrontEntradaOld.main(args);
+        FrontEntrada.main(args);
         //new UserController().select();
         //new ModelFaturaDAO().buscarFaturasByUserId("45678912345");
 
