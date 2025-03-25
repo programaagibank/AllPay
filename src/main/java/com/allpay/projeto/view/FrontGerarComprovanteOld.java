@@ -6,7 +6,7 @@ import com.allpay.projeto.interfaces.DataBaseConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class FrontGerarComprovante{
+public class FrontGerarComprovanteOld {
     static final String URL = System.getenv("DB_URL");
     static final String USER = System.getenv("DB_USER");
     static final String PASSWORD = System.getenv("DB_PASSWORD");

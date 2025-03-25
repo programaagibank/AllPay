@@ -9,7 +9,7 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class TesteUserModal {
+class TestUserModel {
 
     private UserModelDAO userModelDAO;
     private DataBaseConnection mockDbConnect;

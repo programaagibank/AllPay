@@ -2,6 +2,7 @@ package com.allpay.projeto.controller;
 
 import com.allpay.projeto.model.UserModelDAO;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class UserController {
     private static UserModelDAO userModel;
@@ -58,7 +59,32 @@ public class UserController {
     }
 
     public static void exit() {
+        System.out.println("Você escolheu Sair. Obrigado por usar o allPay.");
+        System.out.println("Encerrando sessão...");
         System.exit(0);
+    }
+
+    public int confirmarInfos(int numConfirmacao){
+        Scanner sc = new Scanner(System.in);
+        do{
+
+            if (numConfirmacao == 1){
+                return 1;
+            }
+            else if (numConfirmacao == 3){
+                System.out.println("Encerrando sessão...");
+                exit();
+                return 3;
+            } else if (numConfirmacao == 2) {
+                System.out.println("Recomeçando...");
+                return 2;
+            }else {
+                System.out.println("Opção inválida!");
+                return 4;
+            }
+
+        }while(numConfirmacao != 1 && numConfirmacao != 2 && numConfirmacao != 3);
+
     }
 
 }
