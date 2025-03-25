@@ -8,13 +8,13 @@ import java.util.HashMap;
 
 public class FaturaController {
 
-    public static String escolherMetodoPag (int choice) {
+    public String escolherMetodoPag (int choice) {
 
         String metodo_pag;
 
         String[] opcoes = {"PIX", "CRÉDITO", "DÉBITO", "TED", "BOLETO"};
 
-        System.out.println(Arrays.toString(opcoes));
+        //System.out.println(Arrays.toString(opcoes));
 
         metodo_pag = opcoes[choice];
 
@@ -23,7 +23,14 @@ public class FaturaController {
 
     public void buscarFaturasByUserId(String id_usuario){
         ArrayList<HashMap<String,String>> result = new ModelFaturaDAO().buscarFaturasByUserId(id_usuario);
-        System.out.println("pritou faturas");
-        System.out.println(result.get(0).get("id_fatura"));
+
+        for (int i = 0; i < result.size(); i++) {
+            System.out.println("Código da fatura: " + result.get(i).get("id_fatura"));
+            System.out.println("Valor: R$" + result.get(i).get("valor_fatura"));
+            System.out.println("Status: " + result.get(i).get("status_fatura"));
+            System.out.println("Descrição: " + result.get(i).get("descricao"));
+            System.out.println("Remetente: " + result.get(i).get("nome_recebedor"));
+            System.out.println(" ");
+        }
     }
 }

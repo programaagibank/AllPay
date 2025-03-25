@@ -2,7 +2,7 @@
 package com.allpay.projeto.viewOld;
 
 import com.allpay.projeto.viewOld.FrontLoginOld;
-import com.allpay.projeto.view.FrontSignUp;
+import com.allpay.projeto.viewOld.FrontSignUpOld;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -31,7 +31,7 @@ public class FrontEntradaOld {
         System.out.println(RESET + "\n✅ Carregamento concluído!\n");
 
         Scanner sc = new Scanner(System.in);
-        int opcaoEntrada = 0;
+        String opcaoEntrada = "";
 
         do {
             try {
@@ -41,15 +41,15 @@ public class FrontEntradaOld {
                 System.out.println("║ 3. Sair          ║");
                 System.out.println("╚══════════════════╝"+ RESET);
                 System.out.print("Escolha uma opção: ");
-                opcaoEntrada = sc.nextInt();
+                opcaoEntrada = sc.nextLine();
 
-                if (opcaoEntrada == 1) {
+                if (opcaoEntrada.equals("1")) {
                     System.out.println("Você escolheu Login. Vamos te redirecionar.");
                     FrontLoginOld.main(args);
-                } else if (opcaoEntrada == 2) {
+                } else if (opcaoEntrada.equals("2")) {
                     System.out.println("Você escolheu Cadastro. Vamos te redirecionar.");
-                    FrontSignUp.main(args);
-                } else if (opcaoEntrada == 3) {
+                    FrontSignUpOld.main(args);
+                } else if (opcaoEntrada.equals("3")) {
                     System.out.println("Você escolheu Sair. Obrigado por usar o allPay.");
                 } else {
                     System.out.println("Opção inválida! Tente novamente.");
@@ -63,7 +63,7 @@ public class FrontEntradaOld {
                 sc.nextLine();
             }
 
-        } while (opcaoEntrada != 3);
+        } while (!opcaoEntrada.equals("3"));
 
         sc.close();
     }

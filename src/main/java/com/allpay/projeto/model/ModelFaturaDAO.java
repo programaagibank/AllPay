@@ -51,7 +51,7 @@ public class ModelFaturaDAO {
                 dados.put("nome_recebedor", rs.getString("nome_recebedor"));
                 dados.put("status_fatura", rs.getString("status_fatura"));
                 dados.put("descricao", rs.getString("descricao"));
-                System.out.println(dados.put("id_fatura", rs.getString("id_fatura")));
+                //System.out.println(dados.put("id_fatura", rs.getString("id_fatura")));
                 //System.out.println(i + " - " + id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
 
                 this.data.add(dados);

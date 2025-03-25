@@ -11,21 +11,32 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BankAccountModelDAO {
+
+  ArrayList<HashMap<String,String>> bancosDisponiveis = new ArrayList();
+
   private static DataBaseConnection dbConnect;
 
   public BankAccountModelDAO(){
     dbConnect = new MySQLDataBaseConnection();
   }
+
+  public BankAccountModelDAO(ArrayList<HashMap<String,String>> bancosDisponiveis){
+    dbConnect = new MySQLDataBaseConnection();
+    this.bancosDisponiveis = bancosDisponiveis;
+  }
+
+  public ArrayList<HashMap<String,String>> getBancosDisponiveis () {
+
+    return bancosDisponiveis;
+  }
   public ArrayList<HashMap<String,String>> findUserBankAccount(String id){
     String sql = """
-            SELECT ib.nome_instituicao, CONCAT(U.id_usuario, ' - ', ib.id_instituicao) AS conta, C.limite, C.saldo_usuario
-            FROM usuario U
-            INNER JOIN conta C ON C.id_usuario = U.id_usuario
-            INNER JOIN instituicao_bancaria ib ON ib.id_instituicao = C.id_instituicao
-            WHERE U.id_usuario = ?;
+            SELECT ib.nome_instituicao, ib.id_instituicao, C.limite, C.saldo_usuario
+                        FROM usuario U
+                        INNER JOIN conta C ON C.id_usuario = U.id_usuario
+                        INNER JOIN instituicao_bancaria ib ON ib.id_instituicao = C.id_instituicao
+                        WHERE U.id_usuario = ?;
             """;
-
-    ArrayList<HashMap<String,String>> bancosDisponiveis = new ArrayList();
 
     try {
       dbConnect.connect();
@@ -38,10 +49,10 @@ public class BankAccountModelDAO {
       while (rs.next()) {
         HashMap<String, String> dados = new HashMap<>();
         dados.put("nome_instituicao", rs.getString("nome_instituicao"));
-        dados.put("conta", rs.getString("conta"));
         dados.put("limite", rs.getString("limite"));
         dados.put("saldo_usuario", rs.getString("saldo_usuario"));
-        bancosDisponiveis.add(dados);
+        dados.put("id_instituicao", rs.getString("id_instituicao"));
+        this.bancosDisponiveis.add(dados);
       }
 
       rs.close();
@@ -51,7 +62,7 @@ public class BankAccountModelDAO {
     } catch (SQLException e) {
       System.out.println("Erro ao buscar");
     }
-    return bancosDisponiveis;
+    return this.bancosDisponiveis;
   }
 
   public float escolherBancoCartao (String id_usuario, int id_instituicao) {
@@ -87,7 +98,6 @@ public class BankAccountModelDAO {
   }
 
   public float escolherBanco (String id_usuario, int id_instituicao) {
-    System.out.println("escolherbanco");
     String query = "SELECT saldo_usuario FROM conta WHERE id_instituicao = ? and id_usuario = ?";
 
     float saldo = 0;
