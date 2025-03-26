@@ -1,22 +1,17 @@
-package com.allpay.projeto.model;
-import java.math.BigInteger;
+package com.allpay.projeto.DAO;
 import java.sql.*;
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
 
-import javax.imageio.plugins.jpeg.JPEGImageReadParam;
-
-public class ModelFaturaDAO {
+public class FaturaDAO {
 
     DataBaseConnection conn;
     public ArrayList<HashMap<String,String>> data;
 
-    public ModelFaturaDAO() {
+    public FaturaDAO() {
 
         this.conn = new MySQLDataBaseConnection();
         this.data = new ArrayList<>();
@@ -142,7 +137,7 @@ public class ModelFaturaDAO {
 
     public float efetuarPagamentoCartao (String id_usuarioOut, int id_fatura, float valor_fatura, float limite_usuario, String senha_transacao, int id_instituicao) {
 
-        BankAccountModelDAO conta = new BankAccountModelDAO();
+        BankAccountDAO conta = new BankAccountDAO();
         float limite_restante = 0;
         boolean validacao = conta.validarSenha(senha_transacao, id_usuarioOut, id_instituicao);
         float valor_faturaConvert = Float.parseFloat(data.get(id_fatura).get("valor_fatura"));
@@ -163,7 +158,7 @@ public class ModelFaturaDAO {
 
     public float efetuarPagamento (String id_usuarioOut, int id_fatura, float valor_fatura, float saldo_usuario, String senha_transacao, int id_instituicao) {
         System.out.println("aqui");
-        BankAccountModelDAO conta = new BankAccountModelDAO();
+        BankAccountDAO conta = new BankAccountDAO();
         float saldo_restante = 0;
         boolean validacao = conta.validarSenha(senha_transacao, id_usuarioOut, id_instituicao);
         float valor_faturaConvert = Float.parseFloat(data.get(id_fatura).get("valor_fatura"));

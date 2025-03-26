@@ -1,6 +1,5 @@
 package com.allpay.projeto.view;
 
-import com.allpay.projeto.controller.User;
 import com.allpay.projeto.controller.UserController;
 import javafx.application.Application;
 import javafx.geometry.Insets;
