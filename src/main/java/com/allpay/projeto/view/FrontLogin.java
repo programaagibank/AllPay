@@ -2,16 +2,13 @@ package com.allpay.projeto.view;
 
 import com.allpay.projeto.controller.User;
 import com.allpay.projeto.controller.UserController;
-import com.allpay.projeto.view.FrontSignUp;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -23,6 +20,7 @@ import java.util.HashMap;
 public class FrontLogin extends Application {
 
     private static UserController userController = new UserController();
+    private ImageView loadingGif = new ImageView();
 
     @Override
     public void start(Stage primaryStage) {
@@ -52,81 +50,66 @@ public class FrontLogin extends Application {
         lblErro.setVisible(false);
 
         Button btnLogin = new Button("Entrar");
-        btnLogin.setStyle("-fx-background-color: #FFFFFF; " +
-                "-fx-text-fill: #000000; " +
-                "-fx-font-size: 14px; " +
-                "-fx-padding: 10px 20px; " +
-                "-fx-border-radius: 5px; " +
-                "-fx-background-radius: 5px; " +
-                "-fx-min-width: 250px; " +
-                "-fx-min-height: 40px; " +
-                "-fx-font-family: 'Montserrat'; " +
-                "-fx-font-weight: bold;");
+        btnLogin.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-min-width: 250px; -fx-min-height: 40px; -fx-font-family: 'Montserrat'; -fx-font-weight: bold;");
 
         Button btnCadastro = new Button("Cadastro");
-        btnCadastro.setOnAction(e -> {
-            Stage stage = (Stage) btnCadastro.getScene().getWindow();
-            stage.close();
-            new FrontSignUp().start(new Stage());
-        });
-        btnCadastro.setStyle("-fx-background-color: #FFFFFF; " +
-                "-fx-text-fill: #000000; " +
-                "-fx-font-size: 14px; " +
-                "-fx-padding: 10px 20px; " +
-                "-fx-border-radius: 5px; " +
-                "-fx-background-radius: 5px; " +
-                "-fx-min-width: 250px; " +
-                "-fx-min-height: 40px; " +
-                "-fx-font-family: 'Montserrat'; " +
-                "-fx-font-weight: bold;");
+        btnCadastro.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-min-width: 250px; -fx-min-height: 40px; -fx-font-family: 'Montserrat'; -fx-font-weight: bold;");
 
         Button btnVoltar = new Button("Voltar");
+        btnVoltar.setStyle("-fx-background-color: #000000; -fx-text-fill: #FFFFFF; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-min-width: 250px; -fx-min-height: 40px; -fx-font-family: 'Montserrat'; -fx-font-weight: bold;");
 
-        btnVoltar.setStyle("-fx-background-color: #000000; " +
-                "-fx-text-fill: #FFFFFF; " +
-                "-fx-font-size: 14px; " +
-                "-fx-padding: 10px 20px; " +
-                "-fx-border-radius: 5px; " +
-                "-fx-background-radius: 5px; " +
-                "-fx-min-width: 250px; " +
-                "-fx-min-height: 40px; " +
-                "-fx-font-family: 'Montserrat'; " +
-                "-fx-font-weight: bold;");
+        try {
+            loadingGif.setImage(new Image(getClass().getResourceAsStream("/images/loading.gif")));
+        } catch (Exception e) {
+            System.out.println("Erro ao carregar o gif");
+        }
+        loadingGif.setFitWidth(20);
+        loadingGif.setFitHeight(20);
+        loadingGif.setVisible(false);
+
+        Region spacer = new Region();
+        spacer.setPrefHeight(40);
+
+
+        layout.getChildren().addAll(lblTitulo, spacer, txtCpfCnpj, txtSenha, lblErro, loadingGif, btnLogin, btnCadastro, btnVoltar);
 
         btnLogin.setOnAction(e -> {
             String cpfCnpj = txtCpfCnpj.getText();
             String senha = txtSenha.getText();
 
-            if (userController.autenticar(cpfCnpj, senha)) {
-                HashMap<String, String> userInfo = userController.getUserInfo();
-                User.setUserData(
-                        userInfo.get("id_usuario"),
-                        userInfo.get("nome_usuario"),
-                        userInfo.get("email"),
-                        userInfo.get("senha_acesso"));
+            loadingGif.setVisible(true);
+            lblErro.setVisible(false);
 
-                Stage stage = (Stage) btnLogin.getScene().getWindow();
-                stage.close();
-                new FrontPrincipal("70191820602", "Amanda").start(new Stage());
-            } else {
-                lblErro.setText("Credenciais inválidas. Tente Novamente.");
-                lblErro.setVisible(true);
-            }
+            new Thread(() -> {
+                boolean autenticado = userController.autenticar(cpfCnpj, senha);
+
+                javafx.application.Platform.runLater(() -> {
+                    if (autenticado) {
+                        HashMap<String, String> userInfo = userController.getUserInfo();
+                        String nomeUsuario = userInfo.get("nome_usuario");
+
+                        Stage stage = (Stage) btnLogin.getScene().getWindow();
+                        stage.close();
+                        new FrontPrincipal(cpfCnpj, nomeUsuario).start(new Stage());
+                    } else {
+                        loadingGif.setVisible(false);
+                        lblErro.setText("Credenciais inválidas. Tente Novamente.");
+                        lblErro.setVisible(true);
+                    }
+                });
+            }).start();
+        });
+
+        btnCadastro.setOnAction(e -> {
+            Stage stage = (Stage) btnCadastro.getScene().getWindow();
+            stage.close();
+            new FrontSignUp().start(new Stage());
         });
 
         btnVoltar.setOnAction(e -> {
             primaryStage.close();
-            FrontEntrada frontEntrada = new FrontEntrada();
-            frontEntrada.start(new Stage());
+            new FrontEntrada().start(new Stage());
         });
-
-        Region spacer = new Region();
-        spacer.setPrefHeight(40);
-
-        Region spacer2 = new Region();
-        spacer2.setPrefHeight(20);
-
-        layout.getChildren().addAll(lblTitulo, spacer, txtCpfCnpj, txtSenha, lblErro, spacer2, btnLogin, btnCadastro, btnVoltar);
 
         Scene scene = new Scene(layout, 320, 600);
         primaryStage.setScene(scene);
