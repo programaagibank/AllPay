@@ -42,7 +42,6 @@ public class FrontPrincipal extends Application {
         mainLayout.setPadding(new Insets(20));
         setBackground(mainLayout, "/images/backgroundImage.png");
 
-        // Cabeçalho
         Label lblNomeUsuario = new Label("Olá, " + nomeUsuario);
         lblNomeUsuario.setFont(Font.font("Montserrat", FontWeight.BOLD, 24));
         lblNomeUsuario.setTextFill(Color.WHITE);

@@ -126,7 +126,6 @@ public class FrontLogin extends Application {
         Region spacer2 = new Region();
         spacer2.setPrefHeight(20);
 
-
         layout.getChildren().addAll(lblTitulo, spacer, txtCpfCnpj, txtSenha, lblErro, spacer2, btnLogin, btnCadastro, btnVoltar);
 
         Scene scene = new Scene(layout, 320, 600);
