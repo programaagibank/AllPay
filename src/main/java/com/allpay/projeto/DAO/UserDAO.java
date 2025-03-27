@@ -15,7 +15,7 @@ public class UserDAO implements InterfaceUserModelDAO {
     public UserDAO(){
         dbConnect = new MySQLDataBaseConnection();
     }
-    public UserModelDAO(DataBaseConnection dbConnect) {
+    public UserDAO(DataBaseConnection dbConnect) {
         this.dbConnect = dbConnect;
     }
 

@@ -1,8 +1,8 @@
 package com.allpay.projeto.viewOld;
 
 import com.allpay.projeto.controller.FaturaController;
-import com.allpay.projeto.controller.User;
-import com.allpay.projeto.model.ModelFaturaDAO;
+import com.allpay.projeto.model.UserModel;
+
 
 import java.util.Scanner;
 
@@ -22,7 +22,7 @@ public class FrontPagarFaturaOld {
         }
         System.out.println("\r✔ Concluído!");
         System.out.println("Essas são suas faturas:");
-        new FaturaController().buscarFaturasByUserId(User.getId_usuario());
+        new FaturaController().buscarFaturasByUserId(UserModel.getId_usuario());
         System.out.println("Selecione qual deseja pagar:");
         //preciso do metodo de pagamento pra terminar o front
     }

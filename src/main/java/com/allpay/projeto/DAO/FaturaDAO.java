@@ -16,7 +16,7 @@ public class FaturaDAO {
         conn = new MySQLDataBaseConnection();
         this.data = new ArrayList<>();
     }
-    public ModelFaturaDAO(DataBaseConnection conn) {
+    public FaturaDAO(DataBaseConnection conn) {
 
         this.conn = conn;
         this.data = new ArrayList<>();
