@@ -1,6 +1,6 @@
 package com.allpay.projeto.controller;
 
-import com.allpay.projeto.model.ModelFaturaDAO;
+import com.allpay.projeto.DAO.FaturaDAO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +22,7 @@ public class FaturaController {
     }
 
     public void buscarFaturasByUserId(String id_usuario){
-        ArrayList<HashMap<String,String>> result = new ModelFaturaDAO().buscarFaturasByUserId(id_usuario);
+        ArrayList<HashMap<String,String>> result = new FaturaDAO().buscarFaturasByUserId(id_usuario);
         System.out.println("pritou faturas");
         System.out.println(result.get(0).get("id_fatura"));
     }

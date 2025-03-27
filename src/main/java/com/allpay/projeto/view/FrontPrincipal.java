@@ -1,10 +1,8 @@
 package com.allpay.projeto.view;
 
 import com.allpay.projeto.controller.UserController;
-import com.allpay.projeto.model.ModelFaturaDAO;
+import com.allpay.projeto.DAO.FaturaDAO;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -42,7 +40,6 @@ public class FrontPrincipal extends Application {
         mainLayout.setPadding(new Insets(20));
         setBackground(mainLayout, "/images/backgroundImage.png");
 
-        // Cabeçalho
         Label lblNomeUsuario = new Label("Olá, " + nomeUsuario);
         lblNomeUsuario.setFont(Font.font("Montserrat", FontWeight.BOLD, 24));
         lblNomeUsuario.setTextFill(Color.WHITE);
@@ -205,7 +202,7 @@ public class FrontPrincipal extends Application {
         ListView<HBox> listView = new ListView<>();
         listView.setStyle("-fx-background-color: transparent;");
 
-        ModelFaturaDAO faturaDAO = new ModelFaturaDAO();
+        FaturaDAO faturaDAO = new FaturaDAO();
         ArrayList<HashMap<String, String>> faturas = faturaDAO.buscarFaturas(idUsuario);
 
         for (HashMap<String, String> fatura : faturas) {

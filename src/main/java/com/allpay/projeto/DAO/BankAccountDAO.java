@@ -1,4 +1,4 @@
-package com.allpay.projeto.model;
+package com.allpay.projeto.DAO;
 
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
@@ -6,14 +6,13 @@ import com.allpay.projeto.interfaces.DataBaseConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class BankAccountModelDAO {
+public class BankAccountDAO {
   private static DataBaseConnection dbConnect;
 
-  public BankAccountModelDAO(){
+  public BankAccountDAO(){
     dbConnect = new MySQLDataBaseConnection();
   }
   public ArrayList<HashMap<String,String>> findUserBankAccount(String id){
