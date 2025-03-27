@@ -1,5 +1,6 @@
 package com.allpay.projeto.view;
 
+import com.allpay.projeto.controller.BankAccountController;
 import com.allpay.projeto.controller.UserController;
 import com.allpay.projeto.DAO.FaturaDAO;
 import javafx.application.Application;
@@ -25,12 +26,14 @@ public class FrontPrincipal extends Application {
 
     private final String idUsuario;
     private final String nomeUsuario;
+    private final ArrayList<HashMap<String,String>> contaBanco;
     private static final int WINDOW_WIDTH = 320;
     private static final int WINDOW_HEIGHT = 600;
 
     public FrontPrincipal(String idUsuario, String nomeUsuario) {
         this.idUsuario = idUsuario;
         this.nomeUsuario = nomeUsuario;
+        this.contaBanco = new BankAccountController().findUserBankAccount(idUsuario);
     }
 
     @Override
@@ -85,12 +88,12 @@ public class FrontPrincipal extends Application {
 
         ArrayList<HashMap<String, String>> bancos = buscarBancosUsuario();
 
-        if (bancos.isEmpty()) {
+        if (contaBanco.isEmpty()) {
             Label lblSemBancos = new Label("Nenhum banco vinculado");
             lblSemBancos.setTextFill(Color.WHITE);
             carrossel.getChildren().add(lblSemBancos);
         } else {
-            for (HashMap<String, String> banco : bancos) {
+            for (HashMap<String, String> banco : contaBanco) {
                 VBox cardBanco = criarCardBanco(banco);
                 carrossel.getChildren().add(cardBanco);
             }
@@ -106,11 +109,13 @@ public class FrontPrincipal extends Application {
         cardBanco.setMinWidth(WINDOW_WIDTH - 50);
         cardBanco.setPrefWidth(WINDOW_WIDTH - 50);
 
-        Label lblNomeBanco = new Label(banco.get("nome_banco"));
+        //chamar a cotrolle para colocar no card as informacoes
+
+        Label lblNomeBanco = new Label(banco.get("nome_instituicao"));
         lblNomeBanco.setTextFill(Color.WHITE);
         lblNomeBanco.setFont(Font.font("Montserrat", FontWeight.BOLD, 16));
 
-        Label lblSaldoBanco = new Label("R$ " + banco.get("saldo"));
+        Label lblSaldoBanco = new Label("R$ " + banco.get("saldo_usuario"));
         lblSaldoBanco.setTextFill(Color.WHITE);
         lblSaldoBanco.setFont(Font.font("Montserrat", FontWeight.BOLD, 18));
 

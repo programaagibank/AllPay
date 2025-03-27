@@ -1,4 +1,4 @@
-
+package com.allpay.projeto.trasicoes;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
@@ -16,13 +16,13 @@ public class MainApp extends Application {
     root = new StackPane();
 
     // Instâncias das páginas
-    Pagina1 pagina1 = new Pagina1(this);  // Passando a referência de MainApp
+    Pagina1 pagina1 = new Pagina1(this);  // Passando a referência de com.allpay.projeto.trasicoes.MainApp
     Pagina2 pagina2 = new Pagina2(this);
 
     // Adicionando as páginas ao root, mas apenas uma delas será visível
     root.getChildren().addAll(pagina1, pagina2);
 
-    // Exibindo a Pagina1 inicialmente
+    // Exibindo a com.allpay.projeto.trasicoes.Pagina1 inicialmente
     pagina1.setVisible(true);
     pagina2.setVisible(false);
 
@@ -33,7 +33,7 @@ public class MainApp extends Application {
     primaryStage.show();
   }
 
-  // Método para trocar para a Pagina2 com animação
+  // Método para trocar para a com.allpay.projeto.trasicoes.Pagina2 com animação
   public void trocarParaPagina2() {
     Pagina1 pagina1 = (Pagina1) root.getChildren().get(0);
     Pagina2 pagina2 = (Pagina2) root.getChildren().get(1);
@@ -52,7 +52,7 @@ public class MainApp extends Application {
     fadeOut.play();
   }
 
-  // Método para trocar para a Pagina1 com animação
+  // Método para trocar para a com.allpay.projeto.trasicoes.Pagina1 com animação
   public void trocarParaPagina1() {
     Pagina1 pagina1 = (Pagina1) root.getChildren().get(0);
     Pagina2 pagina2 = (Pagina2) root.getChildren().get(1);

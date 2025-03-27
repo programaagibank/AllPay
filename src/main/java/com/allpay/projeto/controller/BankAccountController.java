@@ -9,14 +9,15 @@ public class BankAccountController {
 
   //public void atualizarSaldo ()
 
-  public void findUserBankAccount(){
-    ArrayList<HashMap<String,String>> bancosDisponiveis = new BankAccountDAO().findUserBankAccount("11223344556");
+  public ArrayList<HashMap<String,String>> findUserBankAccount(String id){
+    ArrayList<HashMap<String,String>> bancosDisponiveis = new BankAccountDAO().findUserBankAccount(id);
     if(!bancosDisponiveis.isEmpty()){
 
-      bancosDisponiveis.forEach(elemento ->
-        System.out.println(elemento.get("nome_instituicao") + " | " + elemento.get("conta") + " | " + elemento.get("limite") + " | " + elemento.get("saldo_usuario")));
+//      bancosDisponiveis.forEach(elemento ->
+//        System.out.println(elemento.get("nome_instituicao") + " | " + elemento.get("conta") + " | " + elemento.get("limite") + " | " + elemento.get("saldo_usuario")));
+     return bancosDisponiveis;
     } else {
-      System.out.println("erro");
+      return bancosDisponiveis;
     }
   }
 }

@@ -1,5 +1,7 @@
 //import com.allpay.projeto.model.BankAccountModelDAO;
 
+import com.allpay.projeto.view.FrontEntrada;
+
 import java.sql.Connection;
 
 public class Main {
@@ -14,11 +16,11 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         //GerarComprovantePagamento(1);
         //PaymentModelDAO.GerarComprovantePagamento();
-//        FrontEntrada.main(args);
+        FrontEntrada.main(args);
         //new UserController().select();
         //new ModelFaturaDAO().buscarFaturasByUserId("45678912345");
 
-        MainApp.main(args);
+//        com.allpay.projeto.trasicoes.MainApp.main(args);
     }
 
 //    public static void GerarComprovantePagamento(/*int VarIdPagamento*/) {
