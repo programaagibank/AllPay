@@ -1,14 +1,14 @@
 package com.allpay.projeto.controller;
 
-import com.allpay.projeto.model.UserModelDAO;
+import com.allpay.projeto.DAO.UserDAO;
 import java.util.HashMap;
 
 public class UserController {
-    private static UserModelDAO userModel;
+    private static UserDAO userModel;
     private HashMap<String, String> data;
 
     public UserController() {
-        userModel = new UserModelDAO();
+        userModel = new UserDAO();
     }
 
     public HashMap<String, String> getUserInfo() {

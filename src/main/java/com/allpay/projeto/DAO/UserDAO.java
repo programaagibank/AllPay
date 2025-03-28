@@ -1,4 +1,4 @@
-package com.allpay.projeto.model;
+package com.allpay.projeto.DAO;
 
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
@@ -9,11 +9,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-public class UserModelDAO implements InterfaceUserModelDAO {
+public class UserDAO implements InterfaceUserModelDAO {
     private static DataBaseConnection dbConnect;
 
-    public UserModelDAO(){
+    public UserDAO(){
         dbConnect = new MySQLDataBaseConnection();
+    }
+    public UserDAO(DataBaseConnection dbConnect) {
+        this.dbConnect = dbConnect;
     }
 
     public void insert(String id_usuario, String nome_usuario, String senha_acesso, String email){

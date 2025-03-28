@@ -1,6 +1,5 @@
 package com.allpay.projeto.view;
 
-import com.allpay.projeto.model.ModelFaturaDAO;
 import java.util.Scanner;
 
 public class FrontBuscarFatura {

@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'application'
-    id 'org.openjfx.javafxplugin' version '0.0.11'  // Plugin JavaFX
+    id 'org.openjfx.javafxplugin' version '0.0.13'  // Versão atualizada do plugin
 }
 
 repositories {
@@ -11,13 +11,15 @@ repositories {
 dependencies {
     implementation 'mysql:mysql-connector-java:8.0.33'
 
+    // Dependências de teste
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
 
-    // JavaFX dependencies (se necessário)
-    implementation 'org.openjfx:javafx-controls:17'
-    implementation 'org.openjfx:javafx-fxml:17'
+    // Dependências JavaFX (opcional se estiver usando o plugin javafx)
+    implementation 'org.openjfx:javafx-controls:17.0.2'
+    implementation 'org.openjfx:javafx-fxml:17.0.2'
+    implementation 'org.openjfx:javafx-media:17.0.2'  // Novo módulo adicionado
 }
 
 application {
@@ -25,8 +27,8 @@ application {
 }
 
 javafx {
-    version = "17"  // Versão do JavaFX
-    modules = ['javafx.controls', 'javafx.fxml']  // Módulos que você usará
+    version = "17.0.2"
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.media']
 }
 
 test {
