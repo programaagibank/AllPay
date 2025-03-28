@@ -1,4 +1,4 @@
-package com.allpay.projeto.model;
+package com.allpay.projeto.DAO;
 
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
@@ -10,17 +10,17 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class BankAccountModelDAO {
+public class BankAccountDAO {
 
   ArrayList<HashMap<String,String>> bancosDisponiveis = new ArrayList();
 
   private static DataBaseConnection dbConnect;
 
-  public BankAccountModelDAO(){
+  public BankAccountDAO(){
     dbConnect = new MySQLDataBaseConnection();
   }
 
-  public BankAccountModelDAO(ArrayList<HashMap<String,String>> bancosDisponiveis){
+  public BankAccountDAO(ArrayList<HashMap<String,String>> bancosDisponiveis){
     dbConnect = new MySQLDataBaseConnection();
     this.bancosDisponiveis = bancosDisponiveis;
   }
@@ -167,9 +167,9 @@ public class BankAccountModelDAO {
     return validacao;
   }
 
-  public void saldoUpdate (float saldo_restante, String id_usuarioOut) {
+  public void saldoUpdate (float saldo_restante, String id_usuarioOut, int id_instituicao) {
 
-    String query = "UPDATE conta SET saldo_usuario = ? WHERE id_usuario = ?";
+    String query = "UPDATE conta SET saldo_usuario = ? WHERE id_usuario = ? and id_instituicao = ?";
 
     if (saldo_restante != 0) {
       try {
@@ -180,6 +180,8 @@ public class BankAccountModelDAO {
         PreparedStatement stmt = dbConnect.getConnection().prepareStatement(query);
         stmt.setFloat(1, saldo_restante);
         stmt.setString(2, id_usuarioOut);
+        stmt.setInt(3, id_instituicao);
+
 
         stmt.executeUpdate();
 
@@ -190,9 +192,9 @@ public class BankAccountModelDAO {
     }
   }
 
-  public void limiteUpdate (float saldo_restante, String id_usuarioOut) {
+  public void limiteUpdate (float saldo_restante, String id_usuarioOut, int id_instituicao) {
 
-    String query = "UPDATE conta SET limite = ? WHERE id_usuario = ?";
+    String query = "UPDATE conta SET limite = ? WHERE id_usuario = ? id_instituicao = ?";
 
     if (saldo_restante != 0) {
       try {
@@ -203,7 +205,7 @@ public class BankAccountModelDAO {
         PreparedStatement stmt = dbConnect.getConnection().prepareStatement(query);
         stmt.setFloat(1, saldo_restante);
         stmt.setString(2, id_usuarioOut);
-
+        stmt.setInt(3, id_instituicao);
         stmt.executeUpdate();
 
       } catch (SQLException e) {

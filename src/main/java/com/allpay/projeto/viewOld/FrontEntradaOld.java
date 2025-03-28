@@ -1,8 +1,8 @@
 
 package com.allpay.projeto.viewOld;
 
-import com.allpay.projeto.viewOld.FrontLoginOld;
-import com.allpay.projeto.viewOld.FrontSignUpOld;
+//import com.allpay.projeto.viewOld.FrontLoginOld;
+//import com.allpay.projeto.viewOld.FrontSignUpOld;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -45,10 +45,10 @@ public class FrontEntradaOld {
 
                 if (opcaoEntrada.equals("1")) {
                     System.out.println("Você escolheu Login. Vamos te redirecionar.");
-                    FrontLoginOld.main(args);
+//                    FrontLoginOld.main(args);
                 } else if (opcaoEntrada.equals("2")) {
                     System.out.println("Você escolheu Cadastro. Vamos te redirecionar.");
-                    FrontSignUpOld.main(args);
+//                    FrontSignUpOld.main(args);
                 } else if (opcaoEntrada.equals("3")) {
                     System.out.println("Você escolheu Sair. Obrigado por usar o allPay.");
                 } else {

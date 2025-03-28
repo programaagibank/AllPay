@@ -1,6 +1,7 @@
 package com.allpay.projeto.controller;
 
-import com.allpay.projeto.model.BankAccountModelDAO;
+import com.allpay.projeto.DAO.BankAccountDAO;
+import com.allpay.projeto.model.UserModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,8 +19,9 @@ public BankAccountController(){
     return bancosDisponiveis;
   }
 
-  public void findUserBankAccount(){
-    bancosDisponiveis = new BankAccountModelDAO().findUserBankAccount(User.getId_usuario());
+  public void findUserBankAccount(String id_usuaria){
+    bancosDisponiveis = new BankAccountDAO().findUserBankAccount(UserModel.getId_usuario());
+    System.out.println("mudar para o do develop");
     if(!bancosDisponiveis.isEmpty()){
 
       bancosDisponiveis.forEach(elemento ->
@@ -31,36 +33,36 @@ public BankAccountController(){
 
   public float escolherBanco (int selecaoBancoPagar) {
 
-    BankAccountModelDAO bankAccountModelDAO = new BankAccountModelDAO();
+    BankAccountDAO bankAccountModelDAO = new BankAccountDAO();
 
-    float saldo = new BankAccountModelDAO().escolherBanco(User.getId_usuario(), Integer.parseInt(bankAccountModelDAO.findUserBankAccount(User.getId_usuario()).get(selecaoBancoPagar).get("id_instituicao")));
+    float saldo = new BankAccountDAO().escolherBanco(UserModel.getId_usuario(), Integer.parseInt(bankAccountModelDAO.findUserBankAccount(UserModel.getId_usuario()).get(selecaoBancoPagar).get("id_instituicao")));
 
     return saldo;
   }
 
   public float escolherBancoCartao (int selecaoBancoPagar) {
 
-    float saldo = new BankAccountModelDAO().escolherBancoCartao(User.getId_usuario(), Integer.parseInt(bancosDisponiveis.get(selecaoBancoPagar).get("id_instituicao")));
+    float saldo = new BankAccountDAO().escolherBancoCartao(UserModel.getId_usuario(), Integer.parseInt(bancosDisponiveis.get(selecaoBancoPagar).get("id_instituicao")));
 
     return saldo;
   }
 
   public boolean validarSenha (String senha, int selecaoBancoPagar) {
 
-    boolean validacao = new BankAccountModelDAO().validarSenha(senha, User.getId_usuario(), Integer.parseInt(getBancosDisponiveis().get(selecaoBancoPagar).get("id_instituicao")));
+    boolean validacao = new BankAccountDAO().validarSenha(senha, UserModel.getId_usuario(), Integer.parseInt(getBancosDisponiveis().get(selecaoBancoPagar).get("id_instituicao")));
 
     return validacao;
   }
 
   public void saldoUpdate (float saldo_restante, int selecaoBancoPagar) {
 
-    new BankAccountModelDAO().saldoUpdate(saldo_restante, User.getId_usuario(), Integer.parseInt(bancosDisponiveis.get(selecaoBancoPagar).get("id_instituicao")));
+    new BankAccountDAO().saldoUpdate(saldo_restante, UserModel.getId_usuario(), Integer.parseInt(bancosDisponiveis.get(selecaoBancoPagar).get("id_instituicao")));
 
   }
 
   public void limiteUpdate (float saldo_restante, int selecaoBancoPagar) {
 
-    new BankAccountModelDAO().limiteUpdate(saldo_restante, User.getId_usuario(), Integer.parseInt(bancosDisponiveis.get(selecaoBancoPagar).get("id_instituicao")));
+    new BankAccountDAO().limiteUpdate(saldo_restante, UserModel.getId_usuario(), Integer.parseInt(bancosDisponiveis.get(selecaoBancoPagar).get("id_instituicao")));
 
   }
 }

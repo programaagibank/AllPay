@@ -1,7 +1,7 @@
 package com.allpay.projeto.controller;
 
+import com.allpay.projeto.DAO.BankAccountDAO;
 import com.allpay.projeto.DAO.FaturaDAO;
-import com.allpay.projeto.model.BankAccountModelDAO;
 import com.allpay.projeto.model.UserModel;
 
 
@@ -43,7 +43,7 @@ public class FaturaController {
     public float efetuarPagamento(int id_fatura, String senha_transacao, int selecaoBancoPagar){
 
         BankAccountController bankAccountController = new BankAccountController();
-        BankAccountModelDAO bankAccountModelDAO = new BankAccountModelDAO();
+        BankAccountDAO bankAccountModelDAO = new BankAccountDAO();
 
         float valor_fatura = Float.parseFloat(this.modelFaturaDAO.buscarFaturasByUserId(UserModel.getId_usuario()).get(id_fatura).get("valor_fatura"));
 
