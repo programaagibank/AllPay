@@ -1,6 +1,7 @@
 package com.allpay.projeto;//import com.allpay.projeto.model.BankAccountModelDAO;
 
 import com.allpay.projeto.view.FrontEntrada;
+import com.allpay.projeto.view.FrontInfosAllpay;
 
 import java.sql.Connection;
 
@@ -16,7 +17,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         //GerarComprovantePagamento(1);
         //PaymentModelDAO.GerarComprovantePagamento();
-        FrontEntrada.main(args);
+        FrontInfosAllpay.main(args);
         //new UserController().select();
         //new ModelFaturaDAO().buscarFaturasByUserId("45678912345");
 
