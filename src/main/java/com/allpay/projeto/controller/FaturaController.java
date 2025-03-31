@@ -1,8 +1,8 @@
 package com.allpay.projeto.controller;
 
-import com.allpay.projeto.DAO.BankAccountDAO;
+import com.allpay.projeto.DAO.ContaBancoDAO;
 import com.allpay.projeto.DAO.FaturaDAO;
-import com.allpay.projeto.model.UserModel;
+import com.allpay.projeto.model.UsuarioModel;
 
 
 import java.util.ArrayList;
@@ -42,26 +42,26 @@ public class FaturaController {
     }
     public float efetuarPagamento(int id_fatura, String senha_transacao, int selecaoBancoPagar){
 
-        BankAccountController bankAccountController = new BankAccountController();
-        BankAccountDAO bankAccountModelDAO = new BankAccountDAO();
+        ContaBancoController bankAccountController = new ContaBancoController();
+        ContaBancoDAO bankAccountModelDAO = new ContaBancoDAO();
 
-        float valor_fatura = Float.parseFloat(this.modelFaturaDAO.buscarFaturasByUserId(UserModel.getId_usuario()).get(id_fatura).get("valor_fatura"));
+        float valor_fatura = Float.parseFloat(this.modelFaturaDAO.buscarFaturasByUserId(UsuarioModel.getId_usuario()).get(id_fatura).get("valor_fatura"));
 
         float escolherBanco = bankAccountController.escolherBanco(selecaoBancoPagar);
 
-        int id_instituicao = Integer.parseInt(bankAccountModelDAO.findUserBankAccount(UserModel.getId_usuario()).get(selecaoBancoPagar).get("id_instituicao"));
+        int id_instituicao = Integer.parseInt(bankAccountModelDAO.findUserBankAccount(UsuarioModel.getId_usuario()).get(selecaoBancoPagar).get("id_instituicao"));
 
-        float saldo_restante = this.modelFaturaDAO.efetuarPagamento(UserModel.getId_usuario(),id_fatura,valor_fatura,escolherBanco, senha_transacao, id_instituicao);
+        float saldo_restante = this.modelFaturaDAO.efetuarPagamento(UsuarioModel.getId_usuario(),id_fatura,valor_fatura,escolherBanco, senha_transacao, id_instituicao);
 
         return saldo_restante;
     }
     public float efetuarPagamentoCartao(int id_fatura, String senha_transacao, int selecaoBancoPagar){
 
-        BankAccountController bankAccountController = new BankAccountController();
+        ContaBancoController bankAccountController = new ContaBancoController();
 
         float valor_fatura = Float.parseFloat(this.modelFaturaDAO.data.get(id_fatura).get("valor_fatura"));
         float escolherBanco = bankAccountController.escolherBanco(Integer.parseInt(bankAccountController.bancosDisponiveis.get(selecaoBancoPagar).get("id_instituicao")));
-        float saldo_restante = this.modelFaturaDAO.efetuarPagamentoCartao(UserModel.getId_usuario(),Integer.parseInt(modelFaturaDAO.data.get(id_fatura).get("id_fatura")),valor_fatura,escolherBanco,senha_transacao,selecaoBancoPagar);
+        float saldo_restante = this.modelFaturaDAO.efetuarPagamentoCartao(UsuarioModel.getId_usuario(),Integer.parseInt(modelFaturaDAO.data.get(id_fatura).get("id_fatura")),valor_fatura,escolherBanco,senha_transacao,selecaoBancoPagar);
 
         return saldo_restante;
     }

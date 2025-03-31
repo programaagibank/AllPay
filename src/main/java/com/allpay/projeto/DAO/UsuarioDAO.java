@@ -2,7 +2,7 @@ package com.allpay.projeto.DAO;
 
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
-import com.allpay.projeto.interfaces.InterfaceUserModelDAO;
+import com.allpay.projeto.interfaces.InterfaceUsuarioDAO;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.PreparedStatement;
@@ -10,13 +10,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-public class UserDAO implements InterfaceUserModelDAO {
+public class UsuarioDAO implements InterfaceUsuarioDAO {
     private static DataBaseConnection dbConnect;
 
-    public UserDAO(){
+    public UsuarioDAO(){
         dbConnect = new MySQLDataBaseConnection();
     }
-    public UserDAO(DataBaseConnection dbConnect) {
+    public UsuarioDAO(DataBaseConnection dbConnect) {
         this.dbConnect = dbConnect;
     }
 

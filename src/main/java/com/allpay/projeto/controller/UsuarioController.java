@@ -1,22 +1,23 @@
 package com.allpay.projeto.controller;
 
-import com.allpay.projeto.DAO.UserDAO;
+import com.allpay.projeto.DAO.UsuarioDAO;
+import com.allpay.projeto.model.UsuarioModel;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.HashMap;
 
-public class UserController {
-    private static UserDAO userDAO;
+public class UsuarioController {
+    private static UsuarioDAO userDAO;
     private HashMap<String, String> data;
 
-    public UserController() {
-        userDAO = new UserDAO();
+    public UsuarioController() {
+        userDAO = new UsuarioDAO();
     }
 
     public void insert(String cpfTemp, String nomeTemp, String senhaTemp, String emailTemp) {
         String hashSenha = BCrypt.hashpw(senhaTemp, BCrypt.gensalt());
         System.out.println(hashSenha);
-        userModel.insert(cpfTemp, nomeTemp, hashSenha, emailTemp);
+        userDAO.insert(cpfTemp, nomeTemp, hashSenha, emailTemp);
     }
 
     public String validarId(String id_temp) throws IllegalArgumentException {
@@ -51,7 +52,7 @@ public class UserController {
     public boolean autenticar(String id_usuario, String senha_acesso) {
         HashMap<String, String> data = userDAO.selectById(id_usuario, senha_acesso);
         if (!data.isEmpty()) {
-            UserModel.setUserData(
+            UsuarioModel.setUserData(
                     data.get("id_usuario"),
                     data.get("nome_usuario"),
                     data.get("email"),

@@ -1,7 +1,9 @@
 package com.allpay.projeto.view;
 
 import com.allpay.projeto.Main;
-import com.allpay.projeto.controller.UserController;
+
+import com.allpay.projeto.controller.UsuarioController;
+import com.allpay.projeto.model.UsuarioModel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -18,7 +20,7 @@ import java.util.HashMap;
 public class FrontLogin {
     private final VBox view;
     private final Main main;
-    private final UserController userController = new UserController();
+    private final UsuarioController userController = new UsuarioController();
     private final ImageView loadingGif = new ImageView();
 
     public FrontLogin(Main main) {
@@ -123,8 +125,8 @@ public class FrontLogin {
                 loadingGif.setVisible(false);
 
                 if (autenticado) {
-                    HashMap<String, String> userInfo = userController.getUserInfo();
-                    String nomeUsuario = userInfo.get("nome_usuario");
+
+                    String nomeUsuario = UsuarioModel.getId_usuario();
                     main.mostrarTelaPrincipal(cpfCnpj, nomeUsuario);
                 } else {
                     lblErro.setText("Credenciais inválidas. Tente Novamente.");

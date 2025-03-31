@@ -10,13 +10,13 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class BankAccountDAO {
+public class ContaBancoDAO {
 
   private static DataBaseConnection dbConnect;
   ArrayList<HashMap<String,String>> bancosDisponiveis;
 
 
-  public BankAccountDAO(){
+  public ContaBancoDAO(){
 
     dbConnect = new MySQLDataBaseConnection();
     bancosDisponiveis = new ArrayList();
