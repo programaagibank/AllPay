@@ -1,29 +1,24 @@
 package com.allpay.projeto.view;
 
 import com.allpay.projeto.Main;
-
 import com.allpay.projeto.controller.UsuarioController;
-import com.allpay.projeto.model.UsuarioModel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 
-import java.util.HashMap;
-
-public class FrontLogin {
+public class FrontCadastro {
     private final VBox view;
     private final Main main;
     private final UsuarioController userController = new UsuarioController();
-    private final ImageView loadingGif = new ImageView();
 
-    public FrontLogin(Main main) {
+    public FrontCadastro(Main main) {
         this.main = main;
         this.view = new VBox(20);
         setupView();
@@ -35,31 +30,37 @@ public class FrontLogin {
 
     private void setupView() {
         view.setAlignment(Pos.TOP_CENTER);
-        view.setPadding(new Insets(90, 20, 20, 20));
+        view.setPadding(new Insets(50, 20, 20, 20));
         setBackground();
 
-        Label lblTitulo = new Label("Login");
+        Label lblTitulo = new Label("Cadastro");
         lblTitulo.setFont(Font.font("Montserrat", FontWeight.BOLD, 32));
         lblTitulo.setTextFill(Color.WHITE);
 
         TextField txtCpfCnpj = createTextField("CPF ou CNPJ");
+        TextField txtNome = createTextField("Nome");
+        TextField txtEmail = createTextField("E-mail");
         PasswordField txtSenha = createPasswordField("Senha");
+        PasswordField txtConfirmarSenha = createPasswordField("Confirmar Senha");
 
         Label lblErro = createErrorLabel();
-        setupLoadingGif();
+        StackPane errorPane = createErrorPane(lblErro);
 
-        Button btnLogin = createButton("Entrar", "primary");
-        Button btnCadastro = createButton("Cadastro", "primary");
+        Button btnAvancar = createButton("Avançar", "primary");
         Button btnVoltar = createButton("Voltar", "secondary");
 
-        Region spacer = new Region();
-        spacer.setPrefHeight(40);
+        btnAvancar.setOnAction(e -> handleRegistration(
+                txtCpfCnpj, txtNome, txtEmail,
+                txtSenha, txtConfirmarSenha, lblErro
+        ));
 
-        view.getChildren().addAll(lblTitulo, spacer, txtCpfCnpj, txtSenha, lblErro, loadingGif, btnLogin, btnCadastro, btnVoltar);
-
-        btnLogin.setOnAction(e -> handleLogin(txtCpfCnpj, txtSenha, lblErro));
-        btnCadastro.setOnAction(e -> main.mostrarTelaCadastro());
         btnVoltar.setOnAction(e -> main.mostrarTelaEntrada());
+
+        view.getChildren().addAll(
+                lblTitulo, txtCpfCnpj, txtNome, txtEmail,
+                txtSenha, txtConfirmarSenha, errorPane,
+                btnAvancar, btnVoltar
+        );
     }
 
     private TextField createTextField(String prompt) {
@@ -80,27 +81,29 @@ public class FrontLogin {
 
     private Label createErrorLabel() {
         Label label = new Label();
-        label.setFont(Font.font("Montserrat", FontWeight.BOLD, 14));
+        label.setFont(Font.font("Montserrat", FontWeight.BOLD, 12));
         label.setTextFill(Color.LIGHTCYAN);
         label.setVisible(false);
+        label.setWrapText(true);
+        label.setMaxWidth(250);
+        label.setTextAlignment(TextAlignment.CENTER);
         return label;
     }
 
-    private void setupLoadingGif() {
-        try {
-            loadingGif.setImage(new Image(getClass().getResourceAsStream("/images/loading.gif")));
-        } catch (Exception e) {
-            System.out.println("Erro ao carregar o gif");
-        }
-        loadingGif.setFitWidth(20);
-        loadingGif.setFitHeight(20);
-        loadingGif.setVisible(false);
+    private StackPane createErrorPane(Label lblErro) {
+        StackPane pane = new StackPane(lblErro);
+        pane.setMinHeight(55);
+        pane.setPrefHeight(55);
+        pane.setMaxHeight(55);
+        pane.setMaxWidth(250);
+        return pane;
     }
 
     private Button createButton(String text, String type) {
         Button btn = new Button(text);
-        String baseStyle = "-fx-font-size: 14px; -fx-padding: 10px 20px; -fx-border-radius: 5px; " +
-                "-fx-background-radius: 5px; -fx-min-width: 250px; -fx-min-height: 40px; " +
+        String baseStyle = "-fx-font-size: 14px; -fx-padding: 10px 20px; " +
+                "-fx-border-radius: 5px; -fx-background-radius: 5px; " +
+                "-fx-min-width: 250px; -fx-min-height: 40px; " +
                 "-fx-font-family: 'Montserrat'; -fx-font-weight: bold;";
 
         if (type.equals("primary")) {
@@ -111,29 +114,46 @@ public class FrontLogin {
         return btn;
     }
 
-    private void handleLogin(TextField txtCpfCnpj, PasswordField txtSenha, Label lblErro) {
-        String cpfCnpj = txtCpfCnpj.getText();
+    private void handleRegistration(TextField txtCpfCnpj, TextField txtNome,
+                                    TextField txtEmail, PasswordField txtSenha,
+                                    PasswordField txtConfirmarSenha, Label lblErro) {
+        String cpfCnpj = txtCpfCnpj.getText().trim();
+        String nome = txtNome.getText().trim();
+        String email = txtEmail.getText().trim().toLowerCase();
         String senha = txtSenha.getText();
+        String confirmarSenha = txtConfirmarSenha.getText();
 
-        loadingGif.setVisible(true);
         lblErro.setVisible(false);
 
-        new Thread(() -> {
-            boolean autenticado = userController.autenticar(cpfCnpj, senha);
+        try {
+            cpfCnpj = userController.validarId(cpfCnpj);
+            nome = userController.validarNome(nome);
+            email = userController.validarEmail(email);
+            senha = userController.validarSenha(senha);
 
-            javafx.application.Platform.runLater(() -> {
-                loadingGif.setVisible(false);
+            if (!senha.equals(confirmarSenha)) {
+                throw new IllegalArgumentException("As senhas não coincidem!");
+            }
 
-                if (autenticado) {
+            userController.insert(cpfCnpj, nome, senha, email);
 
-                    String nomeUsuario = UsuarioModel.getId_usuario();
-                    main.mostrarTelaPrincipal(cpfCnpj, nomeUsuario);
-                } else {
-                    lblErro.setText("Credenciais inválidas. Tente Novamente.");
-                    lblErro.setVisible(true);
-                }
-            });
-        }).start();
+            lblErro.setText("Cadastro realizado com sucesso!");
+            lblErro.setTextFill(Color.LIGHTGREEN);
+            lblErro.setVisible(true);
+
+            txtCpfCnpj.clear();
+            txtNome.clear();
+            txtEmail.clear();
+            txtSenha.clear();
+            txtConfirmarSenha.clear();
+
+            main.mostrarTelaEntrada();
+
+        } catch (IllegalArgumentException ex) {
+            lblErro.setText(ex.getMessage());
+            lblErro.setTextFill(Color.LIGHTCORAL);
+            lblErro.setVisible(true);
+        }
     }
 
     private void setBackground() {

@@ -1,4 +1,4 @@
-import com.allpay.projeto.DAO.UserDAO;
+import com.allpay.projeto.DAO.UsuarioDAO;
 import com.allpay.projeto.interfaces.DataBaseConnection;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +13,7 @@ import static org.mockito.Mockito.*;
 
 class TestUserDao {
 
-    private UserDAO userModelDAO;
+    private UsuarioDAO userModelDAO;
     private DataBaseConnection mockDbConnect;
     private Connection mockConnection;
     private PreparedStatement mockPreparedStatement;
@@ -35,7 +35,7 @@ class TestUserDao {
         when(mockStatement.execute(anyString())).thenReturn(false); // Correção: não usar doNothing(), mas sim thenReturn(false)
 
         // Criando instância do DAO com mock de conexão
-        userModelDAO = new UserDAO(mockDbConnect);
+        userModelDAO = new UsuarioDAO(mockDbConnect);
     }
 
     @Test
