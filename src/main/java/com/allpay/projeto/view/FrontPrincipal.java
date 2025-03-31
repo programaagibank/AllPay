@@ -2,7 +2,7 @@ package com.allpay.projeto.view;
 
 import com.allpay.projeto.Main;
 import com.allpay.projeto.DAO.FaturaDAO;
-import com.allpay.projeto.controller.UserController;
+import com.allpay.projeto.controller.UsuarioController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -105,7 +105,7 @@ public class FrontPrincipal {
                 createMenuButton("bank-icon.png", "Meus Bancos", () -> {}),
                 createMenuButton("switch-icon.png", "Trocar Conta", () -> main.mostrarTelaEntrada()),
                 createMenuButton("info-icon.png", "Infos allPay", () -> {}),
-                createMenuButton("exit-icon.png", "Sair", () -> UserController.exit())
+                createMenuButton("exit-icon.png", "Sair", () -> UsuarioController.exit())
         );
         return container;
     }
