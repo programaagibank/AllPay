@@ -1,6 +1,7 @@
 package com.allpay.projeto.view;
 
 import com.allpay.projeto.controller.UserController;
+import com.allpay.projeto.model.UserModel;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -84,8 +85,8 @@ public class FrontLogin extends Application {
 
                 javafx.application.Platform.runLater(() -> {
                     if (autenticado) {
-                        HashMap<String, String> userInfo = userController.getUserInfo();
-                        String nomeUsuario = userInfo.get("nome_usuario");
+
+                        String nomeUsuario = UserModel.getNome();
 
                         Stage stage = (Stage) btnLogin.getScene().getWindow();
                         stage.close();

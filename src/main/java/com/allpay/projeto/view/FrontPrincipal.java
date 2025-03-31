@@ -33,7 +33,7 @@ public class FrontPrincipal extends Application {
     public FrontPrincipal(String idUsuario, String nomeUsuario) {
         this.idUsuario = idUsuario;
         this.nomeUsuario = nomeUsuario;
-        this.contaBanco = new BankAccountController().findUserBankAccount(idUsuario);
+        this.contaBanco = new BankAccountController().findUserBankAccount();
     }
 
     @Override

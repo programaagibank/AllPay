@@ -19,7 +19,7 @@ public BankAccountController(){
     return bancosDisponiveis;
   }
 
-  public  ArrayList<HashMap<String, String>> findUserBankAccount(String id_usuaria){
+  public  ArrayList<HashMap<String, String>> findUserBankAccount(){
     bancosDisponiveis = new BankAccountDAO().findUserBankAccount(UserModel.getId_usuario());
     System.out.println(bancosDisponiveis.size());
     if(!bancosDisponiveis.isEmpty()){

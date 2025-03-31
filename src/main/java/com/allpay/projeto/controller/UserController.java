@@ -1,22 +1,20 @@
 package com.allpay.projeto.controller;
 
 import com.allpay.projeto.DAO.UserDAO;
+import com.allpay.projeto.model.UserModel;
+
 import java.util.HashMap;
 
 public class UserController {
-    private static UserDAO userModel;
+    private static UserDAO userDAO;
     private HashMap<String, String> data;
 
     public UserController() {
-        userModel = new UserDAO();
-    }
-
-    public HashMap<String, String> getUserInfo() {
-        return this.data;
+        userDAO = new UserDAO();
     }
 
     public void insert(String cpfTemp, String nomeTemp, String senhaTemp, String emailTemp) {
-        userModel.insert(cpfTemp, nomeTemp, senhaTemp, emailTemp);
+        userDAO.insert(cpfTemp, nomeTemp, senhaTemp, emailTemp);
     }
 
     public String validarId(String id_temp) throws IllegalArgumentException {
@@ -49,9 +47,14 @@ public class UserController {
     }
 
     public boolean autenticar(String id_usuario, String senha_acesso) {
-        HashMap<String, String> data = userModel.selectById(id_usuario, senha_acesso);
+        HashMap<String, String> data = userDAO.selectById(id_usuario, senha_acesso);
         if (!data.isEmpty()) {
-            this.data = data;
+            UserModel.setUserData(
+                    data.get("id_usuario"),
+                    data.get("nome_usuario"),
+                    data.get("email"),
+                    data.get("senha_acesso")
+            );
             return true;
         }
         return false;

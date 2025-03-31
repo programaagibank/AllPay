@@ -48,6 +48,7 @@ public class BankAccountDAO {
         dados.put("limite", rs.getString("limite"));
         dados.put("saldo_usuario", rs.getString("saldo_usuario"));
         dados.put("id_instituicao", rs.getString("id_instituicao"));
+        System.out.println(rs.getString("nome_instituicao"));
         this.bancosDisponiveis.add(dados);
       }
 
