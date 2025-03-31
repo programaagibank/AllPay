@@ -1,150 +1,125 @@
 package com.allpay.projeto.view;
 
-import com.allpay.projeto.controller.BankAccountController;
-import com.allpay.projeto.controller.UserController;
+import com.allpay.projeto.Main;
 import com.allpay.projeto.DAO.FaturaDAO;
-import javafx.application.Application;
+import com.allpay.projeto.controller.UserController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class FrontPrincipal extends Application {
-
+public class FrontPrincipal {
+    private final VBox view;
+    private final Main main;
     private final String idUsuario;
     private final String nomeUsuario;
-    private final ArrayList<HashMap<String,String>> contaBanco;
     private static final int WINDOW_WIDTH = 320;
-    private static final int WINDOW_HEIGHT = 600;
 
-    public FrontPrincipal(String idUsuario, String nomeUsuario) {
+    public FrontPrincipal(Main main, String idUsuario, String nomeUsuario) {
+        this.main = main;
         this.idUsuario = idUsuario;
         this.nomeUsuario = nomeUsuario;
-        this.contaBanco = new BankAccountController().findUserBankAccount(idUsuario);
+        this.view = new VBox(15);
+        setupView();
     }
 
-    @Override
-    public void start(Stage primaryStage) {
-        VBox mainLayout = new VBox(15);
-        mainLayout.setAlignment(Pos.TOP_CENTER);
-        mainLayout.setPadding(new Insets(20));
-        setBackground(mainLayout, "/images/backgroundImage.png");
+    public Parent getView() {
+        return view;
+    }
+
+    private void setupView() {
+        view.setAlignment(Pos.TOP_CENTER);
+        view.setPadding(new Insets(20));
+        setBackground();
 
         Label lblNomeUsuario = new Label("Olá, " + nomeUsuario);
         lblNomeUsuario.setFont(Font.font("Montserrat", FontWeight.BOLD, 24));
         lblNomeUsuario.setTextFill(Color.WHITE);
 
-        // Carrossel de bancos
-        HBox bancosCarrossel = createBancosCarrossel();
-        ScrollPane scrollBancos = new ScrollPane(bancosCarrossel);
-        configurarScrollCarrossel(scrollBancos);
-
-        // Botões de menu
-        HBox botoesMenu = createBotoesMenu(primaryStage);
-
-        // Botão de buscar faturas
+        ScrollPane scrollBancos = createBancosCarrossel();
+        HBox botoesMenu = createBotoesMenu();
         Button btnBuscarFaturas = criarBotaoRetangular("Buscar Faturas por Código");
-
-        // Lista de faturas
         ListView<HBox> listaFaturas = createListaFaturas();
         listaFaturas.setPrefHeight(200);
 
-        // Ações dos botões
-        configurarAcoesBotoes(primaryStage, btnBuscarFaturas);
+        //btnBuscarFaturas.setOnAction(e -> main.mostrarTelaPagarFatura(idUsuario, nomeUsuario));
 
-        // Montagem do layout
-        mainLayout.getChildren().addAll(
-                lblNomeUsuario,
-                scrollBancos,
-                botoesMenu,
-                btnBuscarFaturas,
-                listaFaturas
+        view.getChildren().addAll(
+                lblNomeUsuario, scrollBancos,
+                botoesMenu, btnBuscarFaturas, listaFaturas
         );
-
-        Scene scene = new Scene(mainLayout, WINDOW_WIDTH, WINDOW_HEIGHT);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("allPay - Principal");
-        primaryStage.setResizable(false);
-        primaryStage.show();
     }
 
-    private HBox createBancosCarrossel() {
+    private ScrollPane createBancosCarrossel() {
         HBox carrossel = new HBox(10);
         carrossel.setAlignment(Pos.CENTER_LEFT);
         carrossel.setPadding(new Insets(10));
 
         ArrayList<HashMap<String, String>> bancos = buscarBancosUsuario();
 
-        if (contaBanco.isEmpty()) {
+        if (bancos.isEmpty()) {
             Label lblSemBancos = new Label("Nenhum banco vinculado");
             lblSemBancos.setTextFill(Color.WHITE);
             carrossel.getChildren().add(lblSemBancos);
         } else {
-            for (HashMap<String, String> banco : contaBanco) {
-                VBox cardBanco = criarCardBanco(banco);
-                carrossel.getChildren().add(cardBanco);
+            for (HashMap<String, String> banco : bancos) {
+                carrossel.getChildren().add(criarCardBanco(banco));
             }
         }
 
-        return carrossel;
+        ScrollPane scroll = new ScrollPane(carrossel);
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scroll.setFitToHeight(true);
+        scroll.setPrefViewportWidth(WINDOW_WIDTH - 40);
+        scroll.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
+
+        return scroll;
     }
 
     private VBox criarCardBanco(HashMap<String, String> banco) {
-        VBox cardBanco = new VBox(10);
-        cardBanco.setAlignment(Pos.CENTER);
-        cardBanco.setStyle("-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 10; -fx-padding: 15;");
-        cardBanco.setMinWidth(WINDOW_WIDTH - 50);
-        cardBanco.setPrefWidth(WINDOW_WIDTH - 50);
+        VBox card = new VBox(10);
+        card.setAlignment(Pos.CENTER);
+        card.setStyle("-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 10; -fx-padding: 15;");
+        card.setMinWidth(WINDOW_WIDTH - 50);
+        card.setPrefWidth(WINDOW_WIDTH - 50);
 
-        //chamar a cotrolle para colocar no card as informacoes
+        Label nome = new Label(banco.get("nome_banco"));
+        nome.setTextFill(Color.WHITE);
+        nome.setFont(Font.font("Montserrat", FontWeight.BOLD, 16));
 
-        Label lblNomeBanco = new Label(banco.get("nome_instituicao"));
-        lblNomeBanco.setTextFill(Color.WHITE);
-        lblNomeBanco.setFont(Font.font("Montserrat", FontWeight.BOLD, 16));
+        Label saldo = new Label("R$ " + banco.get("saldo"));
+        saldo.setTextFill(Color.WHITE);
+        saldo.setFont(Font.font("Montserrat", FontWeight.BOLD, 18));
 
-        Label lblSaldoBanco = new Label("R$ " + banco.get("saldo_usuario"));
-        lblSaldoBanco.setTextFill(Color.WHITE);
-        lblSaldoBanco.setFont(Font.font("Montserrat", FontWeight.BOLD, 18));
-
-        cardBanco.getChildren().addAll(lblNomeBanco, lblSaldoBanco);
-        return cardBanco;
+        card.getChildren().addAll(nome, saldo);
+        return card;
     }
 
-    private void configurarScrollCarrossel(ScrollPane scrollBancos) {
-        scrollBancos.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollBancos.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollBancos.setFitToHeight(true);
-        scrollBancos.setPrefViewportWidth(WINDOW_WIDTH - 40);
-        scrollBancos.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
-    }
-
-    private HBox createBotoesMenu(Stage primaryStage) {
+    private HBox createBotoesMenu() {
         HBox container = new HBox(15);
         container.setAlignment(Pos.CENTER);
 
-        VBox btnMeusBancos = criarBotaoMenu("bank-icon.png", "Meus Bancos", primaryStage);
-        VBox btnTrocarConta = criarBotaoMenu("switch-icon.png", "Trocar Conta", primaryStage);
-        VBox btnInfos = criarBotaoMenu("info-icon.png", "Infos allPay", primaryStage);
-        VBox btnSair = criarBotaoMenu("exit-icon.png", "Sair", primaryStage);
+        container.getChildren().addAll(
+                criarBotaoMenu("bank-icon.png", "Meus Bancos", () -> {}),
+                criarBotaoMenu("switch-icon.png", "Trocar Conta", () -> main.mostrarTelaEntrada()),
+                criarBotaoMenu("info-icon.png", "Infos allPay", () -> {}),
+                criarBotaoMenu("exit-icon.png", "Sair", () -> UserController.exit())
+        );
 
-        container.getChildren().addAll(btnMeusBancos, btnTrocarConta, btnInfos, btnSair);
         return container;
     }
 
-    private VBox criarBotaoMenu(String iconPath, String text, Stage primaryStage) {
+    private VBox criarBotaoMenu(String iconPath, String text, Runnable acao) {
         VBox container = new VBox(5);
         container.setAlignment(Pos.CENTER);
 
@@ -162,7 +137,7 @@ public class FrontPrincipal extends Application {
             System.out.println("Ícone não encontrado: " + iconPath);
         }
 
-        configurarAcaoBotaoMenu(btn, text, primaryStage);
+        btn.setOnAction(e -> acao.run());
 
         Label lblText = new Label(text);
         lblText.setTextFill(Color.WHITE);
@@ -173,26 +148,6 @@ public class FrontPrincipal extends Application {
 
         container.getChildren().addAll(btn, lblText);
         return container;
-    }
-
-    private void configurarAcaoBotaoMenu(Button btn, String text, Stage primaryStage) {
-        btn.setOnAction(e -> {
-            primaryStage.close();
-            switch (text) {
-                case "Meus Bancos":
-                    //new FrontBancos(idUsuario, nomeUsuario).start(new Stage());
-                    break;
-                case "Trocar Conta":
-                    new FrontEntrada().start(new Stage());
-                    break;
-                case "Infos allPay":
-                    //new FrontInfos(idUsuario, nomeUsuario).start(new Stage());
-                    break;
-                case "Sair":
-                    UserController.exit();
-                    break;
-            }
-        });
     }
 
     private Button criarBotaoRetangular(String text) {
@@ -211,8 +166,7 @@ public class FrontPrincipal extends Application {
         ArrayList<HashMap<String, String>> faturas = faturaDAO.buscarFaturas(idUsuario);
 
         for (HashMap<String, String> fatura : faturas) {
-            HBox item = criarItemFatura(fatura);
-            listView.getItems().add(item);
+            listView.getItems().add(criarItemFatura(fatura));
         }
 
         return listView;
@@ -235,22 +189,11 @@ public class FrontPrincipal extends Application {
         lblValor.setTextFill(Color.WHITE);
 
         Label lblStatus = new Label(fatura.get("status_fatura"));
-        if ("PAGA".equals(fatura.get("status_fatura"))) {
-            lblStatus.setTextFill(Color.LIGHTGREEN);
-        } else {
-            lblStatus.setTextFill(Color.LIGHTCORAL);
-        }
+        lblStatus.setTextFill("PAGA".equals(fatura.get("status_fatura")) ? Color.LIGHTGREEN : Color.LIGHTCORAL);
 
         infoBox.getChildren().addAll(lblRecebedor, lblData, lblValor, lblStatus);
         item.getChildren().add(infoBox);
         return item;
-    }
-
-    private void configurarAcoesBotoes(Stage primaryStage, Button btnBuscarFaturas) {
-        btnBuscarFaturas.setOnAction(e -> {
-            primaryStage.close();
-            //new FrontPagarFatura(idUsuario, nomeUsuario).start(new Stage());
-        });
     }
 
     private ArrayList<HashMap<String, String>> buscarBancosUsuario() {
@@ -270,19 +213,19 @@ public class FrontPrincipal extends Application {
         return bancos;
     }
 
-    private void setBackground(Region layout, String imagePath) {
+    private void setBackground() {
         try {
-            Image backgroundImage = new Image(getClass().getResource(imagePath).toExternalForm());
-            BackgroundImage bgImage = new BackgroundImage(backgroundImage,
-                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                    BackgroundPosition.CENTER, new BackgroundSize(100, 100, true, true, true, true));
-            layout.setBackground(new Background(bgImage));
+            Image backgroundImage = new Image(getClass().getResource("/images/backgroundImage.png").toExternalForm());
+            BackgroundImage bgImage = new BackgroundImage(
+                    backgroundImage,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.CENTER,
+                    new BackgroundSize(100, 100, true, true, true, true)
+            );
+            view.setBackground(new Background(bgImage));
         } catch (Exception e) {
-            layout.setStyle("-fx-background-color: #1E90FF;");
+            view.setStyle("-fx-background-color: #1E90FF;");
         }
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

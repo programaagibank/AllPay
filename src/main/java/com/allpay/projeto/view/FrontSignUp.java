@@ -1,172 +1,174 @@
 package com.allpay.projeto.view;
 
+import com.allpay.projeto.Main;
 import com.allpay.projeto.controller.UserController;
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
 
-public class FrontSignUp extends Application {
+public class FrontSignUp {
+    private final VBox view;
+    private final Main main;
+    private final UserController userController = new UserController();
 
-    private UserController userController = new UserController();
+    public FrontSignUp(Main main) {
+        this.main = main;
+        this.view = new VBox(20);
+        setupView();
+    }
 
-    @Override
-    public void start(Stage primaryStage) {
-        VBox layout = new VBox(20);
-        layout.setAlignment(Pos.TOP_CENTER);
-        layout.setPadding(new Insets(50, 0, 0, 0));
+    public Parent getView() {
+        return view;
+    }
 
-        setBackground(layout, "/images/backgroundImage.png");
+    private void setupView() {
+        view.setAlignment(Pos.TOP_CENTER);
+        view.setPadding(new Insets(50, 20, 20, 20));
+        setBackground();
 
         Label lblTitulo = new Label("Cadastro");
         lblTitulo.setFont(Font.font("Montserrat", FontWeight.BOLD, 32));
         lblTitulo.setTextFill(Color.WHITE);
 
-        TextField txtCpfCnpj = new TextField();
-        txtCpfCnpj.setPromptText("CPF ou CNPJ");
-        txtCpfCnpj.setMaxWidth(250);
-        txtCpfCnpj.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);");
+        TextField txtCpfCnpj = createTextField("CPF ou CNPJ");
+        TextField txtNome = createTextField("Nome");
+        TextField txtEmail = createTextField("E-mail");
+        PasswordField txtSenha = createPasswordField("Senha");
+        PasswordField txtConfirmarSenha = createPasswordField("Confirmar Senha");
 
-        TextField txtNome = new TextField();
-        txtNome.setPromptText("Nome");
-        txtNome.setMaxWidth(250);
-        txtNome.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);");
+        Label lblErro = createErrorLabel();
+        StackPane errorPane = createErrorPane(lblErro);
 
-        TextField txtEmail = new TextField();
-        txtEmail.setPromptText("E-mail");
-        txtEmail.setMaxWidth(250);
-        txtEmail.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);");
+        Button btnAvancar = createButton("Avançar", "primary");
+        Button btnVoltar = createButton("Voltar", "secondary");
 
-        PasswordField txtSenha = new PasswordField();
-        txtSenha.setPromptText("Senha");
-        txtSenha.setMaxWidth(250);
-        txtSenha.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);");
+        btnAvancar.setOnAction(e -> handleRegistration(
+                txtCpfCnpj, txtNome, txtEmail,
+                txtSenha, txtConfirmarSenha, lblErro
+        ));
 
-        PasswordField txtConfirmarSenha = new PasswordField();
-        txtConfirmarSenha.setPromptText("Confirmar Senha");
-        txtConfirmarSenha.setMaxWidth(250);
-        txtConfirmarSenha.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);");
+        btnVoltar.setOnAction(e -> main.mostrarTelaEntrada());
 
+        view.getChildren().addAll(
+                lblTitulo, txtCpfCnpj, txtNome, txtEmail,
+                txtSenha, txtConfirmarSenha, errorPane,
+                btnAvancar, btnVoltar
+        );
+    }
 
-        Label lblErro = new Label();
-        lblErro.setFont(Font.font("Montserrat", FontWeight.BOLD, 12));
-        lblErro.setTextFill(Color.LIGHTCYAN);
+    private TextField createTextField(String prompt) {
+        TextField field = new TextField();
+        field.setPromptText(prompt);
+        field.setMaxWidth(250);
+        field.setStyle("-fx-font-size: 14px; -fx-padding: 10px;");
+        return field;
+    }
+
+    private PasswordField createPasswordField(String prompt) {
+        PasswordField field = new PasswordField();
+        field.setPromptText(prompt);
+        field.setMaxWidth(250);
+        field.setStyle("-fx-font-size: 14px; -fx-padding: 10px;");
+        return field;
+    }
+
+    private Label createErrorLabel() {
+        Label label = new Label();
+        label.setFont(Font.font("Montserrat", FontWeight.BOLD, 12));
+        label.setTextFill(Color.LIGHTCYAN);
+        label.setVisible(false);
+        label.setWrapText(true);
+        label.setMaxWidth(250);
+        label.setTextAlignment(TextAlignment.CENTER);
+        return label;
+    }
+
+    private StackPane createErrorPane(Label lblErro) {
+        StackPane pane = new StackPane(lblErro);
+        pane.setMinHeight(55);
+        pane.setPrefHeight(55);
+        pane.setMaxHeight(55);
+        pane.setMaxWidth(250);
+        return pane;
+    }
+
+    private Button createButton(String text, String type) {
+        Button btn = new Button(text);
+        String baseStyle = "-fx-font-size: 14px; -fx-padding: 10px 20px; " +
+                "-fx-border-radius: 5px; -fx-background-radius: 5px; " +
+                "-fx-min-width: 250px; -fx-min-height: 40px; " +
+                "-fx-font-family: 'Montserrat'; -fx-font-weight: bold;";
+
+        if (type.equals("primary")) {
+            btn.setStyle(baseStyle + " -fx-background-color: #FFFFFF; -fx-text-fill: #000000;");
+        } else {
+            btn.setStyle(baseStyle + " -fx-background-color: #000000; -fx-text-fill: #FFFFFF;");
+        }
+        return btn;
+    }
+
+    private void handleRegistration(TextField txtCpfCnpj, TextField txtNome,
+                                    TextField txtEmail, PasswordField txtSenha,
+                                    PasswordField txtConfirmarSenha, Label lblErro) {
+        String cpfCnpj = txtCpfCnpj.getText().trim();
+        String nome = txtNome.getText().trim();
+        String email = txtEmail.getText().trim().toLowerCase();
+        String senha = txtSenha.getText();
+        String confirmarSenha = txtConfirmarSenha.getText();
+
         lblErro.setVisible(false);
-        lblErro.setWrapText(true);
-        lblErro.setMaxWidth(250);
-        lblErro.setTextAlignment(TextAlignment.CENTER);
-        lblErro.setAlignment(Pos.TOP_CENTER);
 
-        StackPane errorPane = new StackPane(lblErro);
-        errorPane.setMinHeight(55);
-        errorPane.setPrefHeight(55);
-        errorPane.setMaxHeight(55);
-        errorPane.setMaxWidth(250);
+        try {
+            cpfCnpj = userController.validarId(cpfCnpj);
+            nome = userController.validarNome(nome);
+            email = userController.validarEmail(email);
+            senha = userController.validarSenha(senha);
 
-        Button btnAvancar = new Button("Avançar");
-        btnAvancar.setStyle("-fx-background-color: #FFFFFF; " +
-                "-fx-text-fill: #000000; " +
-                "-fx-font-size: 14px; " +
-                "-fx-padding: 10px 20px; " +
-                "-fx-border-radius: 5px; " +
-                "-fx-background-radius: 5px; " +
-                "-fx-min-width: 250px; " +
-                "-fx-min-height: 40px; " +
-                "-fx-font-family: 'Montserrat'; " +
-                "-fx-font-weight: bold;");
-
-        Button btnVoltar = new Button("Voltar");
-        btnVoltar.setStyle("-fx-background-color: #000000; " +
-                "-fx-text-fill: #FFFFFF; " +
-                "-fx-font-size: 14px; " +
-                "-fx-padding: 10px 20px; " +
-                "-fx-border-radius: 5px; " +
-                "-fx-background-radius: 5px; " +
-                "-fx-min-width: 250px; " +
-                "-fx-min-height: 40px; " +
-                "-fx-font-family: 'Montserrat'; " +
-                "-fx-font-weight: bold;");
-
-        btnAvancar.setOnAction(e -> {
-            String cpfCnpj = txtCpfCnpj.getText().trim();
-            String nome = txtNome.getText().trim();
-            String email = txtEmail.getText().trim().toLowerCase();
-            String senha = txtSenha.getText();
-            String confirmarSenha = txtConfirmarSenha.getText();
-
-            lblErro.setVisible(false);
-
-            try {
-
-                cpfCnpj = userController.validarId(cpfCnpj);
-                nome = userController.validarNome(nome);
-                email = userController.validarEmail(email);
-                senha = userController.validarSenha(senha);
-
-                if (!senha.equals(confirmarSenha)) {
-                    throw new IllegalArgumentException("As senhas não coincidem!");
-                }
-
-                userController.insert(cpfCnpj, nome, senha, email);
-
-                lblErro.setText("Cadastro realizado com sucesso!");
-                lblErro.setTextFill(Color.LIGHTGREEN);
-                lblErro.setVisible(true);
-
-
-                txtCpfCnpj.clear();
-                txtNome.clear();
-                txtEmail.clear();
-                txtSenha.clear();
-                txtConfirmarSenha.clear();
-
-                Stage stage = (Stage) btnAvancar.getScene().getWindow();
-                stage.close();
-                new FrontEntrada().start(new Stage());
-
-            } catch (IllegalArgumentException ex) {
-                lblErro.setText(ex.getMessage());
-                lblErro.setTextFill(Color.LIGHTCORAL);
-                lblErro.setVisible(true);
+            if (!senha.equals(confirmarSenha)) {
+                throw new IllegalArgumentException("As senhas não coincidem!");
             }
-        });
 
+            userController.insert(cpfCnpj, nome, senha, email);
 
-        btnVoltar.setOnAction(e -> {
-            primaryStage.close();
-            FrontEntrada frontEntradaOld = new FrontEntrada();
-            frontEntradaOld.start(new Stage());
-        });
+            lblErro.setText("Cadastro realizado com sucesso!");
+            lblErro.setTextFill(Color.LIGHTGREEN);
+            lblErro.setVisible(true);
 
-        layout.getChildren().addAll(lblTitulo, txtCpfCnpj, txtNome, txtEmail, txtSenha, txtConfirmarSenha, errorPane, btnAvancar, btnVoltar);
+            txtCpfCnpj.clear();
+            txtNome.clear();
+            txtEmail.clear();
+            txtSenha.clear();
+            txtConfirmarSenha.clear();
 
-        Scene scene = new Scene(layout, 320, 600);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Cadastro");
-        primaryStage.setResizable(false);
-        primaryStage.show();
+            main.mostrarTelaEntrada();
+
+        } catch (IllegalArgumentException ex) {
+            lblErro.setText(ex.getMessage());
+            lblErro.setTextFill(Color.LIGHTCORAL);
+            lblErro.setVisible(true);
+        }
     }
 
-    private void setBackground(Region layout, String imagePath) {
-        Image backgroundImage = new Image(FrontSignUp.class.getResource(imagePath).toExternalForm());
-        BackgroundImage bgImage = new BackgroundImage(backgroundImage,
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER, new BackgroundSize(100, 100, true, true, true, true));
-        layout.setBackground(new Background(bgImage));
-    }
-
-    public static void main(String[] args) {
-        launch(args);
+    private void setBackground() {
+        try {
+            Image backgroundImage = new Image(getClass().getResource("/images/backgroundImage.png").toExternalForm());
+            BackgroundImage bgImage = new BackgroundImage(
+                    backgroundImage,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.CENTER,
+                    new BackgroundSize(100, 100, true, true, true, true)
+            );
+            view.setBackground(new Background(bgImage));
+        } catch (Exception e) {
+            view.setStyle("-fx-background-color: #121212;");
+        }
     }
 }

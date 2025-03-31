@@ -1,27 +1,81 @@
-package com.allpay.projeto;//import com.allpay.projeto.model.BankAccountModelDAO;
+package com.allpay.projeto;
+//import com.allpay.projeto.model.BankAccountModelDAO;
 
 import com.allpay.projeto.view.FrontEntrada;
 
 import java.sql.Connection;
 
-public class Main {
-    static final String URL = System.getenv("DB_URL");
-    static final String USER = System.getenv("DB_USER");
-    static final String PASSWORD = System.getenv("DB_PASSWORD");
-    public static final String RESET = "\u001B[0m";
-    public static final String GREEN = "\u001B[32m";
-    Connection conn;
+import com.allpay.projeto.view.FrontLogin;
+import com.allpay.projeto.view.FrontSignUp;
+import javafx.application.Application;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
+    public class Main extends Application {
+        static final String URL = System.getenv("DB_URL");
+        static final String USER = System.getenv("DB_USER");
+        static final String PASSWORD = System.getenv("DB_PASSWORD");
+        public static final String RESET = "\u001B[0m";
+        public static final String GREEN = "\u001B[32m";
+        Connection conn;
+        private static Stage primaryStage;
 
-    public static void main(String[] args) throws InterruptedException {
+        @Override
+        public void start(Stage primaryStage) {
+            Main.primaryStage = primaryStage;
+            configurarStage();
+            mostrarTelaEntrada();
+        }
+
+        private void configurarStage() {
+            primaryStage.setTitle("allPay");
+            primaryStage.setWidth(320);
+            primaryStage.setHeight(600);
+            primaryStage.setResizable(false);
+        }
+
+        public static Stage getPrimaryStage() {
+            return primaryStage;
+        }
+
+        public void mostrarTelaEntrada() {
+            FrontEntrada.mostrarSplashScreen(this, () -> {
+                FrontEntrada entrada = new FrontEntrada(this);
+                trocarCena(entrada.getView());
+            });
+        }
+
+        public void mostrarTelaLogin() {
+            FrontLogin login = new FrontLogin(this);
+            trocarCena(login.getView());
+        }
+
+        public void mostrarTelaCadastro() {
+            FrontSignUp cadastro = new FrontSignUp(this);
+            trocarCena(cadastro.getView());
+        }
+
+        private void trocarCena(Parent view) {
+            Scene scene = new Scene(view, 320, 600);
+            scene.setFill(Color.TRANSPARENT);
+            primaryStage.setScene(scene);
+        }
+
+        public static void main(String[] args) {
+            launch(args);
+        }
+    }
+   // public static void main(String[] args) throws InterruptedException {
         //GerarComprovantePagamento(1);
         //PaymentModelDAO.GerarComprovantePagamento();
-        FrontEntrada.main(args);
+       // FrontEntrada.main(args);
         //new UserController().select();
         //new ModelFaturaDAO().buscarFaturasByUserId("45678912345");
 
 //        com.allpay.projeto.trasicoes.MainApp.main(args);
-    }
+    //}
 
 //    public static void GerarComprovantePagamento(/*int VarIdPagamento*/) {
 //        try {
@@ -124,4 +178,4 @@ public class Main {
 //            e.printStackTrace();
 //        }
 //    }
-}
+//}
