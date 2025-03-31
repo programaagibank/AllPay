@@ -66,6 +66,7 @@ public class FrontPrincipal {
         carousel.setAlignment(Pos.CENTER_LEFT);
 
         ArrayList<HashMap<String, String>> bancos = getBankAccounts();
+
         if (bancos.isEmpty()) {
             carousel.getChildren().add(createNoBanksLabel());
         } else {
