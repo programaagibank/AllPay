@@ -19,15 +19,16 @@ public BankAccountController(){
     return bancosDisponiveis;
   }
 
-  public void findUserBankAccount(String id_usuaria){
+  public  ArrayList<HashMap<String, String>> findUserBankAccount(String id_usuaria){
     bancosDisponiveis = new BankAccountDAO().findUserBankAccount(UserModel.getId_usuario());
-    System.out.println("mudar para o do develop");
+    System.out.println(bancosDisponiveis.size());
     if(!bancosDisponiveis.isEmpty()){
-
-      bancosDisponiveis.forEach(elemento ->
-        System.out.println(elemento.get("nome_instituicao") + " | " + "Código do banco: "+elemento.get("id_instituicao") + " | " + "Limite: R$" + elemento.get("limite") + " | " + "Saldo: R$"+elemento.get("saldo_usuario")));
+//      bancosDisponiveis.forEach(elemento ->
+//        System.out.println(elemento.get("nome_instituicao") + " | " + "Código do banco: "+elemento.get("id_instituicao") + " | " + "Limite: R$" + elemento.get("limite") + " | " + "Saldo: R$"+elemento.get("saldo_usuario")));
+    return bancosDisponiveis;
     } else {
       System.out.println("erro");
+      return bancosDisponiveis;
     }
   }
 

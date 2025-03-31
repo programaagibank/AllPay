@@ -12,21 +12,17 @@ import java.util.HashMap;
 
 public class BankAccountDAO {
 
-  ArrayList<HashMap<String,String>> bancosDisponiveis = new ArrayList();
-
   private static DataBaseConnection dbConnect;
+  ArrayList<HashMap<String,String>> bancosDisponiveis;
+
 
   public BankAccountDAO(){
-    dbConnect = new MySQLDataBaseConnection();
-  }
 
-  public BankAccountDAO(ArrayList<HashMap<String,String>> bancosDisponiveis){
     dbConnect = new MySQLDataBaseConnection();
-    this.bancosDisponiveis = bancosDisponiveis;
+    bancosDisponiveis = new ArrayList();
   }
 
   public ArrayList<HashMap<String,String>> getBancosDisponiveis () {
-
     return bancosDisponiveis;
   }
   public ArrayList<HashMap<String,String>> findUserBankAccount(String id){
