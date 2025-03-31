@@ -125,7 +125,7 @@ public class FrontLogin {
                 if (autenticado) {
                     HashMap<String, String> userInfo = userController.getUserInfo();
                     String nomeUsuario = userInfo.get("nome_usuario");
-                    //main.mostrarTelaPrincipal(cpfCnpj, nomeUsuario);
+                    main.mostrarTelaPrincipal(cpfCnpj, nomeUsuario);
                 } else {
                     lblErro.setText("Credenciais inválidas. Tente Novamente.");
                     lblErro.setVisible(true);

@@ -33,8 +33,11 @@ public class FrontEntrada {
     }
 
     private void setupView() {
+
         view.setAlignment(Pos.TOP_CENTER);
         view.setPadding(new Insets(150, 20, 20, 20));
+        view.setPrefWidth(320);
+        view.setPrefHeight(600);
         setBackground();
 
         ImageView logo = new ImageView(new Image(getClass().getResource("/images/logoAllpay.png").toExternalForm()));
@@ -83,10 +86,12 @@ public class FrontEntrada {
                     BackgroundPosition.CENTER,
                     new BackgroundSize(100, 100, true, true, true, true)
             );
+
             view.setBackground(new Background(bgImage));
         } catch (Exception e) {
             view.setStyle("-fx-background-color: #121212;");
         }
+
     }
 
     public static void mostrarSplashScreen(Main main, Runnable onFinished) {
