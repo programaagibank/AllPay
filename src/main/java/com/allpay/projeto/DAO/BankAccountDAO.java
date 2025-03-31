@@ -35,6 +35,7 @@ public class BankAccountDAO {
       ResultSet rs = stmt.executeQuery();
 
       while (rs.next()) {
+
         HashMap<String, String> dados = new HashMap<>();
         dados.put("nome_instituicao", rs.getString("nome_instituicao"));
         dados.put("conta", rs.getString("conta"));

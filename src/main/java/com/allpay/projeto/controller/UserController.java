@@ -1,6 +1,8 @@
 package com.allpay.projeto.controller;
 
 import com.allpay.projeto.DAO.UserDAO;
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.util.HashMap;
 
 public class UserController {
@@ -16,7 +18,9 @@ public class UserController {
     }
 
     public void insert(String cpfTemp, String nomeTemp, String senhaTemp, String emailTemp) {
-        userModel.insert(cpfTemp, nomeTemp, senhaTemp, emailTemp);
+        String hashSenha = BCrypt.hashpw(senhaTemp, BCrypt.gensalt());
+        System.out.println(hashSenha);
+        userModel.insert(cpfTemp, nomeTemp, hashSenha, emailTemp);
     }
 
     public String validarId(String id_temp) throws IllegalArgumentException {

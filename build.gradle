@@ -15,11 +15,13 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
-
+    testImplementation("org.mockito:mockito-junit-jupiter:5.8.0") // Para JUnit 5
     // Dependências JavaFX (opcional se estiver usando o plugin javafx)
     implementation 'org.openjfx:javafx-controls:17.0.2'
     implementation 'org.openjfx:javafx-fxml:17.0.2'
     implementation 'org.openjfx:javafx-media:17.0.2'  // Novo módulo adicionado
+
+    implementation 'org.mindrot:jbcrypt:0.4'
 }
 
 application {

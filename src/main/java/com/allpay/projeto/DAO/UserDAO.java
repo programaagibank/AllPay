@@ -3,6 +3,7 @@ package com.allpay.projeto.DAO;
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
 import com.allpay.projeto.interfaces.InterfaceUserModelDAO;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -48,7 +49,7 @@ public class UserDAO implements InterfaceUserModelDAO {
     }
 
     public HashMap<String, String> selectById(String id, String senha){
-        String sql = "SELECT * FROM usuario WHERE id_usuario = ? AND senha_acesso = ?";
+        String sql = "SELECT * FROM usuario WHERE id_usuario = ?";
         HashMap<String, String> dados = new HashMap<>();
 
         try {
@@ -57,11 +58,10 @@ public class UserDAO implements InterfaceUserModelDAO {
 
             PreparedStatement stmt = dbConnect.getConnection().prepareStatement(sql);
             stmt.setString(1, id);
-            stmt.setString(2, senha);
 
             ResultSet rs = stmt.executeQuery();
 
-            if(rs.next()) {
+            if(rs.next() && verificarSenha(senha, rs.getString("senha_acesso"))) {
                 dados.put("id_usuario", rs.getString("id_usuario"));
                 dados.put("nome_usuario", rs.getString("nome_usuario"));
                 dados.put("email", rs.getString("email"));
@@ -77,6 +77,10 @@ public class UserDAO implements InterfaceUserModelDAO {
             System.out.println("Desculpe Tente novamente");
         }
     return dados;
+    }
+
+    public static boolean verificarSenha(String senhaDigitada, String senhaHash) {
+        return BCrypt.checkpw(senhaDigitada, senhaHash);
     }
 }
 

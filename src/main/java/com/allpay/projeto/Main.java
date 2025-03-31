@@ -1,4 +1,4 @@
-//import com.allpay.projeto.model.BankAccountModelDAO;
+package com.allpay.projeto;//import com.allpay.projeto.model.BankAccountModelDAO;
 
 import com.allpay.projeto.view.FrontEntrada;
 
