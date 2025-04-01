@@ -1,7 +1,7 @@
 package com.allpay.projeto.view;
 
 import com.allpay.projeto.Main;
-import com.allpay.projeto.DAO.BankAccountDAO;
+import com.allpay.projeto.DAO.ContaBancoDAO;
 import com.allpay.projeto.DAO.FaturaDAO;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -85,7 +85,7 @@ public class FrontPagarFatura {
         ScrollPane scrollBancos = new ScrollPane();
         VBox bancosContainer = new VBox(10);
 
-        BankAccountDAO bankDAO = new BankAccountDAO();
+        ContaBancoDAO bankDAO = new ContaBancoDAO();
         ArrayList<HashMap<String, String>> bancos = bankDAO.findUserBankAccount(idUsuario);
 
         float valorFatura = Float.parseFloat(faturaData.get("valor_fatura"));
@@ -194,7 +194,7 @@ public class FrontPagarFatura {
     }
 
     private boolean validarSenha(String senha) {
-        BankAccountDAO bankDAO = new BankAccountDAO();
+        ContaBancoDAO bankDAO = new ContaBancoDAO();
         // Implementar lógica para obter id_instituicao do banco selecionado
         return bankDAO.validarSenha(senha, idUsuario, 1); // Substituir 1 pelo id correto
     }
@@ -205,7 +205,7 @@ public class FrontPagarFatura {
         int idFatura = Integer.parseInt(idPagamento);
 
         if (metodoPagamento.equals("Cartão de Crédito")) {
-            BankAccountDAO bankDAO = new BankAccountDAO();
+            ContaBancoDAO bankDAO = new ContaBancoDAO();
             float limite = bankDAO.escolherBancoCartao(idUsuario, 1); // Substituir 1 pelo id correto
             faturaDAO.efetuarPagamentoCartao(idUsuario, idFatura, valor, limite, "senha", 1);
         } else {
