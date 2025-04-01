@@ -2,6 +2,7 @@ package com.allpay.projeto.view;
 
 import com.allpay.projeto.Main;
 import com.allpay.projeto.DAO.FaturaDAO;
+import com.allpay.projeto.controller.ContaBancoController;
 import com.allpay.projeto.controller.UsuarioController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -22,12 +23,15 @@ public class FrontPrincipal {
     private final Main main;
     private final String idUsuario;
     private final String nomeUsuario;
+    private final ContaBancoController contaBancoController;
     private static final int WINDOW_WIDTH = 320;
 
     public FrontPrincipal(Main main, String idUsuario, String nomeUsuario) {
         this.main = main;
         this.idUsuario = idUsuario;
         this.nomeUsuario = nomeUsuario;
+        this.contaBancoController = new ContaBancoController();
+        contaBancoController.findUserBankAccount();
         this.view = new VBox(10);
         setupView();
     }
@@ -65,7 +69,7 @@ public class FrontPrincipal {
         HBox carousel = new HBox(10);
         carousel.setAlignment(Pos.CENTER_LEFT);
 
-        ArrayList<HashMap<String, String>> bancos = getBankAccounts();
+        ArrayList<HashMap<String, String>> bancos = contaBancoController.getBancosDisponiveis();
 
         if (bancos.isEmpty()) {
             carousel.getChildren().add(createNoBanksLabel());
@@ -89,10 +93,10 @@ public class FrontPrincipal {
         card.setStyle("-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 10; -fx-padding: 15;");
         card.setMinWidth(WINDOW_WIDTH - 50);
 
-        Label name = new Label(banco.get("nome_banco"));
+        Label name = new Label(banco.get("nome_instituicao"));
         name.setStyle("-fx-text-fill: white; -fx-font-family: 'Montserrat'; -fx-font-weight: bold; -fx-font-size: 16px;");
 
-        Label balance = new Label("R$ " + banco.get("saldo"));
+        Label balance = new Label("R$ " + banco.get("saldo_usuario"));
         balance.setStyle("-fx-text-fill: white; -fx-font-family: 'Montserrat'; -fx-font-weight: bold; -fx-font-size: 18px;");
 
         card.getChildren().addAll(name, balance);
