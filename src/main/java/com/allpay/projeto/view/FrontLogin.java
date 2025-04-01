@@ -45,6 +45,20 @@ public class FrontLogin {
         TextField txtCpfCnpj = createTextField("CPF ou CNPJ");
         PasswordField txtSenha = createPasswordField("Senha");
 
+        StackPane passwordStack = new StackPane();
+
+        // TextField para exibir a senha quando o CheckBox estiver marcado
+        TextField txtShowPassword = new TextField();
+        txtShowPassword.setPromptText("Senha");
+        txtShowPassword.setMaxWidth(250);
+        txtShowPassword.setStyle("-fx-font-size: 14px; -fx-padding: 10px;");
+        txtShowPassword.setVisible(false); // Inicialmente escondido
+
+        passwordStack.getChildren().addAll(txtSenha,txtShowPassword);
+
+        CheckBox showPasswordCheckBox = new CheckBox("Mostrar Senha");
+        showPasswordCheckBox.setStyle("-fx-text-fill: #FFFFFF; -fx-base: #000000;");
+        showPasswordCheckBox.setFont(Font.font("Montserrat", FontWeight.BOLD, 10));
         Label lblErro = createErrorLabel();
         setupLoadingGif();
 
@@ -55,11 +69,24 @@ public class FrontLogin {
         Region spacer = new Region();
         spacer.setPrefHeight(40);
 
-        view.getChildren().addAll(lblTitulo, spacer, txtCpfCnpj, txtSenha, lblErro, loadingGif, btnLogin, btnCadastro, btnVoltar);
+        view.getChildren().addAll(lblTitulo, spacer, txtCpfCnpj, passwordStack, showPasswordCheckBox, lblErro, loadingGif, btnLogin, btnCadastro, btnVoltar);
 
-        btnLogin.setOnAction(e -> handleLogin(txtCpfCnpj, txtSenha, lblErro));
+        btnLogin.setOnAction(e -> handleLogin(txtCpfCnpj, txtSenha, txtShowPassword, lblErro));
         btnCadastro.setOnAction(e -> main.mostrarTelaCadastro());
         btnVoltar.setOnAction(e -> main.mostrarTelaEntrada());
+
+        // Lógica para alternar entre mostrar e ocultar a senha
+        showPasswordCheckBox.setOnAction(e -> {
+            if (showPasswordCheckBox.isSelected()) {
+                txtShowPassword.setText(txtSenha.getText());
+                txtShowPassword.setVisible(true);
+                txtSenha.setVisible(false);
+            } else {
+                txtSenha.setText(txtShowPassword.getText());
+                txtSenha.setVisible(true);
+                txtShowPassword.setVisible(false);
+            }
+        });
     }
 
     private TextField createTextField(String prompt) {
@@ -111,9 +138,9 @@ public class FrontLogin {
         return btn;
     }
 
-    private void handleLogin(TextField txtCpfCnpj, PasswordField txtSenha, Label lblErro) {
+    private void handleLogin(TextField txtCpfCnpj, PasswordField txtSenha, TextField txtShowPassword, Label lblErro) {
         String cpfCnpj = txtCpfCnpj.getText();
-        String senha = txtSenha.getText();
+        String senha = txtSenha.isVisible() ? txtSenha.getText() : txtShowPassword.getText(); // Verifica qual campo de senha está visível
 
         loadingGif.setVisible(true);
         lblErro.setVisible(false);
