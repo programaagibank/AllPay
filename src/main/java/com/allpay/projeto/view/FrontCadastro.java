@@ -1,7 +1,7 @@
 package com.allpay.projeto.view;
 
 import com.allpay.projeto.Main;
-import com.allpay.projeto.controller.UserController;
+import com.allpay.projeto.controller.UsuarioController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -13,12 +13,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
-public class FrontSignUp {
+public class FrontCadastro {
     private final VBox view;
     private final Main main;
-    private final UserController userController = new UserController();
+    private final UsuarioController userController = new UsuarioController();
 
-    public FrontSignUp(Main main) {
+    public FrontCadastro(Main main) {
         this.main = main;
         this.view = new VBox(20);
         setupView();

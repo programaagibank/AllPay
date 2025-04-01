@@ -1,6 +1,10 @@
 package com.allpay.projeto;
 
-import com.allpay.projeto.view.*;
+import com.allpay.projeto.view.FrontCadastro;
+import com.allpay.projeto.view.FrontEntrada;
+import com.allpay.projeto.view.FrontLogin;
+import com.allpay.projeto.view.FrontPrincipal;
+import com.allpay.projeto.view.FrontCadastro;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -46,7 +50,7 @@ public class Main extends Application {
     }
 
     public void mostrarTelaCadastro() {
-        trocarCena(new FrontSignUp(this).getView());
+        trocarCena(new FrontCadastro(this).getView());
     }
 
     private void trocarCena(Parent view) {

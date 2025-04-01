@@ -51,7 +51,7 @@ public class FaturaDAO {
                 dados.put("nome_recebedor", rs.getString("nome_recebedor"));
                 dados.put("status_fatura", rs.getString("status_fatura"));
                 dados.put("descricao", rs.getString("descricao"));
-                System.out.println(dados.put("id_fatura", rs.getString("id_fatura")));
+                //System.out.println(dados.put("id_fatura", rs.getString("id_fatura")));
                 //System.out.println(i + " - " + id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
 
                 this.data.add(dados);
@@ -142,7 +142,7 @@ public class FaturaDAO {
 
     public float efetuarPagamentoCartao (String id_usuarioOut, int id_fatura, float valor_fatura, float limite_usuario, String senha_transacao, int id_instituicao) {
 
-        BankAccountDAO conta = new BankAccountDAO();
+        ContaBancoDAO conta = new ContaBancoDAO();
         float limite_restante = 0;
         boolean validacao = conta.validarSenha(senha_transacao, id_usuarioOut, id_instituicao);
         float valor_faturaConvert = Float.parseFloat(data.get(id_fatura).get("valor_fatura"));
@@ -163,7 +163,7 @@ public class FaturaDAO {
 
     public float efetuarPagamento (String id_usuarioOut, int id_fatura, float valor_fatura, float saldo_usuario, String senha_transacao, int id_instituicao) {
         System.out.println("aqui");
-        BankAccountDAO conta = new BankAccountDAO();
+        ContaBancoDAO conta = new ContaBancoDAO();
         float saldo_restante = 0;
         boolean validacao = conta.validarSenha(senha_transacao, id_usuarioOut, id_instituicao);
         float valor_faturaConvert = Float.parseFloat(data.get(id_fatura).get("valor_fatura"));
