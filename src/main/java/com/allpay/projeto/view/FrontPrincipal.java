@@ -4,8 +4,12 @@ import com.allpay.projeto.Main;
 import com.allpay.projeto.DAO.FaturaDAO;
 import com.allpay.projeto.controller.ContaBancoController;
 import com.allpay.projeto.controller.UsuarioController;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -14,6 +18,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.util.Duration;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -53,8 +59,7 @@ public class FrontPrincipal {
 
     private void configureViewStyle() {
         view.setAlignment(Pos.TOP_CENTER);
-        view.setPadding(new Insets(10));
-        view.setStyle("-fx-background-insets: 0; -fx-padding: 0;");
+        view.setPadding(new Insets(90, 20, 20, 20));
         setBackground();
     }
 
@@ -69,20 +74,51 @@ public class FrontPrincipal {
         HBox carousel = new HBox(10);
         carousel.setAlignment(Pos.CENTER_LEFT);
 
+
         ArrayList<HashMap<String, String>> bancos = contaBancoController.getBancosDisponiveis();
 
         if (bancos.isEmpty()) {
-            carousel.getChildren().add(createNoBanksLabel());
+//            carousel.getChildren().add(createNoBanksLabel());
         } else {
-            bancos.forEach(banco -> carousel.getChildren().add(createBankCard(banco)));
+            bancos.forEach(banco -> {
+                carousel.getChildren().add(createBankCard(banco));
+                carousel.setStyle("-fx-background-color: transparent;" +
+                        "-fx-border-radius: 15px; " +
+                        "-fx-background-radius: 15px;");
+            });
         }
 
         ScrollPane scroll = new ScrollPane(carousel);
-        scroll.setStyle("-fx-background: transparent;");
-        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scroll.setStyle("-fx-background-color: transparent; -fx-border-radius: 15px; -fx-background-radius: 15px;");
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Oculta a scrollbar horizontal
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scroll.setFitToHeight(true);
+        scroll.setPannable(true);
         scroll.setPrefViewportWidth(WINDOW_WIDTH - 40);
+
+        Platform.runLater(() -> {
+            Node viewport = scroll.lookup(".viewport");
+            if (viewport != null) {
+                viewport.setStyle("-fx-background-color: transparent;");
+            }
+        });
+        scroll.setOnMouseReleased(event -> {
+            double currentScroll = scroll.getHvalue();
+            double targetScroll = (currentScroll > 0.5) ? 1.0 : 0.0; // Decide para qual lado ir
+
+            // 🔄 Animação progressiva para suavizar o movimento
+            Timeline timeline = new Timeline();
+            double duration = 100; // Duração em ms (mais tempo = mais suave)
+            int frames = 60; // Quantidade de frames da animação
+            double step = (targetScroll - currentScroll) / frames; // Diferença por frame
+
+            for (int i = 0; i <= frames; i++) {
+                double progress = currentScroll + (step * i);
+                timeline.getKeyFrames().add(new KeyFrame(Duration.millis(i * (duration / frames)), e -> scroll.setHvalue(progress)));
+            }
+
+            timeline.play(); // Inicia a animação
+        });
 
         return scroll;
     }
@@ -90,14 +126,14 @@ public class FrontPrincipal {
     private VBox createBankCard(HashMap<String, String> banco) {
         VBox card = new VBox(10);
         card.setAlignment(Pos.CENTER);
-        card.setStyle("-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 10; -fx-padding: 15;");
-        card.setMinWidth(WINDOW_WIDTH - 50);
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 6; -fx-padding: 15;");
+        card.setMinWidth(WINDOW_WIDTH - 43);
 
         Label name = new Label(banco.get("nome_instituicao"));
-        name.setStyle("-fx-text-fill: white; -fx-font-family: 'Montserrat'; -fx-font-weight: bold; -fx-font-size: 16px;");
+        name.setStyle("-fx-text-fill: black; -fx-font-family: 'Montserrat'; -fx-font-weight: bold; -fx-font-size: 16px;");
 
         Label balance = new Label("R$ " + banco.get("saldo_usuario"));
-        balance.setStyle("-fx-text-fill: white; -fx-font-family: 'Montserrat'; -fx-font-weight: bold; -fx-font-size: 18px;");
+        balance.setStyle("-fx-text-fill: black; -fx-font-family: 'Montserrat'; -fx-font-weight: bold; -fx-font-size: 18px;");
 
         card.getChildren().addAll(name, balance);
         return card;
@@ -191,23 +227,6 @@ public class FrontPrincipal {
         label.setFont(Font.font("Montserrat", weight, Double.parseDouble(fontSize)));
         label.setTextFill(color);
         return label;
-    }
-
-    private ArrayList<HashMap<String, String>> getBankAccounts() {
-        ArrayList<HashMap<String, String>> bancos = new ArrayList<>();
-
-        HashMap<String, String> banco1 = new HashMap<>();
-        banco1.put("nome_banco", "AgiBank");
-        banco1.put("saldo", "2,500.00");
-
-        HashMap<String, String> banco2 = new HashMap<>();
-        banco2.put("nome_banco", "Santander");
-        banco2.put("saldo", "3,000.00");
-
-        bancos.add(banco1);
-        bancos.add(banco2);
-
-        return bancos;
     }
 
     private Label createNoBanksLabel() {

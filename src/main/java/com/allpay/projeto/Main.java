@@ -1,9 +1,6 @@
 package com.allpay.projeto;
 
-import com.allpay.projeto.view.FrontCadastro;
-import com.allpay.projeto.view.FrontEntrada;
-import com.allpay.projeto.view.FrontLogin;
-import com.allpay.projeto.view.FrontPrincipal;
+import com.allpay.projeto.view.*;
 import com.allpay.projeto.view.FrontCadastro;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -72,7 +69,9 @@ public class Main extends Application {
         // Implementar FrontComprovantePagamento depois
     }
 
+
     public static void main(String[] args) {
         launch(args);
     }
+
 }
