@@ -102,7 +102,10 @@ public class FrontPrincipal {
         HBox container = new HBox(15);
         container.setAlignment(Pos.CENTER);
         container.getChildren().addAll(
-                createMenuButton("bank-icon.png", "Meus Bancos", () -> {}),
+                createMenuButton("bank-icon.png", "Meus Bancos", () -> {
+                    // Alteração aqui - direciona para pagamento da fatura 8
+                    main.mostrarTelaPagarFatura(idUsuario, "8");
+                }),
                 createMenuButton("switch-icon.png", "Trocar Conta", () -> main.mostrarTelaEntrada()),
                 createMenuButton("info-icon.png", "Infos allPay", () -> {}),
                 createMenuButton("exit-icon.png", "Sair", () -> UserController.exit())
@@ -167,10 +170,10 @@ public class FrontPrincipal {
 
         VBox infoBox = new VBox(5);
         infoBox.getChildren().addAll(
-                createInvoiceLabel(fatura.get("nome_recebedor"), "14px", FontWeight.BOLD, Color.WHITE),
-                createInvoiceLabel(fatura.get("data_vencimento"), "12px", FontWeight.NORMAL, Color.LIGHTGRAY),
-                createInvoiceLabel("R$" + fatura.get("valor_fatura"), "12px", FontWeight.NORMAL, Color.WHITE),
-                createInvoiceLabel(fatura.get("status_fatura"), "12px", FontWeight.NORMAL,
+                createInvoiceLabel(fatura.get("nome_recebedor"), "14", FontWeight.BOLD, Color.WHITE),
+                createInvoiceLabel(fatura.get("data_vencimento"), "12", FontWeight.NORMAL, Color.LIGHTGRAY),
+                createInvoiceLabel("R$" + fatura.get("valor_fatura"), "12", FontWeight.NORMAL, Color.WHITE),
+                createInvoiceLabel(fatura.get("status_fatura"), "12", FontWeight.NORMAL,
                         "PAGA".equals(fatura.get("status_fatura")) ? Color.LIGHTGREEN : Color.LIGHTCORAL)
         );
 
