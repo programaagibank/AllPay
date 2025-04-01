@@ -63,6 +63,15 @@ public class Main extends Application {
         trocarCena(principal.getView());
     }
 
+    public void mostrarTelaPagarFatura(String idUsuario, String idPagamento) {
+        FrontPagarFatura pagarFatura = new FrontPagarFatura(this, idUsuario, idPagamento);
+        trocarCena(pagarFatura.getView());
+    }
+
+    public void mostrarComprovantePagamento(String idUsuario, String idPagamento) {
+        // Implementar FrontComprovantePagamento depois
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
