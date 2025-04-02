@@ -186,8 +186,8 @@ public class FrontPrincipal {
 
     private Button criarBotaoFatura() {
         Button btn = new Button("Buscar Faturas por Código");
-        btn.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-font-weight: bold;");
-        btn.setMinSize(250, 40);
+        btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #000000; -fx-font-weight: bold;");
+//        btn.setMinSize(250, 40);
         return btn;
     }
 
@@ -206,13 +206,13 @@ public class FrontPrincipal {
 
         FaturaDAO faturaDAO = new FaturaDAO();
         faturaDAO.buscarFaturas(idUsuario).forEach(fatura ->
-                listView.getItems().add(createInvoiceButton(fatura))
+                listView.getItems().add(criarBotaoFatura(fatura))
         );
 
         return listView;
     }
 
-    private Button createInvoiceButton(HashMap<String, String> fatura) {
+    private Button criarBotaoFatura(HashMap<String, String> fatura) {
         Button item = new Button();
         item.setStyle("-fx-background-color: transparent; -fx-border-width: 0; -fx-padding: 0;");
         item.setGraphic(createInvoiceContent(fatura)); // Define o conteúdo do botão
