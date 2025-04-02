@@ -4,6 +4,7 @@ import com.allpay.projeto.Main;
 import com.allpay.projeto.DAO.FaturaDAO;
 import com.allpay.projeto.controller.ContaBancoController;
 import com.allpay.projeto.controller.UsuarioController;
+import com.allpay.projeto.model.UsuarioModel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -242,7 +243,7 @@ public class FrontPrincipal {
         Button item = new Button();
         item.setStyle("-fx-background-color: transparent; -fx-border-radius: 15px; -fx-background-radius: 15px;");
         item.setGraphic(createInvoiceContent(fatura)); // Define o conteúdo do botão
-        item.setOnAction(e -> abrirTelaX(fatura)); // Ao clicar, abre a tela com os dados da fatura // Chama a tela ao clicar
+        item.setOnAction(e -> abrirTelaMostrarFatura(fatura)); // Ao clicar, abre a tela com os dados da fatura // Chama a tela ao clicar
         item.setOnMousePressed(event -> item.getParent().fireEvent(event)); // Repassa evento para o VBox
         item.setOnMouseDragged(event -> item.getParent().fireEvent(event));
         return item;
@@ -272,8 +273,8 @@ public class FrontPrincipal {
 
 
     // 🔹 Abre a Tela X (simulação)
-    private void abrirTelaX(HashMap<String, String> fatura) {
-        main.mostrarTelaPagarFatura("00000000004", "0010");
+    private void abrirTelaMostrarFatura(HashMap<String, String> fatura) {
+        main.mostrarTelaPagarFatura(UsuarioModel.getId_usuario(), fatura.get("id_fatura"));
     }
 
 
