@@ -191,38 +191,63 @@ public class FrontPrincipal {
         return btn;
     }
 
-    private ListView<HBox> criarListaFatura() {
-        ListView<HBox> listView = new ListView<>();
-        listView.setStyle("-fx-background-color: transparent;");
+    private ListView<Button> criarListaFatura() {
+        ListView<Button> listView = new ListView<>();
+        listView.setStyle("-fx-background-color: transparent; -fx-border-width: 0;");
         listView.setPrefHeight(200);
+
+        // 🔴 Remove fundo branco da Viewport
+        Platform.runLater(() -> {
+            Node viewport = listView.lookup(".viewport");
+            if (viewport != null) {
+                viewport.setStyle("-fx-background-color: transparent;");
+            }
+        });
 
         FaturaDAO faturaDAO = new FaturaDAO();
         faturaDAO.buscarFaturas(idUsuario).forEach(fatura ->
-                listView.getItems().add(criarItemFatura(fatura))
+                listView.getItems().add(createInvoiceButton(fatura))
         );
 
         return listView;
     }
 
-    private HBox criarItemFatura(HashMap<String, String> fatura) {
-        HBox item = new HBox(15);
-        item.setAlignment(Pos.CENTER_LEFT);
-        item.setStyle("-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 10; -fx-padding: 10;");
-
-        VBox infoBox = new VBox(5);
-        infoBox.getChildren().addAll(
-                criarLaberFatura(fatura.get("nome_recebedor"), "14", FontWeight.BOLD, Color.WHITE),
-                criarLaberFatura(fatura.get("data_vencimento"), "12", FontWeight.NORMAL, Color.LIGHTGRAY),
-                criarLaberFatura("R$" + fatura.get("valor_fatura"), "12", FontWeight.NORMAL, Color.WHITE),
-                criarLaberFatura(fatura.get("status_fatura"), "12", FontWeight.NORMAL,
-                        "PAGA".equals(fatura.get("status_fatura")) ? Color.LIGHTGREEN : Color.LIGHTCORAL)
-        );
-
-        item.getChildren().add(infoBox);
+    private Button createInvoiceButton(HashMap<String, String> fatura) {
+        Button item = new Button();
+        item.setStyle("-fx-background-color: transparent; -fx-border-width: 0; -fx-padding: 0;");
+        item.setGraphic(createInvoiceContent(fatura)); // Define o conteúdo do botão
+        item.setOnAction(e -> abrirTelaX(fatura)); // Ao clicar, abre a tela com os dados da fatura
         return item;
     }
 
-    private Label criarLaberFatura(String text, String fontSize, FontWeight weight, Color color) {
+    private VBox createInvoiceContent(HashMap<String, String> fatura) {
+        VBox content = new VBox(5);
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setStyle("-fx-background-color: transparent; -fx-border-width: 0;");
+
+        Label name = createInvoiceLabel(fatura.get("nome_recebedor"), "14", FontWeight.BOLD, Color.WHITE);
+        Label dueDate = createInvoiceLabel(fatura.get("data_vencimento"), "12", FontWeight.NORMAL, Color.LIGHTGRAY);
+        Label amount = createInvoiceLabel("R$ " + fatura.get("valor_fatura"), "12", FontWeight.NORMAL, Color.WHITE);
+        Label status = createInvoiceLabel(
+                fatura.get("status_fatura"), "12", FontWeight.NORMAL,
+                "PAGA".equals(fatura.get("status_fatura")) ? Color.LIGHTGREEN : Color.LIGHTCORAL
+        );
+
+        // 🔵 Linha separadora entre os itens
+        VBox separator = new VBox();
+        separator.setStyle("-fx-border-color: rgba(255,255,255,0.3); -fx-border-width: 0 0 1 0; -fx-padding: 5;");
+
+        content.getChildren().addAll(name, dueDate, amount, status, separator);
+        return content;
+    }
+
+    private void abrirTelaX(HashMap<String, String> fatura) {
+        System.out.println("Abrindo Tela X com os dados da fatura: " + fatura);
+        // 🟢 Aqui você chama a tela X e passa os dados
+//        main.mostrarTelaX(fatura); // 🚀 Substitua por sua lógica real
+    }
+
+    private Label createInvoiceLabel(String text, String fontSize, FontWeight weight, Color color) {
         Label label = new Label(text);
         label.setFont(Font.font("Montserrat", weight, Double.parseDouble(fontSize)));
         label.setTextFill(color);
