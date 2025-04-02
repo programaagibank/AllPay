@@ -86,7 +86,7 @@ public class FrontPagarFatura {
         VBox bancosContainer = new VBox(10);
 
         ContaBancoDAO bankDAO = new ContaBancoDAO();
-        ArrayList<HashMap<String, String>> bancos = bankDAO.findUserBankAccount(idUsuario);
+        ArrayList<HashMap<String, String>> bancos = bankDAO.encontrarContaBancoUsuario(idUsuario);
 
         float valorFatura = Float.parseFloat(faturaData.get("valor_fatura"));
 

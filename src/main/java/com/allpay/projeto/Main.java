@@ -34,7 +34,7 @@ public class Main extends Application {
     public void mostrarTelaEntrada() {
         if (primeiroAcesso) {
             primeiroAcesso = false;
-            FrontEntrada.mostrarSplashScreen(this, () -> {
+            FrontEntrada.mostrarTelaSplash(this, () -> {
                 trocarCena(new FrontEntrada(this).getView());
             });
         } else {

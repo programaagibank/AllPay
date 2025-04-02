@@ -42,7 +42,7 @@
 //        selecaoFaturaPagar = sc.nextInt() - 1;
 //        sc.nextLine();
 //        System.out.println("\nBancos disponíveis:\n");
-////        new BankAccountController().findUserBankAccount(UserModel.getId_usuario());
+////        new BankAccountController().encontrarContaBancoUsuario(UserModel.getId_usuario());
 //        System.out.println("\nSelecione qual banco deseja usar (Código do banco): ");
 //        selecaoBancoPagar = sc.nextInt() - 1;
 //        System.out.println("Selecione o método de pagamento:\nPIX - 1\nCrédito - 2\nDébito - 3\nTED - 4\nBoleto - 5\n");
@@ -61,7 +61,7 @@
 //
 //                valor_usuario = bankAccountModel.escolherBanco(UserModel.getId_usuario(), selecaoBancoPagar);
 //                valor_update = modelFaturaDAO.efetuarPagamento(UserModel.getId_usuario(), selecaoFaturaPagar, Float.parseFloat(modelFaturaDAO.data.get(selecaoFaturaPagar).get("valor_fatura")), valor_usuario, senhaConta, selecaoBancoPagar);
-////                bankAccountModel.saldoUpdate(valor_update, UserModel.getId_usuario());
+////                bankAccountModel.atualizarSaldo(valor_update, UserModel.getId_usuario());
 //                System.out.println("PAGAMENTO FEITO!!!!");
 //            }
 //
@@ -70,7 +70,7 @@
 //
 //                valor_usuario = bankAccountModel.escolherBancoCartao(UserModel.getId_usuario(), selecaoBancoPagar);
 //                valor_update = modelFaturaDAO.efetuarPagamentoCartao(UserModel.getId_usuario(), selecaoFaturaPagar, Float.parseFloat(modelFaturaDAO.data.get(selecaoFaturaPagar).get("valor_fatura")), valor_usuario, senhaConta, selecaoBancoPagar);
-//                bankAccountModel.limiteUpdate(valor_update, UserModel.getId_usuario());
+//                bankAccountModel.atualizarLimite(valor_update, UserModel.getId_usuario());
 //                System.out.println("PAGAMENTO FEITO!");
 //            }
 //

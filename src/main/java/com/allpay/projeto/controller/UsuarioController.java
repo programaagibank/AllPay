@@ -14,10 +14,10 @@ public class UsuarioController {
         userDAO = new UsuarioDAO();
     }
 
-    public void insert(String cpfTemp, String nomeTemp, String senhaTemp, String emailTemp) {
+    public void inserir(String cpfTemp, String nomeTemp, String senhaTemp, String emailTemp) {
         String hashSenha = BCrypt.hashpw(senhaTemp, BCrypt.gensalt());
         System.out.println(hashSenha);
-        userDAO.insert(cpfTemp, nomeTemp, hashSenha, emailTemp);
+        userDAO.inserir(cpfTemp, nomeTemp, hashSenha, emailTemp);
     }
 
     public String validarId(String id_temp) throws IllegalArgumentException {
@@ -50,7 +50,7 @@ public class UsuarioController {
     }
 
     public boolean autenticar(String id_usuario, String senha_acesso) {
-        HashMap<String, String> data = userDAO.selectById(id_usuario, senha_acesso);
+        HashMap<String, String> data = userDAO.procurarPeloId(id_usuario, senha_acesso);
         if (!data.isEmpty()) {
             UsuarioModel.setUserData(
                     data.get("id_usuario"),
@@ -63,7 +63,7 @@ public class UsuarioController {
         return false;
     }
 
-    public static void exit() {
+    public static void sair() {
         System.exit(0);
     }
 

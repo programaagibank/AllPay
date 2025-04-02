@@ -51,9 +51,9 @@ public class FrontEntrada {
         Region spacer = new Region();
         spacer.setPrefHeight(120);
 
-        Button btnLogin = createButton("LOGIN", "primary");
-        Button btnCadastro = createButton("CADASTRO", "primary");
-        Button btnSair = createButton("SAIR", "secondary");
+        Button btnLogin = criarBotao("LOGIN", "primary");
+        Button btnCadastro = criarBotao("CADASTRO", "primary");
+        Button btnSair = criarBotao("SAIR", "secondary");
 
         btnLogin.setOnAction(e -> main.mostrarTelaLogin());
         btnCadastro.setOnAction(e -> main.mostrarTelaCadastro());
@@ -62,7 +62,7 @@ public class FrontEntrada {
         view.getChildren().addAll(logo, slogan, spacer, btnLogin, btnCadastro, btnSair);
     }
 
-    private Button createButton(String text, String type) {
+    private Button criarBotao(String text, String type) {
         Button btn = new Button(text);
         String baseStyle = "-fx-font-size: 14px; -fx-padding: 10px 20px; -fx-border-radius: 5px; " +
                 "-fx-background-radius: 5px; -fx-min-width: 250px; -fx-min-height: 40px; " +
@@ -94,7 +94,7 @@ public class FrontEntrada {
 
     }
 
-    public static void mostrarSplashScreen(Main main, Runnable onFinished) {
+    public static void mostrarTelaSplash(Main main, Runnable onFinished) {
         try {
             String videoPath = FrontEntrada.class.getResource("/videos/splash.mp4").toString();
             Media media = new Media(videoPath);

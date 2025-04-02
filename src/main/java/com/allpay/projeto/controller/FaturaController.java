@@ -15,7 +15,6 @@ public class FaturaController {
     public FaturaController (){
         this.modelFaturaDAO = new FaturaDAO();
     }
-
     public String escolherMetodoPag (int choice) {
 
         String metodo_pag;
@@ -27,7 +26,6 @@ public class FaturaController {
 
         return metodo_pag;
     }
-
     public void buscarFaturasByUserId(String id_usuario){
         ArrayList<HashMap<String,String>> result = this.modelFaturaDAO.buscarFaturasByUserId(id_usuario);
 
@@ -49,7 +47,7 @@ public class FaturaController {
 
         float escolherBanco = bankAccountController.escolherBanco(selecaoBancoPagar);
 
-        int id_instituicao = Integer.parseInt(bankAccountModelDAO.findUserBankAccount(UsuarioModel.getId_usuario()).get(selecaoBancoPagar).get("id_instituicao"));
+        int id_instituicao = Integer.parseInt(bankAccountModelDAO.encontrarContaBancoUsuario(UsuarioModel.getId_usuario()).get(selecaoBancoPagar).get("id_instituicao"));
 
         float saldo_restante = this.modelFaturaDAO.efetuarPagamento(UsuarioModel.getId_usuario(),id_fatura,valor_fatura,escolherBanco, senha_transacao, id_instituicao);
 
@@ -65,7 +63,6 @@ public class FaturaController {
 
         return saldo_restante;
     }
-
     public void atulizaStatusFatura(int id_fatura){
 
         int id = Integer.parseInt(this.modelFaturaDAO.getData().get(id_fatura).get("id_fatura"));

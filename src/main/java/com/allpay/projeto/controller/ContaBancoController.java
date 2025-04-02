@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class ContaBancoController {
   ArrayList<HashMap<String,String>> bancosDisponiveis;
-  //public void atualizarSaldo ()
+
 
 public ContaBancoController(){
   bancosDisponiveis = new ArrayList<>();
@@ -19,8 +19,8 @@ public ContaBancoController(){
     return bancosDisponiveis;
   }
 
-  public  ArrayList<HashMap<String, String>> findUserBankAccount(){
-    bancosDisponiveis = new ContaBancoDAO().findUserBankAccount(UsuarioModel.getId_usuario());
+  public  ArrayList<HashMap<String, String>> encontrarContaBancoUsuario(){
+    bancosDisponiveis = new ContaBancoDAO().encontrarContaBancoUsuario(UsuarioModel.getId_usuario());
     System.out.println(bancosDisponiveis.size());
     if(!bancosDisponiveis.isEmpty()){
 //      bancosDisponiveis.forEach(elemento ->
@@ -36,7 +36,7 @@ public ContaBancoController(){
 
     ContaBancoDAO bankAccountModelDAO = new ContaBancoDAO();
 
-    float saldo = new ContaBancoDAO().escolherBanco(UsuarioModel.getId_usuario(), Integer.parseInt(bankAccountModelDAO.findUserBankAccount(UsuarioModel.getId_usuario()).get(selecaoBancoPagar).get("id_instituicao")));
+    float saldo = new ContaBancoDAO().escolherBanco(UsuarioModel.getId_usuario(), Integer.parseInt(bankAccountModelDAO.encontrarContaBancoUsuario(UsuarioModel.getId_usuario()).get(selecaoBancoPagar).get("id_instituicao")));
 
     return saldo;
   }
@@ -55,15 +55,15 @@ public ContaBancoController(){
     return validacao;
   }
 
-  public void saldoUpdate (float saldo_restante, int selecaoBancoPagar) {
+  public void atualizarSaldo (float saldo_restante, int selecaoBancoPagar) {
 
-    new ContaBancoDAO().saldoUpdate(saldo_restante, UsuarioModel.getId_usuario(), Integer.parseInt(bancosDisponiveis.get(selecaoBancoPagar).get("id_instituicao")));
+    new ContaBancoDAO().atualizarSaldo(saldo_restante, UsuarioModel.getId_usuario(), Integer.parseInt(bancosDisponiveis.get(selecaoBancoPagar).get("id_instituicao")));
 
   }
 
-  public void limiteUpdate (float saldo_restante, int selecaoBancoPagar) {
+  public void atualizarLimite (float saldo_restante, int selecaoBancoPagar) {
 
-    new ContaBancoDAO().limiteUpdate(saldo_restante, UsuarioModel.getId_usuario(), Integer.parseInt(bancosDisponiveis.get(selecaoBancoPagar).get("id_instituicao")));
+    new ContaBancoDAO().atualizarLimite(saldo_restante, UsuarioModel.getId_usuario(), Integer.parseInt(bancosDisponiveis.get(selecaoBancoPagar).get("id_instituicao")));
 
   }
 }

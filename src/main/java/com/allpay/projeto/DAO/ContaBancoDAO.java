@@ -25,7 +25,7 @@ public class ContaBancoDAO {
   public ArrayList<HashMap<String,String>> getBancosDisponiveis () {
     return bancosDisponiveis;
   }
-  public ArrayList<HashMap<String,String>> findUserBankAccount(String id){
+  public ArrayList<HashMap<String,String>> encontrarContaBancoUsuario(String id){
     String sql = """
             SELECT ib.nome_instituicao, ib.id_instituicao, C.limite, C.saldo_usuario
                         FROM usuario U
@@ -165,7 +165,7 @@ public class ContaBancoDAO {
     return validacao;
   }
 
-  public void saldoUpdate (float saldo_restante, String id_usuarioOut, int id_instituicao) {
+  public void atualizarSaldo (float saldo_restante, String id_usuarioOut, int id_instituicao) {
 
     String query = "UPDATE conta SET saldo_usuario = ? WHERE id_usuario = ? and id_instituicao = ?";
 
@@ -190,7 +190,7 @@ public class ContaBancoDAO {
     }
   }
 
-  public void limiteUpdate (float saldo_restante, String id_usuarioOut, int id_instituicao) {
+  public void atualizarLimite (float saldo_restante, String id_usuarioOut, int id_instituicao) {
 
     String query = "UPDATE conta SET limite = ? WHERE id_usuario = ? id_instituicao = ?";
 

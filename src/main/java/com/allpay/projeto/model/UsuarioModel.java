@@ -57,7 +57,7 @@ public class UsuarioModel {
         System.out.println("Email: " + email);
     }
 
-    public static void logout(){
+    public static void encerrarSessao(){
         id_usuario = null;
         nome_usuario = null;
         email = null;

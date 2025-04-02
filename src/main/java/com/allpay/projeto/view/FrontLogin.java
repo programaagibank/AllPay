@@ -42,8 +42,8 @@ public class FrontLogin {
         lblTitulo.setFont(Font.font("Montserrat", FontWeight.BOLD, 32));
         lblTitulo.setTextFill(Color.WHITE);
 
-        TextField txtCpfCnpj = createTextField("CPF ou CNPJ");
-        PasswordField txtSenha = createPasswordField("Senha");
+        TextField txtCpfCnpj = criarCampoTexto("CPF ou CNPJ");
+        PasswordField txtSenha = criarCampoSenha("Senha");
 
         StackPane passwordStack = new StackPane();
 
@@ -59,19 +59,19 @@ public class FrontLogin {
         CheckBox showPasswordCheckBox = new CheckBox("Mostrar Senha");
         showPasswordCheckBox.setStyle("-fx-text-fill: #FFFFFF; -fx-base: #000000;");
         showPasswordCheckBox.setFont(Font.font("Montserrat", FontWeight.BOLD, 10));
-        Label lblErro = createErrorLabel();
-        setupLoadingGif();
+        Label lblErro = criarCampoErro();
+        setupCarregandoGif();
 
-        Button btnLogin = createButton("Entrar", "primary");
-        Button btnCadastro = createButton("Cadastro", "primary");
-        Button btnVoltar = createButton("Voltar", "secondary");
+        Button btnLogin = criarBotao("Entrar", "primary");
+        Button btnCadastro = criarBotao("Cadastro", "primary");
+        Button btnVoltar = criarBotao("Voltar", "secondary");
 
         Region spacer = new Region();
         spacer.setPrefHeight(40);
 
         view.getChildren().addAll(lblTitulo, spacer, txtCpfCnpj, passwordStack, showPasswordCheckBox, lblErro, loadingGif, btnLogin, btnCadastro, btnVoltar);
 
-        btnLogin.setOnAction(e -> handleLogin(txtCpfCnpj, txtSenha, txtShowPassword, lblErro));
+        btnLogin.setOnAction(e -> identificadorLogin(txtCpfCnpj, txtSenha, txtShowPassword, lblErro));
         btnCadastro.setOnAction(e -> main.mostrarTelaCadastro());
         btnVoltar.setOnAction(e -> main.mostrarTelaEntrada());
 
@@ -89,7 +89,7 @@ public class FrontLogin {
         });
     }
 
-    private TextField createTextField(String prompt) {
+    private TextField criarCampoTexto(String prompt) {
         TextField field = new TextField();
         field.setPromptText(prompt);
         field.setMaxWidth(250);
@@ -97,7 +97,7 @@ public class FrontLogin {
         return field;
     }
 
-    private PasswordField createPasswordField(String prompt) {
+    private PasswordField criarCampoSenha(String prompt) {
         PasswordField field = new PasswordField();
         field.setPromptText(prompt);
         field.setMaxWidth(250);
@@ -105,7 +105,7 @@ public class FrontLogin {
         return field;
     }
 
-    private Label createErrorLabel() {
+    private Label criarCampoErro() {
         Label label = new Label();
         label.setFont(Font.font("Montserrat", FontWeight.BOLD, 14));
         label.setTextFill(Color.LIGHTCYAN);
@@ -113,7 +113,7 @@ public class FrontLogin {
         return label;
     }
 
-    private void setupLoadingGif() {
+    private void setupCarregandoGif() {
         try {
             loadingGif.setImage(new Image(getClass().getResourceAsStream("/images/loading.gif")));
         } catch (Exception e) {
@@ -124,7 +124,7 @@ public class FrontLogin {
         loadingGif.setVisible(false);
     }
 
-    private Button createButton(String text, String type) {
+    private Button criarBotao(String text, String type) {
         Button btn = new Button(text);
         String baseStyle = "-fx-font-size: 14px; -fx-padding: 10px 20px; -fx-border-radius: 5px; " +
                 "-fx-background-radius: 5px; -fx-min-width: 250px; -fx-min-height: 40px; " +
@@ -138,7 +138,7 @@ public class FrontLogin {
         return btn;
     }
 
-    private void handleLogin(TextField txtCpfCnpj, PasswordField txtSenha, TextField txtShowPassword, Label lblErro) {
+    private void identificadorLogin(TextField txtCpfCnpj, PasswordField txtSenha, TextField txtShowPassword, Label lblErro) {
         String cpfCnpj = txtCpfCnpj.getText();
         String senha = txtSenha.isVisible() ? txtSenha.getText() : txtShowPassword.getText(); // Verifica qual campo de senha está visível
 

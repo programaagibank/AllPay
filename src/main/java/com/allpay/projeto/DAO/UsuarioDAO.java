@@ -20,7 +20,7 @@ public class UsuarioDAO implements InterfaceUsuarioDAO {
         this.dbConnect = dbConnect;
     }
 
-    public void insert(String id_usuario, String nome_usuario, String senha_acesso, String email){
+    public void inserir(String id_usuario, String nome_usuario, String senha_acesso, String email){
         String sql = "INSERT INTO usuario (id_usuario, nome_usuario, senha_acesso, email) VALUES (?, ?, ?, ?)";
         String use = "USE allpay;";
         try {
@@ -48,7 +48,7 @@ public class UsuarioDAO implements InterfaceUsuarioDAO {
         }
     }
 
-    public HashMap<String, String> selectById(String id, String senha){
+    public HashMap<String, String> procurarPeloId(String id, String senha){
         String sql = "SELECT * FROM usuario WHERE id_usuario = ?";
         HashMap<String, String> dados = new HashMap<>();
 

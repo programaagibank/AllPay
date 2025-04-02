@@ -46,11 +46,11 @@ public class TestUser {
     assertDoesNotThrow(() -> UsuarioModel.mostrarInfos(), "O método mostrarInfos não deve lançar exceções");
   }
 
-  // Testando o método logout()
+  // Testando o método encerrarSessao()
   @Test
   public void testLogout() {
     // Chamando logout e verificando se os dados foram limpos
-    UsuarioModel.logout();
+    UsuarioModel.encerrarSessao();
 
     // Verificando se os valores de todos os campos estão nulos após o logout
     assertNull(UsuarioModel.getNome(), "O nome do usuário deve ser nulo após logout");

@@ -39,13 +39,13 @@ class TestUserDao {
     }
 
     @Test
-    void testInsert() throws SQLException {
-        // Simulando execução do insert sem erro
+    void testInserir() throws SQLException {
+        // Simulando execução do inserir sem erro
         doNothing().when(mockPreparedStatement).setString(anyInt(), anyString());
         when(mockPreparedStatement.executeUpdate()).thenReturn(1);
 
         // Chamando o método que queremos testar
-        userModelDAO.insert("123", "João", "senha123", "joao@email.com");
+        userModelDAO.inserir("123", "João", "senha123", "joao@email.com");
 
         // Verificando se os métodos foram chamados corretamente
         verify(mockDbConnect).connect();
@@ -57,7 +57,7 @@ class TestUserDao {
     }
 
     @Test
-    void testSelectById() throws SQLException {
+    void testProcurarPeloId() throws SQLException {
         // Criando um hash da senha usando BCrypt
         String senhaOriginal = "senha123";
         String senhaCriptografada = BCrypt.hashpw(senhaOriginal, BCrypt.gensalt());
@@ -71,7 +71,7 @@ class TestUserDao {
         when(mockResultSet.getString("senha_acesso")).thenReturn(senhaCriptografada); // Armazena a senha criptografada
 
         // Chamando o método que queremos testar
-        HashMap<String, String> result = userModelDAO.selectById("123", senhaOriginal); // Passamos a senha original
+        HashMap<String, String> result = userModelDAO.procurarPeloId("123", senhaOriginal); // Passamos a senha original
 
         // Verificando se os dados retornados estão corretos
         assertNotNull(result);

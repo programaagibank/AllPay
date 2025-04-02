@@ -37,19 +37,19 @@ public class FrontCadastro {
         lblTitulo.setFont(Font.font("Montserrat", FontWeight.BOLD, 32));
         lblTitulo.setTextFill(Color.WHITE);
 
-        TextField txtCpfCnpj = createTextField("CPF ou CNPJ");
-        TextField txtNome = createTextField("Nome");
-        TextField txtEmail = createTextField("E-mail");
-        PasswordField txtSenha = createPasswordField("Senha");
-        PasswordField txtConfirmarSenha = createPasswordField("Confirmar Senha");
+        TextField txtCpfCnpj = criarCampoTexto("CPF ou CNPJ");
+        TextField txtNome = criarCampoTexto("Nome");
+        TextField txtEmail = criarCampoTexto("E-mail");
+        PasswordField txtSenha = criarCampoSenha("Senha");
+        PasswordField txtConfirmarSenha = criarCampoSenha("Confirmar Senha");
 
-        Label lblErro = createErrorLabel();
-        StackPane errorPane = createErrorPane(lblErro);
+        Label lblErro = criarCampoErro();
+        StackPane errorPane = criarPainelErro(lblErro);
 
-        Button btnAvancar = createButton("Avançar", "primary");
-        Button btnVoltar = createButton("Voltar", "secondary");
+        Button btnAvancar = criarBotao("Avançar", "primary");
+        Button btnVoltar = criarBotao("Voltar", "secondary");
 
-        btnAvancar.setOnAction(e -> handleRegistration(
+        btnAvancar.setOnAction(e -> identificadorRegistro(
                 txtCpfCnpj, txtNome, txtEmail,
                 txtSenha, txtConfirmarSenha, lblErro
         ));
@@ -63,7 +63,7 @@ public class FrontCadastro {
         );
     }
 
-    private TextField createTextField(String prompt) {
+    private TextField criarCampoTexto(String prompt) {
         TextField field = new TextField();
         field.setPromptText(prompt);
         field.setMaxWidth(250);
@@ -71,7 +71,7 @@ public class FrontCadastro {
         return field;
     }
 
-    private PasswordField createPasswordField(String prompt) {
+    private PasswordField criarCampoSenha(String prompt) {
         PasswordField field = new PasswordField();
         field.setPromptText(prompt);
         field.setMaxWidth(250);
@@ -79,7 +79,7 @@ public class FrontCadastro {
         return field;
     }
 
-    private Label createErrorLabel() {
+    private Label criarCampoErro() {
         Label label = new Label();
         label.setFont(Font.font("Montserrat", FontWeight.BOLD, 12));
         label.setTextFill(Color.LIGHTCYAN);
@@ -90,7 +90,7 @@ public class FrontCadastro {
         return label;
     }
 
-    private StackPane createErrorPane(Label lblErro) {
+    private StackPane criarPainelErro(Label lblErro) {
         StackPane pane = new StackPane(lblErro);
         pane.setMinHeight(55);
         pane.setPrefHeight(55);
@@ -99,7 +99,7 @@ public class FrontCadastro {
         return pane;
     }
 
-    private Button createButton(String text, String type) {
+    private Button criarBotao(String text, String type) {
         Button btn = new Button(text);
         String baseStyle = "-fx-font-size: 14px; -fx-padding: 10px 20px; " +
                 "-fx-border-radius: 5px; -fx-background-radius: 5px; " +
@@ -114,7 +114,7 @@ public class FrontCadastro {
         return btn;
     }
 
-    private void handleRegistration(TextField txtCpfCnpj, TextField txtNome,
+    private void identificadorRegistro(TextField txtCpfCnpj, TextField txtNome,
                                     TextField txtEmail, PasswordField txtSenha,
                                     PasswordField txtConfirmarSenha, Label lblErro) {
         String cpfCnpj = txtCpfCnpj.getText().trim();
@@ -135,7 +135,7 @@ public class FrontCadastro {
                 throw new IllegalArgumentException("As senhas não coincidem!");
             }
 
-            userController.insert(cpfCnpj, nome, senha, email);
+            userController.inserir(cpfCnpj, nome, senha, email);
 
             lblErro.setText("Cadastro realizado com sucesso!");
             lblErro.setTextFill(Color.LIGHTGREEN);
