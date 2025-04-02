@@ -8,6 +8,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -186,45 +187,75 @@ public class FrontPrincipal {
 
     private Button criarBotaoFatura() {
         Button btn = new Button("Buscar Faturas por Código");
-        btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #000000; -fx-font-weight: bold;");
-//        btn.setMinSize(250, 40);
+        btn.setStyle("-fx-background-color: red; -fx-text-fill: #000000; -fx-font-weight: bold;");
+        btn.setMinSize(250, 40);
         return btn;
     }
 
-    private ListView<Button> criarListaFatura() {
-        ListView<Button> listView = new ListView<>();
-        listView.setStyle("-fx-background-color: transparent; -fx-border-width: 0;");
-        listView.setPrefHeight(200);
 
-        // 🔴 Remove fundo branco da Viewport
+    private ScrollPane criarListaFatura() {
+        VBox listaFaturas = new VBox(10);
+        listaFaturas.setAlignment(Pos.TOP_LEFT);
+        listaFaturas.setStyle("-fx-background-color: transparent;");
+        ArrayList<HashMap<String, String>> faturas = new FaturaDAO().buscarFaturas(idUsuario);
+
+        if (faturas.isEmpty()) {
+//            carousel.getChildren().add(criarLaberSemBancos());
+        } else {
+            faturas.forEach(fatura -> {
+                listaFaturas.getChildren().add(criarBotaoFatura(fatura));
+                listaFaturas.setStyle("-fx-background-color: transparent;" +
+                        "-fx-border-radius: 15px; " +
+                        "-fx-background-radius: 15px;");
+            });
+        }
+
+        // 🔵 Configura o ScrollPane para rolagem vertical
+        ScrollPane scroll = new ScrollPane(listaFaturas);
+        scroll.setStyle("-fx-background-color: transparent; -fx-border-radius: 15px; -fx-background-radius: 15px;");
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Oculta a barra de rolagem vertical
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scroll.setFitToHeight(true);
+        scroll.setPannable(true);
+        scroll.setPrefViewportHeight(150);
+
+        // 🔵 Remove fundo branco da Viewport
         Platform.runLater(() -> {
-            Node viewport = listView.lookup(".viewport");
+            Node viewport = scroll.lookup(".viewport");
             if (viewport != null) {
                 viewport.setStyle("-fx-background-color: transparent;");
             }
         });
+        final double[] lastY = {0}; // Guarda a última posição do mouse
+        scroll.setOnMousePressed(event -> lastY[0] = event.getSceneY()); // Captura posição inicial
 
-        FaturaDAO faturaDAO = new FaturaDAO();
-        faturaDAO.buscarFaturas(idUsuario).forEach(fatura ->
-                listView.getItems().add(criarBotaoFatura(fatura))
-        );
-
-        return listView;
+        scroll.setOnMouseDragged(event -> {
+            double deltaY = lastY[0] - event.getSceneY(); // Calcula a diferença do movimento
+            scroll.setVvalue(scroll.getVvalue() + deltaY / scroll.getHeight()); // Move o scroll
+            lastY[0] = event.getSceneY(); // Atualiza posição
+        });
+        return scroll;
     }
 
+    // 🔹 Cria botões para cada fatura
     private Button criarBotaoFatura(HashMap<String, String> fatura) {
         Button item = new Button();
-        item.setStyle("-fx-background-color: transparent; -fx-border-width: 0; -fx-padding: 0;");
+        item.setStyle("-fx-background-color: transparent; -fx-border-radius: 15px; -fx-background-radius: 15px;");
         item.setGraphic(createInvoiceContent(fatura)); // Define o conteúdo do botão
-        item.setOnAction(e -> abrirTelaX(fatura)); // Ao clicar, abre a tela com os dados da fatura
+        item.setOnAction(e -> abrirTelaX(fatura)); // Ao clicar, abre a tela com os dados da fatura // Chama a tela ao clicar
+        item.setOnMousePressed(event -> item.getParent().fireEvent(event)); // Repassa evento para o VBox
+        item.setOnMouseDragged(event -> item.getParent().fireEvent(event));
         return item;
     }
+    private HBox createInvoiceContent(HashMap<String, String> fatura) {
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER);
+        content.setSpacing(30); // Ajusta o espaçamento entre os elementos
+        content.setStyle("-fx-background-color: transparent; -fx-border-width: 0 0 2px 0; -fx-border-color: transparent transparent white transparent;");
+        content.setPrefWidth(250); // Define a largura do bloco
+        content.setPrefHeight(50); // Define a altura para manter alinhado
 
-    private VBox createInvoiceContent(HashMap<String, String> fatura) {
-        VBox content = new VBox(5);
-        content.setAlignment(Pos.CENTER_LEFT);
-        content.setStyle("-fx-background-color: transparent; -fx-border-width: 0;");
-
+        // 🔹 Criação dos textos (não comprimimos eles agora)
         Label name = createInvoiceLabel(fatura.get("nome_recebedor"), "14", FontWeight.BOLD, Color.WHITE);
         Label dueDate = createInvoiceLabel(fatura.get("data_vencimento"), "12", FontWeight.NORMAL, Color.LIGHTGRAY);
         Label amount = createInvoiceLabel("R$ " + fatura.get("valor_fatura"), "12", FontWeight.NORMAL, Color.WHITE);
@@ -233,22 +264,22 @@ public class FrontPrincipal {
                 "PAGA".equals(fatura.get("status_fatura")) ? Color.LIGHTGREEN : Color.LIGHTCORAL
         );
 
-        // 🔵 Linha separadora entre os itens
-        VBox separator = new VBox();
-        separator.setStyle("-fx-border-color: rgba(255,255,255,0.3); -fx-border-width: 0 0 1 0; -fx-padding: 5;");
+        // 🔹 Adiciona os elementos na linha
+        content.getChildren().addAll(name, dueDate, amount, status);
 
-        content.getChildren().addAll(name, dueDate, amount, status, separator);
         return content;
     }
 
+
+    // 🔹 Abre a Tela X (simulação)
     private void abrirTelaX(HashMap<String, String> fatura) {
-        System.out.println("Abrindo Tela X com os dados da fatura: " + fatura);
-        // 🟢 Aqui você chama a tela X e passa os dados
-//        main.mostrarTelaX(fatura); // 🚀 Substitua por sua lógica real
+        main.mostrarTelaPagarFatura("00000000004", "0010");
     }
+
 
     private Label createInvoiceLabel(String text, String fontSize, FontWeight weight, Color color) {
         Label label = new Label(text);
+        label.setStyle("-fx-border-color: transparent;");
         label.setFont(Font.font("Montserrat", weight, Double.parseDouble(fontSize)));
         label.setTextFill(color);
         return label;
