@@ -188,10 +188,12 @@ public class FrontPrincipal {
 
     private HBox criarBotaoFatura() {
 
-        Button btn = new Button("Buscar");
-        btn.setStyle("-fx-background-color: red; -fx-text-fill: #000000; -fx-font-weight: bold; -fx-font-family: 'Montserrat';");
+        Button btn = new Button();
+        btn.setStyle("-fx-background-color: #ffffff00; -fx-text-fill: #ffffff00; -fx-font-weight: bold; -fx-font-family: 'Montserrat';");
         btn.setMinSize(60, 40);
-        
+        btn.setGraphic(carregarIcone("search-icon.png"));
+
+
         TextField faturaIdField = new TextField();
         faturaIdField.setPromptText("Buscar faturas por código");
         faturaIdField.setMinWidth(200);
@@ -205,7 +207,6 @@ public class FrontPrincipal {
 
         return buscarFaturasContainer;
     }
-
 
     private ScrollPane criarListaFatura() {
         VBox listaFaturas = new VBox(10);
