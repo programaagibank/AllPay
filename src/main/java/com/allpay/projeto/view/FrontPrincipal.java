@@ -150,7 +150,7 @@ public class FrontPrincipal {
                     main.mostrarTelaPagarFatura(idUsuario, "8");
                 }),
                 criarMenuBotao("switch-icon.png", "Trocar Conta", () -> main.mostrarTelaEntrada()),
-                criarMenuBotao("info-icon.png", "Infos allPay", () -> {}),
+                criarMenuBotao("info-icon.png", "Infos allPay", () -> main.mostrarTelaInformacao()),
                 criarMenuBotao("exit-icon.png", "Sair", () -> UsuarioController.sair())
         );
         return container;

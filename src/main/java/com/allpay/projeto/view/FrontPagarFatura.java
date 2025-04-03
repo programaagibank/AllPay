@@ -87,11 +87,12 @@ public class FrontPagarFatura {
 
         ContaBancoDAO bankDAO = new ContaBancoDAO();
         ArrayList<HashMap<String, String>> bancos = bankDAO.encontrarContaBancoUsuario(idUsuario);
-
         float valorFatura = Float.parseFloat(faturaData.get("valor_fatura"));
 
         for (HashMap<String, String> banco : bancos) {
             float saldo = Float.parseFloat(banco.get("saldo_usuario"));
+            System.out.println(saldo);
+            System.out.println(valorFatura);
             Button btnBanco = criarBotaoBanco(banco.get("nome_instituicao"), saldo >= valorFatura);
 
             if (saldo >= valorFatura) {
