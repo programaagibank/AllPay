@@ -55,6 +55,7 @@ public class FrontInfosAllpay extends Application {
     }
 
     private static void setBackground(Region layout, String imagePath) {
+
         Image backgroundImage = new Image(FrontLogin.class.getResource(imagePath).toExternalForm());
         BackgroundImage bgImage = new BackgroundImage(backgroundImage,
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
