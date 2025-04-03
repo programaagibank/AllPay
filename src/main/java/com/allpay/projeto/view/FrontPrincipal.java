@@ -186,11 +186,24 @@ public class FrontPrincipal {
         }
     }
 
-    private Button criarBotaoFatura() {
-        Button btn = new Button("Buscar Faturas por Código");
-        btn.setStyle("-fx-background-color: red; -fx-text-fill: #000000; -fx-font-weight: bold;");
-        btn.setMinSize(250, 40);
-        return btn;
+    private HBox criarBotaoFatura() {
+
+        Button btn = new Button("Buscar");
+        btn.setStyle("-fx-background-color: red; -fx-text-fill: #000000; -fx-font-weight: bold; -fx-font-family: 'Montserrat';");
+        btn.setMinSize(60, 40);
+        
+        TextField faturaIdField = new TextField();
+        faturaIdField.setPromptText("Buscar faturas por código");
+        faturaIdField.setMinWidth(200);
+        faturaIdField.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-font-family: 'Montserrat';");
+
+        faturaIdField.getText();
+
+        HBox buscarFaturasContainer = new HBox(10);
+        buscarFaturasContainer.setAlignment(Pos.CENTER);
+        buscarFaturasContainer.getChildren().addAll(faturaIdField, btn);
+
+        return buscarFaturasContainer;
     }
 
 

@@ -22,32 +22,29 @@ public class RequestOFInfos {
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             HttpGet request = new HttpGet(URI.create(url));
 
-            // Adicionando header para aceitar JSON
             request.addHeader("Accept", "application/json");
 
             try (CloseableHttpResponse response = client.execute(request)) {
                 HttpEntity entity = response.getEntity();
                 String jsonResponse = EntityUtils.toString(entity);
+
                 ObjectMapper objectMapper = new ObjectMapper();
 
-                // A resposta é um array direto, então desserializamos para List<Map>
                 List<Map<String, Object>> participantes = objectMapper.readValue(
                         jsonResponse,
                         new TypeReference<List<Map<String, Object>>>() {}
                 );
 
-                // Iterando sobre os participantes
                 for (Map<String, Object> participante : participantes) {
                     System.out.println("Nome: " + participante.get("OrganisationName"));
                     System.out.println("Status: " + participante.get("Status"));
+
                     List<Map<String, Object>> authorisationServers =
                             (List<Map<String, Object>>) participante.get("AuthorisationServers");
 
                     if (authorisationServers != null && !authorisationServers.isEmpty()) {
-                        // Pegando o primeiro servidor (geralmente contém o logo)
                         Map<String, Object> firstServer = authorisationServers.get(0);
 
-                        // Obtendo a URL do logo
                         String logoUrl = (String) firstServer.get("CustomerFriendlyLogoUri");
                         System.out.println("Logo: " + (logoUrl != null ? logoUrl : "Não disponível"));
                     } else {
@@ -63,7 +60,6 @@ public class RequestOFInfos {
     }
 
     public static void main(String[] args) {
-
         jsonRequest();
     }
 }
