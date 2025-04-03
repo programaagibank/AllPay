@@ -98,12 +98,7 @@ public class FrontPrincipal {
         scroll.setPannable(true);
         scroll.setPrefViewportWidth(WINDOW_WIDTH - 40);
 
-        Platform.runLater(() -> {
-            Node viewport = scroll.lookup(".viewport");
-            if (viewport != null) {
-                viewport.setStyle("-fx-background-color: transparent;");
-            }
-        });
+        removeBackgroundScroll(scroll);
         scroll.setOnMouseReleased(event -> {
             double currentScroll = scroll.getHvalue();
             double targetScroll = (currentScroll > 0.5) ? 1.0 : 0.0; // Decide para qual lado ir
@@ -210,8 +205,8 @@ public class FrontPrincipal {
 
     private ScrollPane criarListaFatura() {
         VBox listaFaturas = new VBox(10);
-        listaFaturas.setAlignment(Pos.TOP_LEFT);
-        listaFaturas.setStyle("-fx-background-color: transparent;");
+        listaFaturas.setAlignment(Pos.CENTER);
+        listaFaturas.setStyle("-fx-background-color: transparent; ");
         ArrayList<HashMap<String, String>> faturas = new FaturaDAO().buscarFaturas(idUsuario);
 
         if (faturas.isEmpty()) {
@@ -227,20 +222,16 @@ public class FrontPrincipal {
 
         // 🔵 Configura o ScrollPane para rolagem vertical
         ScrollPane scroll = new ScrollPane(listaFaturas);
-        scroll.setStyle("-fx-background-color: transparent; -fx-border-radius: 15px; -fx-background-radius: 15px;");
+        scroll.setStyle("-fx-background-color: green; -fx-border-radius: 15px; -fx-background-radius: 15px;");
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Oculta a barra de rolagem vertical
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scroll.setFitToHeight(true);
         scroll.setPannable(true);
         scroll.setPrefViewportHeight(150);
+        scroll.setMaxWidth(Double.MAX_VALUE);
 
         // 🔵 Remove fundo branco da Viewport
-        Platform.runLater(() -> {
-            Node viewport = scroll.lookup(".viewport");
-            if (viewport != null) {
-                viewport.setStyle("-fx-background-color: transparent;");
-            }
-        });
+        removeBackgroundScroll(scroll);
         final double[] lastY = {0}; // Guarda a última posição do mouse
         scroll.setOnMousePressed(event -> lastY[0] = event.getSceneY()); // Captura posição inicial
 
@@ -255,7 +246,9 @@ public class FrontPrincipal {
     // 🔹 Cria botões para cada fatura
     private Button criarBotaoFatura(HashMap<String, String> fatura) {
         Button item = new Button();
-        item.setStyle("-fx-background-color: transparent; -fx-border-radius: 15px; -fx-background-radius: 15px;");
+        item.setMaxWidth(Double.MAX_VALUE);
+        item.setAlignment(Pos.CENTER);
+        item.setStyle("-fx-background-color: red; -fx-border-radius: 15px; -fx-background-radius: 15px;");
         item.setGraphic(createInvoiceContent(fatura)); // Define o conteúdo do botão
         item.setOnAction(e -> abrirTelaMostrarFatura(fatura)); // Ao clicar, abre a tela com os dados da fatura // Chama a tela ao clicar
         item.setOnMousePressed(event -> item.getParent().fireEvent(event)); // Repassa evento para o VBox
@@ -265,6 +258,7 @@ public class FrontPrincipal {
     private HBox createInvoiceContent(HashMap<String, String> fatura) {
         HBox content = new HBox();
         content.setAlignment(Pos.CENTER);
+        content.setMaxWidth(Double.MAX_VALUE);
         content.setSpacing(30); // Ajusta o espaçamento entre os elementos
         content.setStyle("-fx-background-color: transparent; -fx-border-width: 0 0 2px 0; -fx-border-color: transparent transparent white transparent;");
         content.setPrefWidth(250); // Define a largura do bloco
@@ -319,5 +313,14 @@ public class FrontPrincipal {
         } catch (Exception e) {
             view.setStyle("-fx-background-color: #121212;");
         }
+    }
+
+    private void removeBackgroundScroll(ScrollPane scroll){
+        Platform.runLater(() -> {
+            Node viewport = scroll.lookup(".viewport");
+            if (viewport != null) {
+                viewport.setStyle("-fx-background-color: transparent;");
+            }
+        });
     }
 }

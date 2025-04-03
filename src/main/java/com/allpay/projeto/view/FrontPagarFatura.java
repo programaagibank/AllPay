@@ -3,14 +3,18 @@ package com.allpay.projeto.view;
 import com.allpay.projeto.Main;
 import com.allpay.projeto.DAO.ContaBancoDAO;
 import com.allpay.projeto.DAO.FaturaDAO;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -67,11 +71,25 @@ public class FrontPagarFatura {
         Label lblDescricao = new Label("Descrição: " + faturaData.get("descricao"));
         lblDescricao.setStyle("-fx-font-size: 16px; -fx-text-fill: white;");
 
-        Button btnPagar = criarBotao("Pagar", "primary", e -> mostrarTelaBancos());
-        Button btnVoltar = criarBotao("Voltar", "secondary", e -> main.mostrarTelaPrincipal(idUsuario, "Usuário"));
+        // Espaço expansível para empurrar os botões para baixo
+        Region espacador = new Region();
+        VBox.setVgrow(espacador, Priority.ALWAYS);
 
-        view.getChildren().addAll(lblTitulo, lblValor, lblVencimento, lblDescricao, btnPagar, btnVoltar);
+        // Botões
+        Button btnPagar = criarBotao("Pagar", "primary", e -> mostrarTelaBancos());
+        btnPagar.setMaxWidth(Double.MAX_VALUE);
+
+        Button btnVoltar = criarBotao("Voltar", "secondary", e -> main.mostrarTelaPrincipal(idUsuario, "Usuário"));
+        btnVoltar.setMaxWidth(Double.MAX_VALUE);
+
+        // Contêiner para os botões (mantém eles juntos na parte inferior)
+        VBox boxBotoes = new VBox(10, btnPagar, btnVoltar);
+        boxBotoes.setAlignment(Pos.CENTER);
+
+        // Adicionando os elementos à tela
+        view.getChildren().addAll(lblTitulo, lblValor, lblVencimento, lblDescricao, espacador, boxBotoes);
     }
+
 
     private void mostrarTelaBancos() {
         view.getChildren().clear();
@@ -102,15 +120,24 @@ public class FrontPagarFatura {
                     mostrarTelaMetodosPagamento();
                 });
             }
-
             bancosContainer.getChildren().add(btnBanco);
         }
-
+        bancosContainer.setAlignment(Pos.CENTER);
         scrollBancos.setContent(bancosContainer);
         scrollBancos.setFitToWidth(true);
+        scrollBancos.setStyle("-fx-background-color: transparent; fx-border-color:red");
+
+        VBox.setVgrow(scrollBancos, Priority.ALWAYS);
+
+        Platform.runLater(() -> {
+            Node viewport = scrollBancos.lookup(".viewport");
+            if (viewport != null) {
+                viewport.setStyle("-fx-background-color: transparent;");
+            }
+        });
 
         Button btnVoltar = criarBotao("Voltar", "secondary", e -> mostrarTelaFatura());
-
+        btnVoltar.setMaxWidth(Double.MAX_VALUE);
         view.getChildren().addAll(lblTitulo, lblValor, scrollBancos, btnVoltar);
     }
 
@@ -120,14 +147,17 @@ public class FrontPagarFatura {
 
         Label lblTitulo = new Label("Escolher Método de Pagamento");
         lblTitulo.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;");
-
+        lblTitulo.setWrapText(true);
+        lblTitulo.setTextAlignment(TextAlignment.CENTER);
         Label lblValorFatura = new Label("R$ " + faturaData.get("valor_fatura"));
         lblValorFatura.setStyle("-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white;");
 
         Label lblSaldo = new Label("Saldo disponível: R$ " + saldoBancoSelecionado);
         lblSaldo.setStyle("-fx-font-size: 16px; -fx-text-fill: white;");
 
+        // Container para os botões de métodos de pagamento
         VBox metodosContainer = new VBox(10);
+        metodosContainer.setAlignment(Pos.CENTER); // Alinha os botões no centro
 
         String[] metodos = {"PIX", "Cartão de Crédito", "Cartão de Débito", "TED", "Boleto"};
 
@@ -136,13 +166,28 @@ public class FrontPagarFatura {
                 this.metodoPagamento = metodo;
                 mostrarTelaConfirmacao();
             });
+
+            btnMetodo.setWrapText(true); // Faz o texto quebrar linha
+            btnMetodo.setMaxWidth(250); // Define uma largura máxima
             metodosContainer.getChildren().add(btnMetodo);
         }
 
-        Button btnVoltar = criarBotao("Voltar", "secondary", e -> mostrarTelaBancos());
+        // Espaço expansível para empurrar o botão "Voltar" para baixo
+        Region espacador = new Region();
+        VBox.setVgrow(espacador, Priority.ALWAYS);
 
-        view.getChildren().addAll(lblTitulo, lblValorFatura, lblSaldo, metodosContainer, btnVoltar);
+        // Botão "Voltar"
+        Button btnVoltar = criarBotao("Voltar", "secondary", e -> mostrarTelaBancos());
+        btnVoltar.setMaxWidth(Double.MAX_VALUE);
+
+        // Container dos botões (mantém o "Voltar" fixo no final)
+        VBox boxBotoes = new VBox(10, btnVoltar);
+        boxBotoes.setAlignment(Pos.CENTER);
+
+        // Adiciona os elementos à tela
+        view.getChildren().addAll(lblTitulo, lblValorFatura, lblSaldo, metodosContainer, espacador, boxBotoes);
     }
+
 
     // Tela 4: Confirmação de Pagamento
     private void mostrarTelaConfirmacao() {
@@ -226,10 +271,8 @@ public class FrontPagarFatura {
 
     private Button criarBotaoBanco(String nomeBanco, boolean habilitado) {
         Button btn = new Button(nomeBanco);
-        btn.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-min-width: 250px; " +
-                (habilitado ?
-                        "-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white;" :
-                        "-fx-background-color: rgba(255,0,0,0.2); -fx-text-fill: #AAAAAA;"));
+        btn.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-min-width: 250px; -fx-text-fill: black;" +
+                        "-fx-background-color: " + (habilitado ? "white; " : "rgba(255,255,255,0.7);"));
         btn.setDisable(!habilitado);
         return btn;
     }
