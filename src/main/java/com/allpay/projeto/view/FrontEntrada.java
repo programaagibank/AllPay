@@ -18,6 +18,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+import java.util.Objects;
+
 public class FrontEntrada {
     private final VBox view;
     private final Main main;
@@ -40,7 +42,7 @@ public class FrontEntrada {
         view.setPrefHeight(600);
         setBackground();
 
-        ImageView logo = new ImageView(new Image(getClass().getResource("/images/logoAllpay.png").toExternalForm()));
+        ImageView logo = new ImageView(new Image(Objects.requireNonNull(getClass().getResource("/images/logoAllpay.png")).toExternalForm()));
         logo.setFitWidth(280);
         logo.setPreserveRatio(true);
 
@@ -78,7 +80,7 @@ public class FrontEntrada {
 
     private void setBackground() {
         try {
-            Image backgroundImage = new Image(getClass().getResource("/images/backgroundImage.png").toExternalForm());
+            Image backgroundImage = new Image(Objects.requireNonNull(getClass().getResource("/images/backgroundImage.png")).toExternalForm());
             BackgroundImage bgImage = new BackgroundImage(
                     backgroundImage,
                     BackgroundRepeat.NO_REPEAT,
@@ -94,9 +96,9 @@ public class FrontEntrada {
 
     }
 
-    public static void mostrarTelaSplash(Main main, Runnable onFinished) {
+    public static void mostrarTelaSplash(Runnable onFinished) {
         try {
-            String videoPath = FrontEntrada.class.getResource("/videos/splash.mp4").toString();
+            String videoPath = Objects.requireNonNull(FrontEntrada.class.getResource("/videos/splash.mp4")).toString();
             Media media = new Media(videoPath);
             MediaPlayer mediaPlayer = new MediaPlayer(media);
             MediaView mediaView = new MediaView(mediaPlayer);
@@ -108,8 +110,8 @@ public class FrontEntrada {
             StackPane root = new StackPane(mediaView);
             root.setStyle("-fx-background-color: black;");
 
-            main.getPrimaryStage().setScene(new Scene(root, 320, 600));
-            main.getPrimaryStage().show();
+            Main.getPrimaryStage().setScene(new Scene(root, 320, 600));
+            Main.getPrimaryStage().show();
 
             mediaPlayer.setStopTime(Duration.seconds(2));
             mediaPlayer.play();

@@ -104,10 +104,10 @@ public class FrontGerarComprovante {
 
                 PDImageXObject logo = PDImageXObject.createFromByteArray(
                         document,
-                        getClass().getResourceAsStream("/images/logoAllpayPreto.png").readAllBytes(),
+                        Objects.requireNonNull(getClass().getResourceAsStream("/images/logoAllpayPreto.png")).readAllBytes(),
                         "logoAllpay"
                 );
-                contentStream.drawImage(logo, 100, 700, 280, logo.getHeight() * 280 / logo.getWidth());
+                contentStream.drawImage(logo, 100, 700, 280, (float) (logo.getHeight() * 280) / logo.getWidth());
 
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
@@ -232,7 +232,7 @@ public class FrontGerarComprovante {
     private void setBackground() {
         try {
             BackgroundImage bgImage = new BackgroundImage(
-                    new Image(getClass().getResourceAsStream("/images/backgroundImage.png")),
+                    new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/backgroundImage.png"))),
                     BackgroundRepeat.NO_REPEAT,
                     BackgroundRepeat.NO_REPEAT,
                     BackgroundPosition.CENTER,

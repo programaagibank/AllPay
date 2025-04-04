@@ -8,9 +8,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    static final String URL = System.getenv("DB_URL");
-    static final String USER = System.getenv("DB_USER");
-    static final String PASSWORD = System.getenv("DB_PASSWORD");
 
     private static Stage primaryStage;
     private static boolean primeiroAcesso = true;
@@ -34,9 +31,7 @@ public class Main extends Application {
     public void mostrarTelaEntrada() {
         if (primeiroAcesso) {
             primeiroAcesso = false;
-            FrontEntrada.mostrarTelaSplash(this, () -> {
-                trocarCena(new FrontEntrada(this).getView());
-            });
+            FrontEntrada.mostrarTelaSplash(this::run);
         } else {
             trocarCena(new FrontEntrada(this).getView());
         }
@@ -67,11 +62,11 @@ public class Main extends Application {
 
     public void mostrarComprovantePagamento(String idUsuario, String idFatura) {
         FrontGerarComprovante comprovante = new FrontGerarComprovante(this, "00000000003", "17");
-        trocarCena(comprovante.getView());
+        trocarCena(comprovante.getView()); ///Mudar aqui glr
     }
 
     public void mostrarTelaInformacao() {
-        FrontInfosAllpay pagarFatura = new FrontInfosAllpay(this);
+        FrontInfosAllpay pagarFatura = new FrontInfosAllpay();
         trocarCena(pagarFatura.getView());
     }
 
@@ -80,4 +75,7 @@ public class Main extends Application {
         launch(args);
     }
 
+    private void run() {
+        trocarCena(new FrontEntrada(this).getView());
+    }
 }
