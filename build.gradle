@@ -42,4 +42,8 @@ dependencies {
 
     // Jackson para deserializar JSON
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
+
+    implementation 'org.apache.pdfbox:pdfbox:2.0.27'
+
+    implementation 'org.apache.pdfbox:pdfbox-tools:2.0.27'
 }
