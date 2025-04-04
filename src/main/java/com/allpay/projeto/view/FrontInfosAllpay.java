@@ -1,6 +1,5 @@
 package com.allpay.projeto.view;
 
-import com.allpay.projeto.Main;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,11 +20,9 @@ import java.util.Objects;
 
 public class FrontInfosAllpay {
     private final VBox content;
-    private final Main main;
     private static final int WINDOW_WIDTH = 320;
 
-    public FrontInfosAllpay(Main main) {
-        this.main = main;
+    public FrontInfosAllpay() {
         this.content = new VBox(15);
         setupView();
     }
@@ -35,17 +32,8 @@ public class FrontInfosAllpay {
         StackPane root = new StackPane();
         root.setPrefSize(WINDOW_WIDTH, WINDOW_WIDTH - 40);
 
-        // 🔹 Criamos o ScrollPane para o conteúdo
-        ScrollPane scrollPane = new ScrollPane(content);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // 🔹 Oculta a barra de rolagem vertical
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // 🔹 Oculta a barra de rolagem horizontal
-        scrollPane.setFitToWidth(true); // 🔹 Ajusta a largura ao conteúdo
-        scrollPane.setFitToHeight(false); // 🔹 Permite que o conteúdo role verticalmente sem afetar o fundo
-        scrollPane.setPannable(true); // 🔹 Permite arrastar o conteúdo
-        scrollPane.setPrefViewportHeight(WINDOW_WIDTH - 60);
-        scrollPane.setStyle("-fx-background-color: transparent; -fx-border-color: black;");
+                ScrollPane scrollPane = getScrollPane();
 
-        // 🔹 Remove o fundo extra do ScrollPane (deixa transparente)
         Platform.runLater(() -> {
             Node viewport = scrollPane.lookup(".viewport");
             if (viewport != null) {
@@ -60,6 +48,18 @@ public class FrontInfosAllpay {
         root.getChildren().add(scrollPane);
 
         return root;
+    }
+
+    private ScrollPane getScrollPane() {
+        ScrollPane scrollPane = new ScrollPane(content);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // 🔹 Oculta a barra de rolagem vertical
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // 🔹 Oculta a barra de rolagem horizontal
+        scrollPane.setFitToWidth(true); // 🔹 Ajusta a largura ao conteúdo
+        scrollPane.setFitToHeight(false); // 🔹 Permite que o conteúdo role verticalmente sem afetar o fundo
+        scrollPane.setPannable(true); // 🔹 Permite arrastar o conteúdo
+        scrollPane.setPrefViewportHeight(WINDOW_WIDTH - 60);
+        scrollPane.setStyle("-fx-background-color: transparent; -fx-border-color: black;");
+        return scrollPane;
     }
 
     private void setupView() {
@@ -84,14 +84,14 @@ public class FrontInfosAllpay {
 
     private TextFlow criarTextoInformativo() {
         String texto = """
-                Tendo em vista os altos números de analfabetismo digital e falta de educação financeira na população brasileira, 
+                Tendo em vista os altos números de analfabetismo digital e falta de educação financeira na população brasileira,
                 e considerando também o público-alvo majoritário do AgiBank, o grupo busca atingir essa demografia.
                 
-                Isto é, pessoas com maior dificuldade no acesso às tecnologias, em geral da terceira idade ou mais velhas. 
-                Prezamos, então, por uma interface amigável e intuitiva, com instruções de utilização claras. 
+                Isto é, pessoas com maior dificuldade no acesso às tecnologias, em geral da terceira idade ou mais velhas.
+                Prezamos, então, por uma interface amigável e intuitiva, com instruções de utilização claras.
                 
-                O projeto também tem por objetivo oferecer maior segurança e confiabilidade nos pagamentos, 
-                verificando contas a pagar vinculadas ao ID do usuário (CPF ou CNPJ) e oferecendo uma ferramenta de geração de boletos. 
+                O projeto também tem por objetivo oferecer maior segurança e confiabilidade nos pagamentos,
+                verificando contas a pagar vinculadas ao ID do usuário (CPF ou CNPJ) e oferecendo uma ferramenta de geração de boletos.
                 
                 Além disso, utilizamos medidas variadas de segurança, como reconhecimento facial, biometria e autenticação multifator.
                 """;

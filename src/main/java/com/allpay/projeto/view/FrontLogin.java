@@ -16,6 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class FrontLogin {
     private final VBox view;
@@ -115,7 +116,7 @@ public class FrontLogin {
 
     private void setupCarregandoGif() {
         try {
-            loadingGif.setImage(new Image(getClass().getResourceAsStream("/images/loading.gif")));
+            loadingGif.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/loading.gif"))));
         } catch (Exception e) {
             System.out.println("Erro ao carregar o gif");
         }
@@ -165,7 +166,7 @@ public class FrontLogin {
 
     private void setBackground() {
         try {
-            Image backgroundImage = new Image(getClass().getResource("/images/backgroundImage.png").toExternalForm());
+            Image backgroundImage = new Image(Objects.requireNonNull(getClass().getResource("/images/backgroundImage.png")).toExternalForm());
             BackgroundImage bgImage = new BackgroundImage(
                     backgroundImage,
                     BackgroundRepeat.NO_REPEAT,

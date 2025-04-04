@@ -13,6 +13,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
+import java.util.Objects;
+
 public class FrontCadastro {
     private final VBox view;
     private final Main main;
@@ -158,7 +160,7 @@ public class FrontCadastro {
 
     private void setBackground() {
         try {
-            Image backgroundImage = new Image(getClass().getResource("/images/backgroundImage.png").toExternalForm());
+            Image backgroundImage = new Image(Objects.requireNonNull(getClass().getResource("/images/backgroundImage.png")).toExternalForm());
             BackgroundImage bgImage = new BackgroundImage(
                     backgroundImage,
                     BackgroundRepeat.NO_REPEAT,

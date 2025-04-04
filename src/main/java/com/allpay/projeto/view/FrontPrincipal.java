@@ -9,7 +9,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -80,7 +79,7 @@ public class FrontPrincipal {
         ArrayList<HashMap<String, String>> bancos = contaBancoController.getBancosDisponiveis();
 
         if (bancos.isEmpty()) {
-//            carousel.getChildren().add(criarLaberSemBancos());
+            carousel.getChildren().add(criarLaberSemBancos());
         } else {
             bancos.forEach(banco -> {
                 carousel.getChildren().add(criarCardBanco(banco));
@@ -144,9 +143,9 @@ public class FrontPrincipal {
                     // Alteração aqui - direciona para pagamento da fatura 8
                     main.mostrarTelaPagarFatura(idUsuario, "8");
                 }),
-                criarMenuBotao("switch-icon.png", "Trocar Conta", () -> main.mostrarTelaEntrada()),
-                criarMenuBotao("info-icon.png", "Infos allPay", () -> main.mostrarTelaInformacao()),
-                criarMenuBotao("exit-icon.png", "Sair", () -> UsuarioController.sair())
+                criarMenuBotao("switch-icon.png", "Trocar Conta", main::mostrarTelaEntrada),
+                criarMenuBotao("info-icon.png", "Infos allPay", main::mostrarTelaInformacao),
+                criarMenuBotao("exit-icon.png", "Sair", UsuarioController::sair)
         );
         return container;
     }
@@ -171,7 +170,7 @@ public class FrontPrincipal {
 
     private ImageView carregarIcone(String path) {
         try {
-            ImageView icon = new ImageView(new Image(getClass().getResourceAsStream("/images/" + path)));
+            ImageView icon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/" + path))));
             icon.setFitWidth(30);
             icon.setFitHeight(30);
             return icon;
@@ -210,7 +209,7 @@ public class FrontPrincipal {
         ArrayList<HashMap<String, String>> faturas = new FaturaDAO().buscarFaturas(idUsuario);
 
         if (faturas.isEmpty()) {
-//            carousel.getChildren().add(criarLaberSemBancos());
+            listaFaturas.getChildren().add(criarLaberSemBancos());
         } else {
             faturas.forEach(fatura -> {
                 listaFaturas.getChildren().add(criarBotaoFatura(fatura));
