@@ -222,13 +222,14 @@ public class FrontPrincipal {
 
         // 🔵 Configura o ScrollPane para rolagem vertical
         ScrollPane scroll = new ScrollPane(listaFaturas);
-        scroll.setStyle("-fx-background-color: green; -fx-border-radius: 15px; -fx-background-radius: 15px;");
+        scroll.setStyle("-fx-background-color: transparent; -fx-border-radius: 15px; -fx-background-radius: 15px;");
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Oculta a barra de rolagem vertical
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scroll.setFitToHeight(true);
         scroll.setPannable(true);
         scroll.setPrefViewportHeight(150);
-        scroll.setMaxWidth(Double.MAX_VALUE);
+        scroll.setMaxWidth(Double.MAX_VALUE-40);
+
 
         // 🔵 Remove fundo branco da Viewport
         removeBackgroundScroll(scroll);
@@ -246,9 +247,9 @@ public class FrontPrincipal {
     // 🔹 Cria botões para cada fatura
     private Button criarBotaoFatura(HashMap<String, String> fatura) {
         Button item = new Button();
-        item.setMaxWidth(Double.MAX_VALUE);
+        item.setPrefWidth(277);
         item.setAlignment(Pos.CENTER);
-        item.setStyle("-fx-background-color: red; -fx-border-radius: 15px; -fx-background-radius: 15px;");
+        item.setStyle("-fx-background-color: transparent; -fx-border-radius: 15px; -fx-background-radius: 15px;");
         item.setGraphic(createInvoiceContent(fatura)); // Define o conteúdo do botão
         item.setOnAction(e -> abrirTelaMostrarFatura(fatura)); // Ao clicar, abre a tela com os dados da fatura // Chama a tela ao clicar
         item.setOnMousePressed(event -> item.getParent().fireEvent(event)); // Repassa evento para o VBox
@@ -260,7 +261,7 @@ public class FrontPrincipal {
         content.setAlignment(Pos.CENTER);
         content.setMaxWidth(Double.MAX_VALUE);
         content.setSpacing(30); // Ajusta o espaçamento entre os elementos
-        content.setStyle("-fx-background-color: transparent; -fx-border-width: 0 0 2px 0; -fx-border-color: transparent transparent white transparent;");
+        content.setStyle("-fx-background-color: transparent; -fx-border-width: 0 0 1px 0; -fx-border-color: transparent transparent grey transparent;");
         content.setPrefWidth(250); // Define a largura do bloco
         content.setPrefHeight(50); // Define a altura para manter alinhado
 
