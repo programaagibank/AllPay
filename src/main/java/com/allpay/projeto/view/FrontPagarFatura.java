@@ -37,6 +37,8 @@ public class FrontPagarFatura {
         mostrarTelaFatura();
     }
 
+
+
     public Parent getView() {
         return view;
     }
@@ -164,6 +166,7 @@ public class FrontPagarFatura {
         for (String metodo : metodos) {
             Button btnMetodo = criarBotao(metodo, "primary", e -> {
                 this.metodoPagamento = metodo;
+                FaturaDAO.metodoPagamento = metodoPagamento;
                 mostrarTelaConfirmacao();
             });
 

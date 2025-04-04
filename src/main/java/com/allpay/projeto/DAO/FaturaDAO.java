@@ -5,11 +5,13 @@ import java.util.HashMap;
 
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
+import com.allpay.projeto.view.FrontPagarFatura;
 
 public class FaturaDAO {
 
     private DataBaseConnection conn;
     public ArrayList<HashMap<String,String>> data;
+    public static String metodoPagamento;
 
     public FaturaDAO() {
 
@@ -184,7 +186,9 @@ public class FaturaDAO {
 
     public void atualizarStatus_fatura (int id_fatura) {
 
-        String query = "UPDATE fatura SET status_fatura = 'PAGA' WHERE id_fatura = ?";
+        String query = "UPDATE fatura SET status_fatura = 'PAGA' WHERE id_fatura = ?" +
+                "INSERT INTO pagamento (valor_pago, data_pagamento, status_pagamento, tipo_pagamento, id_fatura) SELECT f.valor_fatura, CURDATE(), 'PAGA', ?, f.id_fatura FROM fatura f WHERE id_fatura = ?";
+
 
         try {
 
@@ -194,8 +198,13 @@ public class FaturaDAO {
             PreparedStatement stmt = conn.getConnection().prepareStatement(query);
 
             stmt.setInt(1, id_fatura);
+            stmt.setString(2, metodoPagamento);
+            stmt.setInt(3, id_fatura);
+
 
             stmt.executeUpdate();
+
+            metodoPagamento = null;
 
         } catch (SQLException e) {
 
