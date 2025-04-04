@@ -23,6 +23,7 @@ public class FrontPagarFatura {
     private final Main main;
     private final String idUsuario;
     private final String idPagamento;
+    private int id_instituicao;
     private HashMap<String, String> faturaData;
     private String bancoSelecionado;
     private String metodoPagamento;
@@ -111,14 +112,12 @@ public class FrontPagarFatura {
 
         for (HashMap<String, String> banco : bancos) {
             float saldo = Float.parseFloat(banco.get("saldo_usuario"));
-            System.out.println(saldo);
-            System.out.println(valorFatura);
             Button btnBanco = criarBotaoBanco(banco.get("nome_instituicao"), saldo >= valorFatura);
-
             if (saldo >= valorFatura) {
                 btnBanco.setOnAction(e -> {
                     this.bancoSelecionado = banco.get("nome_instituicao");
                     this.saldoBancoSelecionado = saldo;
+                    id_instituicao = Integer.parseInt(banco.get("id_instituicao"));
                     mostrarTelaMetodosPagamento();
                 });
             }
@@ -227,7 +226,7 @@ public class FrontPagarFatura {
 
         Button btnConfirmar = criarBotao("Confirmar", "primary", e -> {
             if (validarSenha(pfSenha.getText())) {
-                efetuarPagamento();
+                efetuarPagamento(pfSenha.getText());
                 main.mostrarComprovantePagamento(idUsuario, idPagamento);
             } else {
                 lblErro.setText("Senha incorreta");
@@ -245,20 +244,21 @@ public class FrontPagarFatura {
     private boolean validarSenha(String senha) {
         ContaBancoDAO bankDAO = new ContaBancoDAO();
         // Implementar lógica para obter id_instituicao do banco selecionado
-        return bankDAO.validarSenha(senha, idUsuario, 1); // Substituir 1 pelo id correto
+
+        return bankDAO.validarSenha(senha, idUsuario, id_instituicao); // Substituir 1 pelo id correto
     }
 
-    private void efetuarPagamento() {
+    private void efetuarPagamento(String senha) {
         FaturaDAO faturaDAO = new FaturaDAO();
         float valor = Float.parseFloat(faturaData.get("valor_fatura"));
         int idFatura = Integer.parseInt(idPagamento);
 
         if (metodoPagamento.equals("Cartão de Crédito")) {
             ContaBancoDAO bankDAO = new ContaBancoDAO();
-            float limite = bankDAO.escolherBancoCartao(idUsuario, 1); // Substituir 1 pelo id correto
-            faturaDAO.efetuarPagamentoCartao(idUsuario, idFatura, valor, limite, "senha", 1);
+            float limite = bankDAO.escolherBancoCartao(idUsuario, id_instituicao); // Substituir 1 pelo id correto
+            faturaDAO.efetuarPagamentoCartao(idUsuario, idFatura, valor, limite, senha, id_instituicao);
         } else {
-            faturaDAO.efetuarPagamento(idUsuario, idFatura, valor, saldoBancoSelecionado, "senha", 1);
+            faturaDAO.efetuarPagamento(idUsuario, idFatura, valor, saldoBancoSelecionado, senha, id_instituicao);
         }
     }
 

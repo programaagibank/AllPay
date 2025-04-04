@@ -163,23 +163,26 @@ public class FaturaDAO {
         return limite_restante;
     }
 
-    public float efetuarPagamento (String id_usuarioOut, int id_fatura, float valor_fatura, float saldo_usuario, String senha_transacao, int id_instituicao) {
+    public float efetuarPagamento (String id_usuarioOut, int id_fatura, float valor_fatura,
+                                   float saldo_usuario, String senha_transacao, int id_instituicao) {
         System.out.println("aqui");
         ContaBancoDAO conta = new ContaBancoDAO();
         float saldo_restante = 0;
+        System.out.println("aqui antes da validacao");
         boolean validacao = conta.validarSenha(senha_transacao, id_usuarioOut, id_instituicao);
-        float valor_faturaConvert = Float.parseFloat(data.get(id_fatura).get("valor_fatura"));
-        int id_faturaConvert = Integer.parseInt(data.get(id_fatura).get("id_fatura"));
-
-        if (saldo_usuario >= valor_faturaConvert && validacao == true) {
-
-            saldo_restante = saldo_usuario - valor_faturaConvert;
-
-            atualizarStatus_fatura(id_faturaConvert);
-        } else {
-
-            System.out.println("Transação negada!");
-        }
+        System.out.println("depois");
+//        float valor_faturaConvert = Float.parseFloat(data.get(id_fatura).get("valor_fatura"));
+//        int id_faturaConvert = Integer.parseInt(data.get(id_fatura).get("id_fatura"));
+//
+//        if (saldo_usuario >= valor_faturaConvert && validacao == true) {
+//
+//            saldo_restante = saldo_usuario - valor_faturaConvert;
+//
+//            atualizarStatus_fatura(id_faturaConvert);
+//        } else {
+//
+//            System.out.println("Transação negada!");
+//        }
 
         return saldo_restante;
     }

@@ -49,7 +49,6 @@ public class ContaBancoDAO {
         dados.put("limite", rs.getString("limite"));
         dados.put("saldo_usuario", rs.getString("saldo_usuario"));
         dados.put("id_instituicao", rs.getString("id_instituicao"));
-        System.out.println(rs.getString("nome_instituicao"));
         this.bancosDisponiveis.add(dados);
       }
 
@@ -142,14 +141,15 @@ public class ContaBancoDAO {
 
       ResultSet rs = stmt.executeQuery();
       if (rs.next()) {
-
         senha_transacao_bd = rs.getString("senha_transacao");
       } else {
 
         System.out.println("Senha não encontrada");
       }
 
-
+    rs.close();
+    stmt.close();
+    dbConnect.closeConnection();
     } catch (SQLException e) {
 
       e.printStackTrace();
@@ -158,11 +158,10 @@ public class ContaBancoDAO {
       boolean validacao = false;
 
     if (senha_transacao.equals(senha_transacao_bd)) {
-
       validacao = true;
     } else System.out.println("Senha inválida");
-
     return validacao;
+
   }
 
   public void atualizarSaldo (float saldo_restante, String id_usuarioOut, int id_instituicao) {
