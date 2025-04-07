@@ -2,6 +2,7 @@ package com.allpay.projeto.view;
 
 import com.allpay.projeto.Main;
 import com.allpay.projeto.DAO.FaturaDAO;
+import com.allpay.projeto.controller.FaturaController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -50,9 +51,8 @@ public class FrontGerarComprovante {
         lblTitulo.setWrapText(true);
         lblTitulo.setMaxWidth(350);
 
-        FaturaDAO faturaDAO = new FaturaDAO();
-        ArrayList<HashMap<String, String>> faturas = faturaDAO.buscarFaturasByUserId(idUsuario);
-
+        FaturaController faturaController = new FaturaController();
+        ArrayList<HashMap<String, String>> faturas = faturaController.buscarFaturasByUserId(idUsuario);
         for (HashMap<String, String> fatura : faturas) {
             if (fatura.get("id_fatura").equals(idFatura)) {
                 this.faturaData = fatura;

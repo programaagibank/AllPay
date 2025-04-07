@@ -49,7 +49,8 @@ public class FrontPagarFatura {
     private void carregarDadosFatura() {
         FaturaDAO faturaDAO = new FaturaDAO();
         ArrayList<HashMap<String, String>> faturas = faturaDAO.buscarFaturas(idUsuario);
-
+        System.out.println("busca faturas");
+        System.out.println(idUsuario);
         for (HashMap<String, String> fatura : faturas) {
             if (fatura.get("id_fatura").equals(idPagamento)) {
                 this.faturaData = fatura;

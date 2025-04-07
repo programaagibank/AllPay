@@ -26,17 +26,9 @@ public class FaturaController {
 
         return metodo_pag;
     }
-    public void buscarFaturasByUserId(String id_usuario){
+    public ArrayList<HashMap<String,String>> buscarFaturasByUserId(String id_usuario){
         ArrayList<HashMap<String,String>> result = this.modelFaturaDAO.buscarFaturasByUserId(id_usuario);
-
-        for (int i = 0; i < result.size(); i++) {
-            System.out.println("Código da fatura: " + result.get(i).get("id_fatura"));
-            System.out.println("Valor: R$" + result.get(i).get("valor_fatura"));
-            System.out.println("Status: " + result.get(i).get("status_fatura"));
-            System.out.println("Descrição: " + result.get(i).get("descricao"));
-            System.out.println("Remetente: " + result.get(i).get("nome_recebedor"));
-            System.out.println(" ");
-        }
+        return result;
     }
     public float efetuarPagamento(String id_usuarioOut, int id_fatura, float valor_fatura,
                                   float saldo_usuario, String senha_transacao, int id_instituicao){

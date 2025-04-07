@@ -61,7 +61,7 @@ public class Main extends Application {
     }
 
     public void mostrarComprovantePagamento(String idUsuario, String idFatura) {
-        FrontGerarComprovante comprovante = new FrontGerarComprovante(this, "00000000003", "17");
+        FrontGerarComprovante comprovante = new FrontGerarComprovante(this, idUsuario, idFatura);
         trocarCena(comprovante.getView()); ///Mudar aqui glr
     }
 

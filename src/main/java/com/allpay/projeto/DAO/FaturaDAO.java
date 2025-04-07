@@ -34,7 +34,7 @@ public class FaturaDAO {
 
     public ArrayList<HashMap<String,String>> buscarFaturasByUserId ( String id_usuarioOut) {
 
-        String query = "SELECT * FROM fatura WHERE id_usuario = ? and status_fatura <> 'PAGA'";
+        String query = "SELECT * FROM fatura WHERE id_usuario = ? and status_fatura = 'PAGA'";
 
         try {
 
