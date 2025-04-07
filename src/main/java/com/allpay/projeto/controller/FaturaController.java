@@ -38,28 +38,17 @@ public class FaturaController {
             System.out.println(" ");
         }
     }
-    public float efetuarPagamento(int id_fatura, String senha_transacao, int selecaoBancoPagar){
+    public float efetuarPagamento(String id_usuarioOut, int id_fatura, float valor_fatura,
+                                  float saldo_usuario, String senha_transacao, int id_instituicao){
 
-        ContaBancoController bankAccountController = new ContaBancoController();
-        ContaBancoDAO bankAccountModelDAO = new ContaBancoDAO();
-
-        float valor_fatura = Float.parseFloat(this.modelFaturaDAO.buscarFaturasByUserId(UsuarioModel.getId_usuario()).get(id_fatura).get("valor_fatura"));
-
-        float escolherBanco = bankAccountController.escolherBanco(selecaoBancoPagar);
-
-        int id_instituicao = Integer.parseInt(bankAccountModelDAO.encontrarContaBancoUsuario(UsuarioModel.getId_usuario()).get(selecaoBancoPagar).get("id_instituicao"));
-
-        float saldo_restante = this.modelFaturaDAO.efetuarPagamento(UsuarioModel.getId_usuario(),id_fatura,valor_fatura,escolherBanco, senha_transacao, id_instituicao);
+        float saldo_restante = this.modelFaturaDAO.efetuarPagamento(id_usuarioOut, id_fatura, valor_fatura, saldo_usuario, senha_transacao, id_instituicao);
 
         return saldo_restante;
     }
-    public float efetuarPagamentoCartao(int id_fatura, String senha_transacao, int selecaoBancoPagar){
+    public float efetuarPagamentoCartao(String id_usuarioOut, int id_fatura, float valor_fatura,
+                                        float saldo_usuario, String senha_transacao, int id_instituicao){
 
-        ContaBancoController bankAccountController = new ContaBancoController();
-
-        float valor_fatura = Float.parseFloat(this.modelFaturaDAO.data.get(id_fatura).get("valor_fatura"));
-        float escolherBanco = bankAccountController.escolherBanco(Integer.parseInt(bankAccountController.bancosDisponiveis.get(selecaoBancoPagar).get("id_instituicao")));
-        float saldo_restante = this.modelFaturaDAO.efetuarPagamentoCartao(UsuarioModel.getId_usuario(),Integer.parseInt(modelFaturaDAO.data.get(id_fatura).get("id_fatura")),valor_fatura,escolherBanco,senha_transacao,selecaoBancoPagar);
+        float saldo_restante = this.modelFaturaDAO.efetuarPagamento(id_usuarioOut, id_fatura, valor_fatura, saldo_usuario, senha_transacao, id_instituicao);
 
         return saldo_restante;
     }

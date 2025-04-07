@@ -2,6 +2,7 @@ package com.allpay.projeto.DAO;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
@@ -165,33 +166,26 @@ public class FaturaDAO {
 
     public float efetuarPagamento (String id_usuarioOut, int id_fatura, float valor_fatura,
                                    float saldo_usuario, String senha_transacao, int id_instituicao) {
-        System.out.println("aqui");
         ContaBancoDAO conta = new ContaBancoDAO();
         float saldo_restante = 0;
-        System.out.println("aqui antes da validacao");
         boolean validacao = conta.validarSenha(senha_transacao, id_usuarioOut, id_instituicao);
-        System.out.println("depois");
-//        float valor_faturaConvert = Float.parseFloat(data.get(id_fatura).get("valor_fatura"));
-//        int id_faturaConvert = Integer.parseInt(data.get(id_fatura).get("id_fatura"));
-//
-//        if (saldo_usuario >= valor_faturaConvert && validacao == true) {
-//
-//            saldo_restante = saldo_usuario - valor_faturaConvert;
-//
-//            atualizarStatus_fatura(id_faturaConvert);
-//        } else {
-//
-//            System.out.println("Transação negada!");
-//        }
+
+        if (saldo_usuario >= valor_fatura && validacao == true && valor_fatura != 0) {
+
+            saldo_restante = saldo_usuario - valor_fatura;
+
+            atualizarStatus_fatura(id_fatura);
+        } else {
+
+            System.out.println("Transação negada!");
+        }
 
         return saldo_restante;
     }
 
     public void atualizarStatus_fatura (int id_fatura) {
 
-        String query = "UPDATE fatura SET status_fatura = 'PAGA' WHERE id_fatura = ?" +
-                "INSERT INTO pagamento (valor_pago, data_pagamento, status_pagamento, tipo_pagamento, id_fatura) SELECT f.valor_fatura, CURDATE(), 'PAGA', ?, f.id_fatura FROM fatura f WHERE id_fatura = ?";
-
+        String query = "UPDATE fatura SET status_fatura = 'PAGA' WHERE id_fatura = ?";
 
         try {
 
@@ -201,8 +195,30 @@ public class FaturaDAO {
             PreparedStatement stmt = conn.getConnection().prepareStatement(query);
 
             stmt.setInt(1, id_fatura);
-            stmt.setString(2, metodoPagamento);
-            stmt.setInt(3, id_fatura);
+            this.salvarPagamento(id_fatura);
+
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+
+    }
+
+    public void salvarPagamento(int id_fatura){
+        String query =  "INSERT INTO pagamento (valor_pago, data_pagamento, status_pagamento, tipo_pagamento, id_fatura) SELECT f.valor_fatura, CURDATE(), 'PAGA', ?, f.id_fatura FROM fatura f WHERE id_fatura = ?";
+
+        try {
+
+            conn.connect();
+            conn.getConnection().createStatement().execute("USE allpay");
+
+            PreparedStatement stmt = conn.getConnection().prepareStatement(query);
+
+            stmt.setString(1, metodoPagamento);
+            stmt.setInt(2, id_fatura);
 
 
             stmt.executeUpdate();

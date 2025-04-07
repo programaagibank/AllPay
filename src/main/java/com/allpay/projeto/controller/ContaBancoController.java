@@ -6,6 +6,7 @@ import com.allpay.projeto.model.UsuarioModel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Optional;
 
 public class ContaBancoController {
   ArrayList<HashMap<String,String>> bancosDisponiveis;
@@ -57,13 +58,13 @@ public ContaBancoController(){
 
   public void atualizarSaldo (float saldo_restante, int selecaoBancoPagar) {
 
-    new ContaBancoDAO().atualizarSaldo(saldo_restante, UsuarioModel.getId_usuario(), Integer.parseInt(bancosDisponiveis.get(selecaoBancoPagar).get("id_instituicao")));
+    new ContaBancoDAO().atualizarSaldo(saldo_restante, UsuarioModel.getId_usuario(), selecaoBancoPagar);
 
   }
 
   public void atualizarLimite (float saldo_restante, int selecaoBancoPagar) {
 
-    new ContaBancoDAO().atualizarLimite(saldo_restante, UsuarioModel.getId_usuario(), Integer.parseInt(bancosDisponiveis.get(selecaoBancoPagar).get("id_instituicao")));
+    new ContaBancoDAO().atualizarLimite(saldo_restante, UsuarioModel.getId_usuario(), selecaoBancoPagar);
 
   }
 }
