@@ -21,6 +21,10 @@ dependencies {
     implementation 'org.openjfx:javafx-media:17.0.2'
 
     implementation 'org.mindrot:jbcrypt:0.4'
+    // Dependências do Apache Batik
+    implementation 'batik:batik-transcoder:1.6-1'
+    implementation 'batik:batik-bridge:1.6-1'
+    implementation 'batik:batik-awt-util:1.6-1'
 }
 
 application {
