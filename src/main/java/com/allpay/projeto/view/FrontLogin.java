@@ -125,7 +125,7 @@ public class FrontLogin {
         loadingGif.setVisible(false);
     }
 
-    private Button criarBotao(String text, String type) {
+    public static Button criarBotao(String text, String type) {
         Button btn = new Button(text);
         String baseStyle = "-fx-font-size: 14px; -fx-padding: 10px 20px; -fx-border-radius: 5px; " +
                 "-fx-background-radius: 5px; -fx-min-width: 250px; -fx-min-height: 40px; " +
