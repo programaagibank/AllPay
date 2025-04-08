@@ -109,6 +109,8 @@ public class FaturaDAO {
 
         String query = "SELECT * FROM fatura WHERE id_usuario = ? and status_fatura <> 'PAGA'";
 
+        this.atualizarDataVencimento();
+
         try{
             conn.connect();
             conn.getConnection().createStatement().execute("USE allpay");
@@ -229,5 +231,27 @@ public class FaturaDAO {
 
             e.printStackTrace();
         }
+    }
+
+    public void atualizarDataVencimento () {
+
+        String query = "UPDATE fatura SET status_fatura = 'ATRASADA', valor_fatura = valor_fatura*1.05 WHERE data_vencimento < CURRENT_DATE and status_fatura = 'EM ABERTO';";
+
+        try {
+
+            conn.connect();
+            conn.getConnection().createStatement().execute("USE allpay");
+
+            PreparedStatement stmt = conn.getConnection().prepareStatement(query);
+
+
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+
     }
 }

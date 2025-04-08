@@ -41,6 +41,13 @@ public class FrontGerarComprovante {
         this.view = new VBox(20);
         setupView();
     }
+    private String getValorFormatado() {
+        Object valorObj = faturaData.get("valor_fatura");
+        double valor = Double.parseDouble(valorObj.toString());
+        return String.format("%.2f", valor);
+    }
+
+
 
     private void setupView() {
         view.setAlignment(Pos.TOP_CENTER);
@@ -64,8 +71,11 @@ public class FrontGerarComprovante {
         contentBox.setAlignment(Pos.CENTER);
         contentBox.setMaxWidth(400);
 
+        String valorFormatado = getValorFormatado();
+
+
         if (faturaData != null) {
-            Label lblValor = createWrappedLabel("Valor: R$ " + faturaData.get("valor_fatura"), 24, FontWeight.BOLD, Color.WHITE);
+            Label lblValor = createWrappedLabel("Valor: R$ " + getValorFormatado(), 24, FontWeight.BOLD, Color.WHITE);
             Label lblRecebedor = createWrappedLabel("Recebedor: " + faturaData.get("nome_recebedor"), 16, FontWeight.NORMAL, Color.WHITE);
             Label lblDescricao = createWrappedLabel("Descrição: " + faturaData.get("descricao"), 16, FontWeight.NORMAL, Color.WHITE);
             Label lblStatus = createWrappedLabel("Status: " + faturaData.get("status_fatura"), 16, FontWeight.NORMAL, Color.WHITE);
