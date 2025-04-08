@@ -3,6 +3,8 @@ package com.allpay.projeto.view;
 import com.allpay.projeto.Main;
 import com.allpay.projeto.DAO.ContaBancoDAO;
 import com.allpay.projeto.DAO.FaturaDAO;
+import com.allpay.projeto.controller.ContaBancoController;
+import com.allpay.projeto.controller.FaturaController;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,12 +27,15 @@ public class FrontPagarFatura {
     private String bancoSelecionado;
     private String metodoPagamento;
     private float saldoBancoSelecionado;
+    private float limiteBancoSelecionado;
+    private FaturaController faturaController;
 
     public FrontPagarFatura(Main main, String idUsuario, String idPagamento) {
         this.main = main;
         this.idUsuario = idUsuario;
         this.idPagamento = idPagamento;
         this.view = new VBox(15);
+        faturaController = new FaturaController();
         carregarDadosFatura();
         mostrarTelaFatura();
     }
@@ -44,7 +49,8 @@ public class FrontPagarFatura {
     private void carregarDadosFatura() {
         FaturaDAO faturaDAO = new FaturaDAO();
         ArrayList<HashMap<String, String>> faturas = faturaDAO.buscarFaturas(idUsuario);
-
+        System.out.println("busca faturas");
+        System.out.println(idUsuario);
         for (HashMap<String, String> fatura : faturas) {
             if (fatura.get("id_fatura").equals(idPagamento)) {
                 this.faturaData = fatura;
@@ -109,11 +115,13 @@ public class FrontPagarFatura {
 
         for (HashMap<String, String> banco : bancos) {
             float saldo = Float.parseFloat(banco.get("saldo_usuario"));
+            float limite = Float.parseFloat(banco.get("limite"));
             Button btnBanco = criarBotaoBanco(banco.get("nome_instituicao"), saldo >= valorFatura);
             if (saldo >= valorFatura) {
                 btnBanco.setOnAction(e -> {
                     this.bancoSelecionado = banco.get("nome_instituicao");
                     this.saldoBancoSelecionado = saldo;
+                    this.limiteBancoSelecionado = limite;
                     id_instituicao = Integer.parseInt(banco.get("id_instituicao"));
                     mostrarTelaMetodosPagamento();
                 });
@@ -157,7 +165,7 @@ public class FrontPagarFatura {
         VBox metodosContainer = new VBox(10);
         metodosContainer.setAlignment(Pos.CENTER); // Alinha os botões no centro
 
-        String[] metodos = {"PIX", "Cartão de Crédito", "Cartão de Débito", "TED", "Boleto"};
+        String[] metodos = {"PIX", "CREDITO", "DEBITO", "TED", "BOLETO"};
 
         for (String metodo : metodos) {
             Button btnMetodo = criarBotao(metodo, "primary", e -> {
@@ -246,16 +254,16 @@ public class FrontPagarFatura {
     }
 
     private void efetuarPagamento(String senha) {
-        FaturaDAO faturaDAO = new FaturaDAO();
+        ContaBancoController contaBancoController = new ContaBancoController();
         float valor = Float.parseFloat(faturaData.get("valor_fatura"));
         int idFatura = Integer.parseInt(idPagamento);
 
-        if (metodoPagamento.equals("Cartão de Crédito")) {
-            ContaBancoDAO bankDAO = new ContaBancoDAO();
-            float limite = bankDAO.escolherBancoCartao(idUsuario, id_instituicao); // Substituir 1 pelo id correto
-            faturaDAO.efetuarPagamentoCartao(idUsuario, idFatura, valor, limite, senha, id_instituicao);
+        if (metodoPagamento.equals("CREDITO")) {// Substituir 1 pelo id correto
+            Float rest = this.faturaController.efetuarPagamentoCartao(idUsuario, idFatura, valor, limiteBancoSelecionado, senha, id_instituicao);
+            contaBancoController.atualizarLimite(rest, id_instituicao);
         } else {
-            faturaDAO.efetuarPagamento(idUsuario, idFatura, valor, saldoBancoSelecionado, senha, id_instituicao);
+            Float rest = this.faturaController.efetuarPagamento(idUsuario, idFatura, valor, saldoBancoSelecionado, senha, id_instituicao);
+            contaBancoController.atualizarSaldo(rest, id_instituicao);
         }
     }
 
