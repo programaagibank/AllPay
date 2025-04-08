@@ -51,6 +51,14 @@ public class FrontPrincipal {
             return "0.00"; // fallback se der erro na conversão
         }
     }
+    private String formatarValorFatura(String valorStr) {
+        try {
+            double valor = Double.parseDouble(valorStr);
+            return String.format("%.2f", valor);
+        } catch (NumberFormatException e) {
+            return "0.00"; // fallback se der erro na conversão
+        }
+    }
 
 
     public Parent getView() {
@@ -70,7 +78,7 @@ public class FrontPrincipal {
 
     private void configurarEstiloView() {
         view.setAlignment(Pos.TOP_CENTER);
-        view.setPadding(new Insets(90, 20, 20, 20));
+        view.setPadding(new Insets(40, 20, 50, 20));
         setBackground();
     }
 
@@ -130,21 +138,38 @@ public class FrontPrincipal {
     }
 
     private VBox criarCardBanco(HashMap<String, String> banco) {
-        VBox card = new VBox(10);
-        card.setAlignment(Pos.CENTER);
-        card.setStyle("-fx-background-color: white; -fx-background-radius: 6; -fx-padding: 15;");
+        VBox card = new VBox(5); // Espaçamento entre os elementos
+        card.setFillWidth(false); // ❗️Não preencher a altura toda
+        card.setAlignment(Pos.TOP_LEFT); // ❗️Alinha os itens no topo à esquerda
+        card.setPadding(new Insets(10, 15, 10, 15)); // Padding ajustado para mais topo, menos base
+        card.setStyle(
+                "-fx-background-color: white;" +
+                        "-fx-background-radius: 12;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 4, 0, 0, 2);"
+        );
+
         card.setMinWidth(WINDOW_WIDTH - 43);
+        card.setMaxWidth(WINDOW_WIDTH - 43);
+        card.setPrefHeight(140); // usa só prefHeight
+        card.setMaxHeight(140);
 
-        Label name = new Label(banco.get("nome_instituicao"));
-        name.setStyle("-fx-text-fill: black; -fx-font-family: 'Montserrat'; -fx-font-weight: bold; -fx-font-size: 16px;");
-
+        // 🔹 Saldo
         Label balance = new Label("R$ " + formatarSaldoBanco(banco.get("saldo_usuario")));
+        balance.setStyle("-fx-text-fill: black; -fx-font-family: 'Arial'; -fx-font-size: 34px; -fx-font-weight: bold;");
 
-        balance.setStyle("-fx-text-fill: black; -fx-font-family: 'Montserrat'; -fx-font-weight: bold; -fx-font-size: 18px;");
+        Label limite = new Label("Limite: R$ " + formatarSaldoBanco(banco.get("limite")));
+        limite.setStyle("-fx-text-fill: black; -fx-font-family: 'Arial';  -fx-font-size: 14px; -fx-font-weight: bold;");
 
-        card.getChildren().addAll(name, balance);
+        // 🔹 Nome do banco
+        Label name = new Label(banco.get("nome_instituicao"));
+        name.setStyle("-fx-text-fill: #6e6e6e; -fx-font-family: 'Montserrat'; -fx-font-size: 12px;");
+
+        card.getChildren().addAll(balance,limite, name);
         return card;
     }
+
+
+
 
     private HBox criarMenuBotao() {
         HBox container = new HBox(15);
@@ -268,27 +293,45 @@ public class FrontPrincipal {
     }
     private HBox createInvoiceContent(HashMap<String, String> fatura) {
         HBox content = new HBox();
-        content.setAlignment(Pos.CENTER);
-        content.setMaxWidth(Double.MAX_VALUE);
-        content.setSpacing(30); // Ajusta o espaçamento entre os elementos
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.setPadding(new Insets(5, 10, 5, 10));
         content.setStyle("-fx-background-color: transparent; -fx-border-width: 0 0 1px 0; -fx-border-color: transparent transparent grey transparent;");
-        content.setPrefWidth(250); // Define a largura do bloco
-        content.setPrefHeight(50); // Define a altura para manter alinhado
+        content.setPrefWidth(250);
+        content.setPrefHeight(60); // Altura um pouco maior pra acomodar a quebra
 
-        // 🔹 Criação dos textos (não comprimimos eles agora)
+        // 🔹 Nome (com quebra de linha)
         Label name = createInvoiceLabel(fatura.get("nome_recebedor"), "14", FontWeight.BOLD, Color.WHITE);
-        Label dueDate = createInvoiceLabel(fatura.get("data_vencimento"), "12", FontWeight.NORMAL, Color.LIGHTGRAY);
-        Label amount = createInvoiceLabel("R$ " + fatura.get("valor_fatura"), "12", FontWeight.NORMAL, Color.WHITE);
+        name.setWrapText(true);
+        name.setMaxWidth(130); // Largura fixa pro nome pra forçar quebra se necessário
+        name.setTooltip(new Tooltip(fatura.get("nome_recebedor")));
+
+        VBox nameBox = new VBox(name);
+        nameBox.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(nameBox, Priority.ALWAYS);
+
+        // 🔹 Valor da fatura
+        Label amount = createInvoiceLabel("R$ " + formatarValorFatura(fatura.get("valor_fatura")), "12", FontWeight.NORMAL, Color.WHITE);
+        amount.setAlignment(Pos.CENTER_RIGHT);
+        amount.setMaxWidth(80);
+
+        // 🔹 Status da fatura
         Label status = createInvoiceLabel(
                 fatura.get("status_fatura"), "12", FontWeight.NORMAL,
                 "EM ABERTO".equals(fatura.get("status_fatura")) ? Color.YELLOW : Color.LIGHTCORAL
         );
+        status.setAlignment(Pos.CENTER_RIGHT);
+        status.setMaxWidth(80);
 
-        // 🔹 Adiciona os elementos na linha
-        content.getChildren().addAll(name, dueDate, amount, status);
+        VBox rightBox = new VBox(amount, status);
+        rightBox.setAlignment(Pos.CENTER_RIGHT);
+        rightBox.setSpacing(5);
 
+        content.getChildren().addAll(nameBox, rightBox);
         return content;
     }
+
+
 
 
     // 🔹 Abre a Tela X (simulação)
