@@ -125,6 +125,7 @@ public class FaturaDAO {
                 HashMap<String,String> dados = new HashMap<>();
                 dados.put("id_usuario", rs.getString("id_usuario"));
                 dados.put("id_fatura", rs.getString("id_fatura"));
+                dados.put("data_vencimento", rs.getString("data_vencimento"));
                 dados.put("valor_fatura", rs.getString("valor_fatura"));
                 dados.put("nome_recebedor", rs.getString("nome_recebedor"));
                 dados.put("status_fatura", rs.getString("status_fatura"));
