@@ -85,7 +85,6 @@ public class FrontPrincipal {
         HBox carousel = new HBox(10);
         carousel.setAlignment(Pos.CENTER_LEFT);
 
-
         ArrayList<HashMap<String, String>> bancos = contaBancoController.getBancosDisponiveis();
 
         if (bancos.isEmpty()) {
@@ -132,7 +131,7 @@ public class FrontPrincipal {
     private VBox criarCardBanco(HashMap<String, String> banco) {
         VBox card = new VBox(10);
         card.setAlignment(Pos.CENTER);
-        card.setStyle("-fx-background-color: white; -fx-background-radius: 6; -fx-padding: 15;");
+        card.setStyle("-fx-background-color: red; -fx-background-radius: 6; -fx-padding: 15;");
         card.setMinWidth(WINDOW_WIDTH - 43);
 
         Label name = new Label(banco.get("nome_instituicao"));
