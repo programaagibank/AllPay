@@ -5,6 +5,7 @@ import com.allpay.projeto.DAO.ContaBancoDAO;
 import com.allpay.projeto.DAO.FaturaDAO;
 import com.allpay.projeto.controller.ContaBancoController;
 import com.allpay.projeto.controller.FaturaController;
+import com.allpay.projeto.model.UsuarioModel;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -99,7 +100,7 @@ public class FrontPagarFatura {
         Button btnPagar = criarBotao("Pagar", "primary", e -> mostrarTelaBancos());
         btnPagar.setMaxWidth(Double.MAX_VALUE);
 
-        Button btnVoltar = criarBotao("Voltar", "secondary", e -> main.mostrarTelaPrincipal(idUsuario, "Usuário"));
+        Button btnVoltar = criarBotao("Voltar", "secondary", e -> main.mostrarTelaPrincipal(idUsuario, UsuarioModel.getNome()));
         btnVoltar.setMaxWidth(Double.MAX_VALUE);
 
         // Contêiner para os botões (mantém eles juntos na parte inferior)

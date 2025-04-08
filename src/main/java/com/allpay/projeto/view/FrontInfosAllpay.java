@@ -1,5 +1,6 @@
 package com.allpay.projeto.view;
 
+import com.allpay.projeto.model.UsuarioModel;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
@@ -370,7 +371,7 @@ public class FrontInfosAllpay {
 
     private Button criarBtnVoltar() {
         Button btnVoltar = FrontLogin.criarBotao("Voltar", "secondary");
-        btnVoltar.setOnAction(e -> main.mostrarTelaPrincipal(idUsuario, "Usuário"));
+        btnVoltar.setOnAction(e -> main.mostrarTelaPrincipal(idUsuario, UsuarioModel.getNome()));
         return btnVoltar;
     }
 
