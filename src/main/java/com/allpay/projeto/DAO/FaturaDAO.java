@@ -107,7 +107,7 @@ public class FaturaDAO {
 
     public ArrayList<HashMap<String,String>> buscarFaturas (String id_usuarioOut) {
 
-        String query = "SELECT * FROM fatura WHERE id_usuario = ?";
+        String query = "SELECT * FROM fatura WHERE id_usuario = ? and status_fatura <> 'PAGA'";
 
         try{
             conn.connect();
