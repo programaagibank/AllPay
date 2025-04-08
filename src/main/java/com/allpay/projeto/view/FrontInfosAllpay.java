@@ -58,20 +58,34 @@ public class FrontInfosAllpay {
     }
 
     public Parent getView() {
+        // Cria o StackPane principal
         StackPane root = new StackPane();
         root.setPrefSize(WINDOW_WIDTH, WINDOW_WIDTH - 40);
 
+        // Configura o background
+        setBackground(root);
+
+        // Cria um VBox para organizar o conteúdo e o botão
+        VBox mainContainer = new VBox();
+        mainContainer.setPrefSize(WINDOW_WIDTH, WINDOW_WIDTH - 40);
+
+        // Cria o ScrollPane com o conteúdo
         ScrollPane scrollPane = getScrollPane();
 
-        Platform.runLater(() -> {
-            Node viewport = scrollPane.lookup(".viewport");
-            if (viewport != null) {
-                viewport.setStyle("-fx-background-color: transparent;");
-            }
-        });
+        // Cria um container para o botão voltar (fixo na parte inferior)
+        StackPane bottomPane = new StackPane();
+        bottomPane.setPadding(new Insets(0, 0, 20, 0)); // Espaço na parte inferior
+        Button btnVoltar = criarBtnVoltar();
+        bottomPane.getChildren().add(btnVoltar);
 
-        setBackground(root);
-        root.getChildren().add(scrollPane);
+        // Adiciona os componentes ao mainContainer
+        mainContainer.getChildren().addAll(scrollPane, bottomPane);
+
+        // Configura para que o ScrollPane ocupe todo o espaço disponível
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+
+        // Adiciona o mainContainer ao root
+        root.getChildren().add(mainContainer);
 
         return root;
     }
@@ -81,31 +95,45 @@ public class FrontInfosAllpay {
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(false);
+        scrollPane.setFitToHeight(true);
         scrollPane.setPannable(true);
-        scrollPane.setPrefViewportHeight(WINDOW_WIDTH - 60);
-        scrollPane.setStyle("-fx-background-color: transparent; -fx-border-color: black;");
+
+        // Estilo do ScrollPane
+        scrollPane.setStyle("-fx-background-color: transparent;");
+
+        // Aplica estilo transparente ao viewport (área de conteúdo visível)
+        scrollPane.setBackground(Background.EMPTY);
+        scrollPane.viewportBoundsProperty().addListener((obs, oldVal, newVal) -> {
+            Platform.runLater(() -> {
+                Node viewport = scrollPane.lookup(".viewport");
+                if (viewport != null) {
+                    viewport.setStyle("-fx-background-color: transparent;");
+                }
+            });
+        });
+
+        // Estilo do conteúdo interno
+        content.setStyle("-fx-background-color: transparent;");
+
         return scrollPane;
     }
 
     private void setupView() {
         configurarEstiloView();
+        content.setStyle("-fx-background-color: transparent;"); // Adicione esta linha
         content.getChildren().addAll(
                 criarTitulo(),
                 criarContainerCards(),
-                criarBtnVerMais(),
-                criarBtnVoltar()
+                criarBtnVerMais()
         );
-
         carregarMaisCards();
-
     }
 
     private VBox criarContainerCards() {
         cardsContainer = new VBox(10);
         cardsContainer.setAlignment(Pos.TOP_CENTER);
         cardsContainer.setPadding(new Insets(10));
-
+        cardsContainer.setStyle("-fx-background-color: transparent;"); // Adicione esta linha
         return cardsContainer;
     }
 
@@ -143,17 +171,16 @@ public class FrontInfosAllpay {
         HBox card = new HBox(10);
         card.setAlignment(Pos.CENTER_LEFT);
         card.setPadding(new Insets(10));
-        card.setStyle("-fx-background-color: rgba(255, 255, 255, 0.1); -fx-background-radius: 10;");
+        card.setStyle("-fx-background-color: rgba(255, 255, 255, 0.2); -fx-background-radius: 10;");
         card.setMaxWidth(WINDOW_WIDTH - 40);
 
         StackPane imageContainer = new StackPane();
-        imageContainer.setMinSize(40, 40);
-        imageContainer.setMaxSize(40, 40);
-        imageContainer.setStyle("-fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 20;");
+        imageContainer.setMinSize(50, 50);
+        imageContainer.setMaxSize(50, 50);
 
         ImageView logoView = new ImageView();
-        logoView.setFitWidth(36);
-        logoView.setFitHeight(36);
+        logoView.setFitWidth(50);
+        logoView.setFitHeight(50);
         logoView.setPreserveRatio(true);
 
         carregarImagemPadrao(logoView); // Carregar uma imagem padrão enquanto a imagem real não chega.
@@ -329,7 +356,7 @@ public class FrontInfosAllpay {
     private void carregarImagemPadrao(ImageView logoView) {
         try {
             Image defaultImage = new Image(Objects.requireNonNull(
-                    getClass().getResource("/images/loading.gif")).toExternalForm());
+                    getClass().getResource("/images/moeda.png")).toExternalForm());
             logoView.setImage(defaultImage);
         } catch (Exception e) {
             logoView.setImage(null);
