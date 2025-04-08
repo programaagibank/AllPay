@@ -78,7 +78,7 @@ public class FrontPrincipal {
 
     private void configurarEstiloView() {
         view.setAlignment(Pos.TOP_CENTER);
-        view.setPadding(new Insets(40, 20, 50, 20));
+        view.setPadding(new Insets(40, 20, 0, 20));
         setBackground();
     }
 
@@ -262,7 +262,7 @@ public class FrontPrincipal {
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scroll.setFitToHeight(true);
         scroll.setPannable(true);
-        scroll.setPrefViewportHeight(150);
+        scroll.setPrefViewportHeight(300);
         scroll.setMaxWidth(Double.MAX_VALUE-40);
 
 
