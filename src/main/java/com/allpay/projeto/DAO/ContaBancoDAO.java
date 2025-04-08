@@ -191,7 +191,7 @@ public class ContaBancoDAO {
 
   public void atualizarLimite (float saldo_restante, String id_usuarioOut, int id_instituicao) {
 
-    String query = "UPDATE conta SET limite = ? WHERE id_usuario = ? id_instituicao = ?";
+    String query = "UPDATE conta SET limite = ? WHERE id_usuario = ? and id_instituicao = ?";
 
     if (saldo_restante != 0) {
       try {
