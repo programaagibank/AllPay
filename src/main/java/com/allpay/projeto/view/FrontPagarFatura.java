@@ -13,6 +13,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
+import java.text.DecimalFormat;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +41,16 @@ public class FrontPagarFatura {
         carregarDadosFatura();
         mostrarTelaFatura();
     }
+    private String getValorFormatado() {
+        Object valorObj = faturaData.get("valor_fatura");
+        double valor = Double.parseDouble(valorObj.toString());
+        return String.format("%.2f", valor);
+    }
+    private String getSaldoFormatado() {
+        return String.format("%.2f", saldoBancoSelecionado);
+    }
+
+
 
 
 
@@ -68,7 +80,9 @@ public class FrontPagarFatura {
         Label lblTitulo = new Label("Confirmar Fatura");
         lblTitulo.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;");
 
-        Label lblValor = new Label("R$ " + faturaData.get("valor_fatura"));
+        String valorFormatado = getValorFormatado();
+
+        Label lblValor = new Label("R$ " + getValorFormatado());
         lblValor.setStyle("-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white;");
 
         Label lblVencimento = new Label("Vencimento: " + faturaData.get("data_vencimento"));
@@ -103,7 +117,10 @@ public class FrontPagarFatura {
         Label lblTitulo = new Label("Escolher Banco");
         lblTitulo.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;");
 
-        Label lblValor = new Label("R$ " + faturaData.get("valor_fatura"));
+
+        String valorFormatado = getValorFormatado();
+
+        Label lblValor = new Label("R$ " + getValorFormatado());
         lblValor.setStyle("-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white;");
 
         ScrollPane scrollBancos = new ScrollPane();
@@ -155,10 +172,12 @@ public class FrontPagarFatura {
         lblTitulo.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;");
         lblTitulo.setWrapText(true);
         lblTitulo.setTextAlignment(TextAlignment.CENTER);
-        Label lblValorFatura = new Label("R$ " + faturaData.get("valor_fatura"));
-        lblValorFatura.setStyle("-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white;");
+        String valorFormatado = getValorFormatado();
 
-        Label lblSaldo = new Label("Saldo disponível: R$ " + saldoBancoSelecionado);
+        Label lblValor = new Label("R$ " + getValorFormatado());
+        lblValor.setStyle("-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white;");
+
+        Label lblSaldo = new Label("Saldo disponível: R$ " + getSaldoFormatado());
         lblSaldo.setStyle("-fx-font-size: 16px; -fx-text-fill: white;");
 
         // Container para os botões de métodos de pagamento
@@ -192,7 +211,7 @@ public class FrontPagarFatura {
         boxBotoes.setAlignment(Pos.CENTER);
 
         // Adiciona os elementos à tela
-        view.getChildren().addAll(lblTitulo, lblValorFatura, lblSaldo, metodosContainer, espacador, boxBotoes);
+        view.getChildren().addAll(lblTitulo, lblValor, lblSaldo, metodosContainer, espacador, boxBotoes);
     }
 
 
@@ -203,7 +222,9 @@ public class FrontPagarFatura {
         Label lblTitulo = new Label("Confirmar Pagamento");
         lblTitulo.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;");
 
-        Label lblValor = new Label("R$ " + faturaData.get("valor_fatura"));
+        String valorFormatado = getValorFormatado();
+
+        Label lblValor = new Label("R$ " + getValorFormatado());
         lblValor.setStyle("-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white;");
 
         Label lblVencimento = new Label("Vencimento: " + faturaData.get("data_vencimento"));

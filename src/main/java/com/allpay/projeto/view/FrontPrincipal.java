@@ -43,6 +43,16 @@ public class FrontPrincipal {
         setupView();
     }
 
+    private String formatarSaldoBanco(String saldoStr) {
+        try {
+            double saldo = Double.parseDouble(saldoStr);
+            return String.format("%.2f", saldo);
+        } catch (NumberFormatException e) {
+            return "0.00"; // fallback se der erro na conversão
+        }
+    }
+
+
     public Parent getView() {
         return view;
     }
@@ -128,7 +138,8 @@ public class FrontPrincipal {
         Label name = new Label(banco.get("nome_instituicao"));
         name.setStyle("-fx-text-fill: black; -fx-font-family: 'Montserrat'; -fx-font-weight: bold; -fx-font-size: 16px;");
 
-        Label balance = new Label("R$ " + banco.get("saldo_usuario"));
+        Label balance = new Label("R$ " + formatarSaldoBanco(banco.get("saldo_usuario")));
+
         balance.setStyle("-fx-text-fill: black; -fx-font-family: 'Montserrat'; -fx-font-weight: bold; -fx-font-size: 18px;");
 
         card.getChildren().addAll(name, balance);
@@ -270,7 +281,7 @@ public class FrontPrincipal {
         Label amount = createInvoiceLabel("R$ " + fatura.get("valor_fatura"), "12", FontWeight.NORMAL, Color.WHITE);
         Label status = createInvoiceLabel(
                 fatura.get("status_fatura"), "12", FontWeight.NORMAL,
-                "PAGA".equals(fatura.get("status_fatura")) ? Color.LIGHTGREEN : Color.LIGHTCORAL
+                "EM ABERTO".equals(fatura.get("status_fatura")) ? Color.YELLOW : Color.LIGHTCORAL
         );
 
         // 🔹 Adiciona os elementos na linha
