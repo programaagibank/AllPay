@@ -11,9 +11,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class RequestOFInfos {
     public static class Instituicao {
@@ -63,6 +61,9 @@ public class RequestOFInfos {
                     }
 
                     instituicoes.add(new Instituicao(nome, status, logoUrl));
+                    Optional<Instituicao> agiCard = instituicoes.stream().filter(el -> el.getNome().equals("BCO AGIBANK S.A.")).findFirst();
+
+                    agiCard.ifPresent(card -> instituicoes.set(2, card));
                 }
             }
         } catch (IOException e) {
