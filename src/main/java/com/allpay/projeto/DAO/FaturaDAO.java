@@ -67,10 +67,10 @@ public class FaturaDAO {
         return this.data;
     }
 
-    public ArrayList<HashMap<String,String>> buscarFaturasNoUser (int id_faturaOut) {
+    public HashMap<String,String> buscarFaturasNoUser (int id_faturaOut) {
 
-        String query = "SELECT * FROM fatura WHERE id_fatura = ? and WHERE id_usuario = null";
-
+        String query = "SELECT * FROM fatura WHERE id_fatura = ? and id_usuario = null";
+        HashMap<String,String> dados = new HashMap<>();
         try {
 
             conn.connect();
@@ -81,9 +81,9 @@ public class FaturaDAO {
 
             ResultSet rs = stmt.executeQuery();
 
-            while (rs.next()) {
+            if (rs.next()) {
 
-                HashMap<String,String> dados = new HashMap<>();
+
                 dados.put("id_usuario", rs.getString("id_usuario"));
                 dados.put("id_fatura", rs.getString("id_fatura"));
                 dados.put("valor_fatura", rs.getString("valor_fatura"));
@@ -93,8 +93,6 @@ public class FaturaDAO {
 
                 //System.out.println(i + " - " + id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
 
-                this.data.add(dados);
-
                 //System.out.println(id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
             }
         } catch (SQLException e) {
@@ -102,7 +100,7 @@ public class FaturaDAO {
             e.printStackTrace();
         }
 
-        return this.data;
+        return dados;
     }
 
     public ArrayList<HashMap<String,String>> buscarFaturas (String id_usuarioOut) {

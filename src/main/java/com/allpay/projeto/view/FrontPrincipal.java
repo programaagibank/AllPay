@@ -175,10 +175,6 @@ public class FrontPrincipal {
         HBox container = new HBox(15);
         container.setAlignment(Pos.CENTER);
         container.getChildren().addAll(
-                criarMenuBotao("bank-icon.png", "Meus Bancos", () -> {
-                    // Alteração aqui - direciona para pagamento da fatura 8
-                    main.mostrarTelaPagarFatura(idUsuario, "8");
-                }),
                 criarMenuBotao("switch-icon.png", "Trocar Conta", main::mostrarTelaEntrada),
                 criarMenuBotao("info-icon.png", "Infos allPay", () -> main.mostrarTelaInformacao(idUsuario)),
                 criarMenuBotao("exit-icon.png", "Sair", UsuarioController::sair)
@@ -218,29 +214,84 @@ public class FrontPrincipal {
 
     private HBox criarBotaoFatura() {
 
+        // Criando o botão
         Button btn = new Button();
         btn.setStyle("-fx-background-color: #ffffff00; -fx-text-fill: #ffffff00; -fx-font-weight: bold; -fx-font-family: 'Montserrat';");
         btn.setMinSize(60, 40);
         btn.setGraphic(carregarIcone("search-icon.png"));
 
-
+        // Criando o campo de texto
         TextField faturaIdField = new TextField();
         faturaIdField.setPromptText("Buscar faturas por código");
         faturaIdField.setMinWidth(200);
         faturaIdField.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-font-family: 'Montserrat';");
 
-        faturaIdField.getText();
+        // Criando a label para a mensagem "Fatura não Encontrada"
+        Label msgNaoEncontrado = createInvoiceLabel("Fatura não Encontrada!", "12", FontWeight.BOLD, Color.RED);
+        msgNaoEncontrado.setMinWidth(200);  // Definindo a largura da mensagem de erro
+        msgNaoEncontrado.setMaxWidth(200);  // Limitando a largura máxima para manter o alinhamento
+        msgNaoEncontrado.setWrapText(true); // Permitindo que o texto seja quebrado em várias linhas se necessário
+        msgNaoEncontrado.setStyle("-fx-font-size: 12px; -fx-text-fill: red;");
+        msgNaoEncontrado.setVisible(false);  // A mensagem inicialmente invisível
 
-        HBox buscarFaturasContainer = new HBox(10);
-        buscarFaturasContainer.setAlignment(Pos.CENTER);
-        buscarFaturasContainer.getChildren().addAll(faturaIdField, btn);
+        // Criando o HBox para o campo de texto e o botão (alinhados horizontalmente)
+        HBox hboxCampos = new HBox(10);  // Espaço de 10 entre os elementos
+        hboxCampos.setAlignment(Pos.CENTER); // Alinhando os elementos centralizados horizontalmente
+
+        hboxCampos.getChildren().addAll(faturaIdField, btn);  // Adiciona o campo de texto e o botão ao HBox
+
+        // Criando um VBox para colocar o HBox (campo de texto + botão) e a mensagem de erro
+        VBox vbox = new VBox(10);  // Espaço de 10 entre os elementos
+        vbox.setAlignment(Pos.CENTER);  // Alinha tudo no centro
+        vbox.getChildren().addAll(hboxCampos, msgNaoEncontrado);  // Adiciona o HBox com os componentes e a mensagem de erro
+
+        // Evento do botão
+        btn.setOnAction(el -> {
+            String text = faturaIdField.getText(); // Pega o texto do campo
+
+            // Verifica se o campo está vazio ou contém um valor inválido
+            if (text.trim().isEmpty()) {
+                // Se estiver vazio, exibe uma mensagem de erro
+                msgNaoEncontrado.setText("Código de fatura inválido!.");
+                msgNaoEncontrado.setVisible(true);
+            } else {
+                try {
+                    // Tenta converter o texto para número
+                    int faturaId = Integer.parseInt(text);
+
+                    // Busca a fatura com o ID fornecido
+                    HashMap<String, String> fatura = new FaturaDAO().buscarFaturasNoUser(faturaId);
+
+                    // Verifica se a fatura foi encontrada
+                    if (!fatura.isEmpty()) {
+                        // Adiciona a fatura encontrada e remove a mensagem de erro, se necessário
+                        abrirTelaMostrarFatura(fatura);
+                        msgNaoEncontrado.setVisible(false);  // Esconde a mensagem se a fatura foi encontrada
+                    } else {
+                        // Exibe a mensagem "Fatura não encontrada"
+                        msgNaoEncontrado.setText("Fatura não Encontrada!");
+                        msgNaoEncontrado.setVisible(true);
+                    }
+                } catch (NumberFormatException ex) {
+                    // Se não for possível converter para inteiro, exibe uma mensagem de erro
+                    msgNaoEncontrado.setText("Código de fatura inválido!");
+                    msgNaoEncontrado.setWrapText(true);
+                    msgNaoEncontrado.setVisible(true);
+                    msgNaoEncontrado.setMaxWidth(Double.MAX_VALUE);
+                }
+            }
+        });
+        // Retorna o VBox com o layout ajustado
+        HBox buscarFaturasContainer = new HBox();
+        buscarFaturasContainer.getChildren().add(vbox);  // Coloca o VBox dentro do HBox, que será retornado
+        buscarFaturasContainer.setAlignment(Pos.CENTER);  // Alinha o VBox no centro do HBox
 
         return buscarFaturasContainer;
     }
 
     private ScrollPane criarListaFatura() {
         VBox listaFaturas = new VBox(10);
-        listaFaturas.setAlignment(Pos.CENTER);
+        listaFaturas.setAlignment(Pos.TOP_CENTER);
         listaFaturas.setStyle("-fx-background-color: transparent; ");
         ArrayList<HashMap<String, String>> faturas = new FaturaDAO().buscarFaturas(idUsuario);
 
@@ -262,7 +313,7 @@ public class FrontPrincipal {
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scroll.setFitToHeight(true);
         scroll.setPannable(true);
-        scroll.setPrefViewportHeight(300);
+        scroll.setPrefViewportHeight(250);
         scroll.setMaxWidth(Double.MAX_VALUE-40);
 
 
@@ -283,7 +334,7 @@ public class FrontPrincipal {
     private Button criarBotaoFatura(HashMap<String, String> fatura) {
         Button item = new Button();
         item.setPrefWidth(277);
-        item.setAlignment(Pos.CENTER);
+        item.setAlignment(Pos.TOP_CENTER);
         item.setStyle("-fx-background-color: transparent; -fx-border-radius: 15px; -fx-background-radius: 15px;");
         item.setGraphic(createInvoiceContent(fatura)); // Define o conteúdo do botão
         item.setOnAction(e -> abrirTelaMostrarFatura(fatura)); // Ao clicar, abre a tela com os dados da fatura // Chama a tela ao clicar
