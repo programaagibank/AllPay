@@ -14,6 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.image.Image;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import javafx.scene.control.Alert;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -33,11 +34,12 @@ public class FrontGerarComprovante {
     private final String idUsuario;
     private final String idFatura;
     private HashMap<String, String> faturaData;
-
-    public FrontGerarComprovante(Main main, String idUsuario, String idFatura) {
+    private boolean noId;
+    public FrontGerarComprovante(Main main, String idUsuario, String idFatura, boolean noId) {
         this.main = main;
         this.idUsuario = idUsuario;
         this.idFatura = idFatura;
+        this.noId = noId;
         this.view = new VBox(20);
         setupView();
     }
@@ -59,14 +61,20 @@ public class FrontGerarComprovante {
         lblTitulo.setMaxWidth(350);
 
         FaturaController faturaController = new FaturaController();
-        ArrayList<HashMap<String, String>> faturas = faturaController.buscarFaturasByUserId(idUsuario);
-        for (HashMap<String, String> fatura : faturas) {
-            if (fatura.get("id_fatura").equals(idFatura)) {
+        if(noId){
+            HashMap<String, String> fatura = faturaController.buscarFaturaSemIdUsuario(Integer.parseInt(idFatura));
+            if(!fatura.isEmpty()){
                 this.faturaData = fatura;
-                break;
+            }
+        }else {
+            ArrayList<HashMap<String, String>> faturas = faturaController.buscarFaturasByUserId(idUsuario);
+            for (HashMap<String, String> fatura : faturas) {
+                if (fatura.get("id_fatura").equals(idFatura)) {
+                    this.faturaData = fatura;
+                    break;
+                }
             }
         }
-
         VBox contentBox = new VBox(15);
         contentBox.setAlignment(Pos.CENTER);
         contentBox.setMaxWidth(400);
@@ -80,7 +88,7 @@ public class FrontGerarComprovante {
             Label lblDescricao = createWrappedLabel("Descrição: " + faturaData.get("descricao"), 16, FontWeight.NORMAL, Color.WHITE);
             Label lblStatus = createWrappedLabel("Status: " + faturaData.get("status_fatura"), 16, FontWeight.NORMAL, Color.WHITE);
             Label lblData = createWrappedLabel("Data do Pagamento: " +
-                            (faturaData.getOrDefault("data_pagamento", "N/A")),
+                            (faturaData.getOrDefault("data_pagamento", getDataNow())),
                     16, FontWeight.NORMAL, Color.WHITE);
 
             contentBox.getChildren().addAll(lblValor, lblRecebedor, lblDescricao, lblStatus, lblData);
@@ -143,7 +151,7 @@ public class FrontGerarComprovante {
                         "Valor: R$ " + faturaData.get("valor_fatura"),
                         "Descrição: " + faturaData.get("descricao"),
                         "Status: " + faturaData.get("status_fatura"),
-                        "Data Pagamento: " + faturaData.getOrDefault("data_pagamento", "N/A")
+                        "Data Pagamento: " + faturaData.getOrDefault("data_pagamento", getDataNow())
                 };
 
                 contentStream.setFont(PDType1Font.HELVETICA, 12);
@@ -254,6 +262,14 @@ public class FrontGerarComprovante {
         }
     }
 
+    public String getDataNow(){
+        LocalDateTime dataHoraAtual = LocalDateTime.now();
+
+        // Formata a data e hora no formato desejado
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        String dataFormatada = dataHoraAtual.format(formatter);
+        return dataFormatada;
+    }
     public Parent getView() {
         return view;
     }
