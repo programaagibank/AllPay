@@ -93,7 +93,6 @@ public class FrontPrincipal {
         HBox carousel = new HBox(10);
         carousel.setAlignment(Pos.CENTER_LEFT);
 
-
         ArrayList<HashMap<String, String>> bancos = contaBancoController.getBancosDisponiveis();
 
         if (bancos.isEmpty()) {
@@ -109,7 +108,7 @@ public class FrontPrincipal {
 
         ScrollPane scroll = new ScrollPane(carousel);
         scroll.setStyle("-fx-background-color: transparent; -fx-border-radius: 15px; -fx-background-radius: 15px;");
-        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Oculta a scrollbar horizontal
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scroll.setFitToHeight(true);
         scroll.setPannable(true);
@@ -118,20 +117,30 @@ public class FrontPrincipal {
         removeBackgroundScroll(scroll);
         scroll.setOnMouseReleased(event -> {
             double currentScroll = scroll.getHvalue();
-            double targetScroll = (currentScroll > 0.5) ? 1.0 : 0.0; // Decide para qual lado ir
+            int cardCount = carousel.getChildren().size();
 
-            // 🔄 Animação progressiva para suavizar o movimento
+            // Se não há cards ou só um, não faz nada
+            if (cardCount <= 1) return;
+
+            // Calcula a posição ideal baseada no scroll atual
+            double cardWidth = 1.0 / (cardCount - 1);
+            int nearestCardIndex = (int) Math.round(currentScroll / cardWidth);
+            double targetScroll = nearestCardIndex * cardWidth;
+
+            // Animação suave
             Timeline timeline = new Timeline();
-            double duration = 100; // Duração em ms (mais tempo = mais suave)
-            int frames = 60; // Quantidade de frames da animação
-            double step = (targetScroll - currentScroll) / frames; // Diferença por frame
+            double duration = 150; // Duração em ms
+            int frames = 30; // Quantidade de frames
 
             for (int i = 0; i <= frames; i++) {
-                double progress = currentScroll + (step * i);
-                timeline.getKeyFrames().add(new KeyFrame(Duration.millis(i * (duration / frames)), e -> scroll.setHvalue(progress)));
+                double progress = currentScroll + ((targetScroll - currentScroll) * (i / (double)frames));
+                timeline.getKeyFrames().add(
+                        new KeyFrame(Duration.millis(i * (duration / frames)),
+                                e -> scroll.setHvalue(progress))
+                );
             }
 
-            timeline.play(); // Inicia a animação
+            timeline.play();
         });
 
         return scroll;
