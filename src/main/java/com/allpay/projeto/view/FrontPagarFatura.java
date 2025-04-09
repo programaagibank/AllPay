@@ -32,12 +32,14 @@ public class FrontPagarFatura {
     private float saldoBancoSelecionado;
     private float limiteBancoSelecionado;
     private FaturaController faturaController;
+    private boolean noId;
 
-    public FrontPagarFatura(Main main, String idUsuario, String idPagamento) {
+    public FrontPagarFatura(Main main, String idUsuario, String idPagamento, boolean noId) {
         this.main = main;
         this.idUsuario = idUsuario;
         this.idPagamento = idPagamento;
         this.view = new VBox(15);
+        this.noId = noId;
         faturaController = new FaturaController();
         carregarDadosFatura();
         mostrarTelaFatura();
@@ -58,7 +60,14 @@ public class FrontPagarFatura {
     public Parent getView() {
         return view;
     }
+    private void carregarDadosFaturaPorIdFatura() {
+        FaturaDAO faturaDAO = new FaturaDAO();
+        HashMap<String, String> fatura= faturaDAO.buscarFaturasNoUser(Integer.parseInt(idPagamento));
+            if (!fatura.isEmpty()) {
+                this.faturaData = fatura;
+            }
 
+    }
     private void carregarDadosFatura() {
         FaturaDAO faturaDAO = new FaturaDAO();
         ArrayList<HashMap<String, String>> faturas = faturaDAO.buscarFaturas(idUsuario);

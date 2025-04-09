@@ -274,7 +274,7 @@ public class FrontPrincipal {
                     // Verifica se a fatura foi encontrada
                     if (!fatura.isEmpty()) {
                         // Adiciona a fatura encontrada e remove a mensagem de erro, se necessário
-                        abrirTelaMostrarFatura(fatura);
+                        abrirTelaMostrarFatura(fatura, true);
                         msgNaoEncontrado.setVisible(false);  // Esconde a mensagem se a fatura foi encontrada
                     } else {
                         // Exibe a mensagem "Fatura não encontrada"
@@ -346,7 +346,7 @@ public class FrontPrincipal {
         item.setAlignment(Pos.TOP_CENTER);
         item.setStyle("-fx-background-color: transparent; -fx-border-radius: 15px; -fx-background-radius: 15px;");
         item.setGraphic(createInvoiceContent(fatura)); // Define o conteúdo do botão
-        item.setOnAction(e -> abrirTelaMostrarFatura(fatura)); // Ao clicar, abre a tela com os dados da fatura // Chama a tela ao clicar
+        item.setOnAction(e -> abrirTelaMostrarFatura(fatura, false)); // Ao clicar, abre a tela com os dados da fatura // Chama a tela ao clicar
         item.setOnMousePressed(event -> item.getParent().fireEvent(event)); // Repassa evento para o VBox
         item.setOnMouseDragged(event -> item.getParent().fireEvent(event));
         return item;
@@ -395,8 +395,8 @@ public class FrontPrincipal {
 
 
     // 🔹 Abre a Tela X (simulação)
-    private void abrirTelaMostrarFatura(HashMap<String, String> fatura) {
-        main.mostrarTelaPagarFatura(UsuarioModel.getId_usuario(), fatura.get("id_fatura"));
+    private void abrirTelaMostrarFatura(HashMap<String, String> fatura, boolean noId) {
+        main.mostrarTelaPagarFatura(UsuarioModel.getId_usuario(), fatura.get("id_fatura"), noId);
     }
 
 

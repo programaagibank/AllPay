@@ -69,7 +69,7 @@ public class FaturaDAO {
 
     public HashMap<String,String> buscarFaturasNoUser (int id_faturaOut) {
 
-        String query = "SELECT * FROM fatura WHERE id_fatura = ? and id_usuario = null";
+        String query = "SELECT * FROM fatura WHERE id_fatura = ? and id_usuario is null";
         HashMap<String,String> dados = new HashMap<>();
         try {
 

@@ -55,8 +55,8 @@ public class Main extends Application {
         trocarCena(principal.getView());
     }
 
-    public void mostrarTelaPagarFatura(String idUsuario, String idPagamento) {
-        FrontPagarFatura pagarFatura = new FrontPagarFatura(this, idUsuario, idPagamento);
+    public void mostrarTelaPagarFatura(String idUsuario, String idPagamento, boolean noId) {
+        FrontPagarFatura pagarFatura = new FrontPagarFatura(this, idUsuario, idPagamento, noId);
         trocarCena(pagarFatura.getView());
     }
 
