@@ -60,8 +60,8 @@ public class Main extends Application {
         trocarCena(pagarFatura.getView());
     }
 
-    public void mostrarComprovantePagamento(String idUsuario, String idFatura) {
-        FrontGerarComprovante comprovante = new FrontGerarComprovante(this, idUsuario, idFatura);
+    public void mostrarComprovantePagamento(String idUsuario, String idFatura, boolean noId) {
+        FrontGerarComprovante comprovante = new FrontGerarComprovante(this, idUsuario, idFatura, noId);
         trocarCena(comprovante.getView()); ///Mudar aqui glr
     }
 

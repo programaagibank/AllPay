@@ -26,6 +26,10 @@ public class FaturaController {
 
         return metodo_pag;
     }
+    public HashMap<String,String> buscarFaturaSemIdUsuario(int id_fatura){
+        HashMap<String,String> result = this.modelFaturaDAO.buscarFaturasNoUser(id_fatura);
+        return result;
+    }
     public ArrayList<HashMap<String,String>> buscarFaturasByUserId(String id_usuario){
         ArrayList<HashMap<String,String>> result = this.modelFaturaDAO.buscarFaturasByUserId(id_usuario);
         return result;

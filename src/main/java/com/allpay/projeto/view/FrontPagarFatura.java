@@ -33,6 +33,7 @@ public class FrontPagarFatura {
     private float limiteBancoSelecionado;
     private FaturaController faturaController;
     private boolean noId;
+    private float valorFatura;
 
     public FrontPagarFatura(Main main, String idUsuario, String idPagamento, boolean noId) {
         this.main = main;
@@ -41,7 +42,11 @@ public class FrontPagarFatura {
         this.view = new VBox(15);
         this.noId = noId;
         faturaController = new FaturaController();
-        carregarDadosFatura();
+        if(noId){
+            carregarDadosFaturaSemIdUsuario();
+        } else{
+            carregarDadosFatura();
+        }
         mostrarTelaFatura();
     }
     private String getValorFormatado() {
@@ -53,21 +58,25 @@ public class FrontPagarFatura {
         return String.format("%.2f", saldoBancoSelecionado);
     }
 
-
+    private String getLimiteFormatado() {
+        return String.format("%.2f", limiteBancoSelecionado);
+    }
 
 
 
     public Parent getView() {
         return view;
     }
-    private void carregarDadosFaturaPorIdFatura() {
+
+    private void carregarDadosFaturaSemIdUsuario() {
         FaturaDAO faturaDAO = new FaturaDAO();
-        HashMap<String, String> fatura= faturaDAO.buscarFaturasNoUser(Integer.parseInt(idPagamento));
+        HashMap<String, String> fatura = faturaDAO.buscarFaturasNoUser(Integer.parseInt(idPagamento));
             if (!fatura.isEmpty()) {
                 this.faturaData = fatura;
             }
 
     }
+
     private void carregarDadosFatura() {
         FaturaDAO faturaDAO = new FaturaDAO();
         ArrayList<HashMap<String, String>> faturas = faturaDAO.buscarFaturas(idUsuario);
@@ -138,13 +147,14 @@ public class FrontPagarFatura {
 
         ContaBancoDAO bankDAO = new ContaBancoDAO();
         ArrayList<HashMap<String, String>> bancos = bankDAO.encontrarContaBancoUsuario(idUsuario);
-        float valorFatura = Float.parseFloat(faturaData.get("valor_fatura"));
+        this.valorFatura = Float.parseFloat(faturaData.get("valor_fatura"));
 
         for (HashMap<String, String> banco : bancos) {
             float saldo = Float.parseFloat(banco.get("saldo_usuario"));
             float limite = Float.parseFloat(banco.get("limite"));
-            Button btnBanco = criarBotaoBanco(banco.get("nome_instituicao"), saldo >= valorFatura);
-            if (saldo >= valorFatura) {
+            boolean habilitado = (saldo >= valorFatura || limite >= valorFatura);
+            Button btnBanco = criarBotaoBanco(banco.get("nome_instituicao"), habilitado );
+            if (habilitado) {
                 btnBanco.setOnAction(e -> {
                     this.bancoSelecionado = banco.get("nome_instituicao");
                     this.saldoBancoSelecionado = saldo;
@@ -190,6 +200,8 @@ public class FrontPagarFatura {
         Label lblSaldo = new Label("Saldo disponível: R$ " + getSaldoFormatado());
         lblSaldo.setStyle("-fx-font-size: 16px; -fx-text-fill: white;");
 
+        Label lblLimite = new Label("Limite disponível: R$ " + getLimiteFormatado());
+        lblLimite.setStyle("-fx-font-size: 10px; -fx-text-fill: white;");
         // Container para os botões de métodos de pagamento
         VBox metodosContainer = new VBox(10);
         metodosContainer.setAlignment(Pos.CENTER); // Alinha os botões no centro
@@ -202,6 +214,12 @@ public class FrontPagarFatura {
                 FaturaDAO.metodoPagamento = metodoPagamento;
                 mostrarTelaConfirmacao();
             });
+            if(limiteBancoSelecionado < this.valorFatura && metodo.equals("CREDITO")){
+                btnMetodo.setDisable(true);
+            }
+            if(saldoBancoSelecionado < this.valorFatura && !metodo.equals("CREDITO")){
+                btnMetodo.setDisable(true);
+            }
 
             btnMetodo.setWrapText(true); // Faz o texto quebrar linha
             btnMetodo.setMaxWidth(250); // Define uma largura máxima
@@ -221,7 +239,7 @@ public class FrontPagarFatura {
         boxBotoes.setAlignment(Pos.CENTER);
 
         // Adiciona os elementos à tela
-        view.getChildren().addAll(lblTitulo, lblValor, lblSaldo, metodosContainer, espacador, boxBotoes);
+        view.getChildren().addAll(lblTitulo, lblValor, lblSaldo,lblLimite, metodosContainer, espacador, boxBotoes);
     }
 
 
@@ -263,7 +281,7 @@ public class FrontPagarFatura {
         Button btnConfirmar = criarBotao("Confirmar", "primary", e -> {
             if (validarSenha(pfSenha.getText())) {
                 efetuarPagamento(pfSenha.getText());
-                main.mostrarComprovantePagamento(idUsuario, idPagamento);
+                main.mostrarComprovantePagamento(idUsuario, idPagamento, noId);
             } else {
                 lblErro.setText("Senha incorreta");
                 lblErro.setVisible(true);
