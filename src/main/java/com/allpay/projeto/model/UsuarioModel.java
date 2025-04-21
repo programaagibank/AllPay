@@ -1,6 +1,6 @@
-package com.allpay.projeto.controller;
+package com.allpay.projeto.model;
 
-public class User {
+public class UsuarioModel {
     private static String id_usuario;
     private static String nome_usuario;
     private static String email;
@@ -8,10 +8,10 @@ public class User {
 
 
     public static void setUserData(String id_usuario, String nome_usuario, String email, String senha_acesso){
-        User.id_usuario = id_usuario;
-        User.nome_usuario = nome_usuario;
-        User.email = email;
-        User.senha_acesso = senha_acesso;
+        UsuarioModel.id_usuario = id_usuario;
+        UsuarioModel.nome_usuario = nome_usuario;
+        UsuarioModel.email = email;
+        UsuarioModel.senha_acesso = senha_acesso;
     }
 
     public static String getNome() {
@@ -57,7 +57,7 @@ public class User {
         System.out.println("Email: " + email);
     }
 
-    public static void logout(){
+    public static void encerrarSessao(){
         id_usuario = null;
         nome_usuario = null;
         email = null;

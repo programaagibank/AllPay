@@ -1,24 +1,27 @@
-package com.allpay.projeto.model;
-import java.math.BigInteger;
+package com.allpay.projeto.DAO;
 import java.sql.*;
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
+import java.util.Optional;
 
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
+import com.allpay.projeto.view.FrontPagarFatura;
 
-import javax.imageio.plugins.jpeg.JPEGImageReadParam;
+public class FaturaDAO {
 
-public class ModelFaturaDAO {
-
-    DataBaseConnection conn;
+    private DataBaseConnection conn;
     public ArrayList<HashMap<String,String>> data;
+    public static String metodoPagamento;
 
-    public ModelFaturaDAO() {
+    public FaturaDAO() {
 
-        this.conn = new MySQLDataBaseConnection();
+        conn = new MySQLDataBaseConnection();
+        this.data = new ArrayList<>();
+    }
+    public FaturaDAO(DataBaseConnection conn) {
+
+        this.conn = conn;
         this.data = new ArrayList<>();
     }
 
@@ -31,7 +34,7 @@ public class ModelFaturaDAO {
 
     public ArrayList<HashMap<String,String>> buscarFaturasByUserId ( String id_usuarioOut) {
 
-        String query = "SELECT * FROM fatura WHERE id_usuario = ? and status_fatura <> 'PAGA'";
+        String query = "SELECT * FROM fatura WHERE id_usuario = ? and status_fatura = 'PAGA'";
 
         try {
 
@@ -51,7 +54,7 @@ public class ModelFaturaDAO {
                 dados.put("nome_recebedor", rs.getString("nome_recebedor"));
                 dados.put("status_fatura", rs.getString("status_fatura"));
                 dados.put("descricao", rs.getString("descricao"));
-                System.out.println(dados.put("id_fatura", rs.getString("id_fatura")));
+                //System.out.println(dados.put("id_fatura", rs.getString("id_fatura")));
                 //System.out.println(i + " - " + id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
 
                 this.data.add(dados);
@@ -64,10 +67,10 @@ public class ModelFaturaDAO {
         return this.data;
     }
 
-    public ArrayList<HashMap<String,String>> buscarFaturasNoUser (int id_faturaOut) {
+    public HashMap<String,String> buscarFaturasNoUser (int id_faturaOut) {
 
-        String query = "SELECT * FROM fatura WHERE id_fatura = ? and WHERE id_usuario = null";
-
+        String query = "SELECT * FROM fatura WHERE id_fatura = ? and id_usuario is null";
+        HashMap<String,String> dados = new HashMap<>();
         try {
 
             conn.connect();
@@ -78,19 +81,19 @@ public class ModelFaturaDAO {
 
             ResultSet rs = stmt.executeQuery();
 
-            while (rs.next()) {
+            if (rs.next()) {
 
-                HashMap<String,String> dados = new HashMap<>();
+
                 dados.put("id_usuario", rs.getString("id_usuario"));
                 dados.put("id_fatura", rs.getString("id_fatura"));
+                dados.put("data_vencimento", rs.getString("data_vencimento"));
                 dados.put("valor_fatura", rs.getString("valor_fatura"));
                 dados.put("nome_recebedor", rs.getString("nome_recebedor"));
                 dados.put("status_fatura", rs.getString("status_fatura"));
+
                 dados.put("descricao", rs.getString("descricao"));
 
                 //System.out.println(i + " - " + id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
-
-                this.data.add(dados);
 
                 //System.out.println(id_usuario + " " + id_fatura + " " + valor_fatura + " " + nome_recebedor + " " + status_fatura + " " + descricao);
             }
@@ -99,12 +102,14 @@ public class ModelFaturaDAO {
             e.printStackTrace();
         }
 
-        return this.data;
+        return dados;
     }
 
     public ArrayList<HashMap<String,String>> buscarFaturas (String id_usuarioOut) {
 
-        String query = "SELECT * FROM fatura WHERE id_usuario = ?";
+        String query = "SELECT * FROM fatura WHERE id_usuario = ? and status_fatura <> 'PAGA'";
+
+        this.atualizarDataVencimento();
 
         try{
             conn.connect();
@@ -120,6 +125,7 @@ public class ModelFaturaDAO {
                 HashMap<String,String> dados = new HashMap<>();
                 dados.put("id_usuario", rs.getString("id_usuario"));
                 dados.put("id_fatura", rs.getString("id_fatura"));
+                dados.put("data_vencimento", rs.getString("data_vencimento"));
                 dados.put("valor_fatura", rs.getString("valor_fatura"));
                 dados.put("nome_recebedor", rs.getString("nome_recebedor"));
                 dados.put("status_fatura", rs.getString("status_fatura"));
@@ -142,7 +148,7 @@ public class ModelFaturaDAO {
 
     public float efetuarPagamentoCartao (String id_usuarioOut, int id_fatura, float valor_fatura, float limite_usuario, String senha_transacao, int id_instituicao) {
 
-        BankAccountModelDAO conta = new BankAccountModelDAO();
+        ContaBancoDAO conta = new ContaBancoDAO();
         float limite_restante = 0;
         boolean validacao = conta.validarSenha(senha_transacao, id_usuarioOut, id_instituicao);
         float valor_faturaConvert = Float.parseFloat(data.get(id_fatura).get("valor_fatura"));
@@ -161,19 +167,17 @@ public class ModelFaturaDAO {
         return limite_restante;
     }
 
-    public float efetuarPagamento (String id_usuarioOut, int id_fatura, float valor_fatura, float saldo_usuario, String senha_transacao, int id_instituicao) {
-        System.out.println("aqui");
-        BankAccountModelDAO conta = new BankAccountModelDAO();
+    public float efetuarPagamento (String id_usuarioOut, int id_fatura, float valor_fatura,
+                                   float saldo_usuario, String senha_transacao, int id_instituicao) {
+        ContaBancoDAO conta = new ContaBancoDAO();
         float saldo_restante = 0;
         boolean validacao = conta.validarSenha(senha_transacao, id_usuarioOut, id_instituicao);
-        float valor_faturaConvert = Float.parseFloat(data.get(id_fatura).get("valor_fatura"));
-        int id_faturaConvert = Integer.parseInt(data.get(id_fatura).get("id_fatura"));
 
-        if (saldo_usuario >= valor_faturaConvert && validacao == true) {
+        if (saldo_usuario >= valor_fatura && validacao == true && valor_fatura != 0) {
 
-            saldo_restante = saldo_usuario - valor_faturaConvert;
+            saldo_restante = saldo_usuario - valor_fatura;
 
-            atualizarStatus_fatura(id_faturaConvert);
+            atualizarStatus_fatura(id_fatura);
         } else {
 
             System.out.println("Transação negada!");
@@ -194,6 +198,8 @@ public class ModelFaturaDAO {
             PreparedStatement stmt = conn.getConnection().prepareStatement(query);
 
             stmt.setInt(1, id_fatura);
+            this.salvarPagamento(id_fatura);
+
 
             stmt.executeUpdate();
 
@@ -201,5 +207,52 @@ public class ModelFaturaDAO {
 
             e.printStackTrace();
         }
+
+    }
+
+    public void salvarPagamento(int id_fatura){
+        String query =  "INSERT INTO pagamento (valor_pago, data_pagamento, status_pagamento, tipo_pagamento, id_fatura) SELECT f.valor_fatura, CURDATE(), 'PAGA', ?, f.id_fatura FROM fatura f WHERE id_fatura = ?";
+
+        try {
+
+            conn.connect();
+            conn.getConnection().createStatement().execute("USE allpay");
+
+            PreparedStatement stmt = conn.getConnection().prepareStatement(query);
+
+            stmt.setString(1, metodoPagamento);
+            stmt.setInt(2, id_fatura);
+
+
+            stmt.executeUpdate();
+
+            metodoPagamento = null;
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    public void atualizarDataVencimento () {
+
+        String query = "UPDATE fatura SET status_fatura = 'ATRASADA', valor_fatura = valor_fatura*1.05 WHERE data_vencimento < CURRENT_DATE and status_fatura = 'EM ABERTO';";
+
+        try {
+
+            conn.connect();
+            conn.getConnection().createStatement().execute("USE allpay");
+
+            PreparedStatement stmt = conn.getConnection().prepareStatement(query);
+
+
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+
     }
 }

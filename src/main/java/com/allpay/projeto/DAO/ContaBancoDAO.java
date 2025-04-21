@@ -1,4 +1,4 @@
-package com.allpay.projeto.model;
+package com.allpay.projeto.DAO;
 
 import com.allpay.projeto.dbConnection.MySQLDataBaseConnection;
 import com.allpay.projeto.interfaces.DataBaseConnection;
@@ -10,22 +10,29 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class BankAccountModelDAO {
+public class ContaBancoDAO {
+
   private static DataBaseConnection dbConnect;
+  ArrayList<HashMap<String,String>> bancosDisponiveis;
 
-  public BankAccountModelDAO(){
+
+  public ContaBancoDAO(){
+
     dbConnect = new MySQLDataBaseConnection();
+    bancosDisponiveis = new ArrayList();
   }
-  public ArrayList<HashMap<String,String>> findUserBankAccount(String id){
-    String sql = """
-            SELECT ib.nome_instituicao, CONCAT(U.id_usuario, ' - ', ib.id_instituicao) AS conta, C.limite, C.saldo_usuario
-            FROM usuario U
-            INNER JOIN conta C ON C.id_usuario = U.id_usuario
-            INNER JOIN instituicao_bancaria ib ON ib.id_instituicao = C.id_instituicao
-            WHERE U.id_usuario = ?;
-            """;
 
-    ArrayList<HashMap<String,String>> bancosDisponiveis = new ArrayList();
+  public ArrayList<HashMap<String,String>> getBancosDisponiveis () {
+    return bancosDisponiveis;
+  }
+  public ArrayList<HashMap<String,String>> encontrarContaBancoUsuario(String id){
+    String sql = """
+            SELECT ib.nome_instituicao, ib.id_instituicao, C.limite, C.saldo_usuario
+                        FROM usuario U
+                        INNER JOIN conta C ON C.id_usuario = U.id_usuario
+                        INNER JOIN instituicao_bancaria ib ON ib.id_instituicao = C.id_instituicao
+                        WHERE U.id_usuario = ?;
+            """;
 
     try {
       dbConnect.connect();
@@ -36,12 +43,13 @@ public class BankAccountModelDAO {
       ResultSet rs = stmt.executeQuery();
 
       while (rs.next()) {
+
         HashMap<String, String> dados = new HashMap<>();
         dados.put("nome_instituicao", rs.getString("nome_instituicao"));
-        dados.put("conta", rs.getString("conta"));
         dados.put("limite", rs.getString("limite"));
         dados.put("saldo_usuario", rs.getString("saldo_usuario"));
-        bancosDisponiveis.add(dados);
+        dados.put("id_instituicao", rs.getString("id_instituicao"));
+        this.bancosDisponiveis.add(dados);
       }
 
       rs.close();
@@ -51,7 +59,7 @@ public class BankAccountModelDAO {
     } catch (SQLException e) {
       System.out.println("Erro ao buscar");
     }
-    return bancosDisponiveis;
+    return this.bancosDisponiveis;
   }
 
   public float escolherBancoCartao (String id_usuario, int id_instituicao) {
@@ -87,7 +95,6 @@ public class BankAccountModelDAO {
   }
 
   public float escolherBanco (String id_usuario, int id_instituicao) {
-    System.out.println("escolherbanco");
     String query = "SELECT saldo_usuario FROM conta WHERE id_instituicao = ? and id_usuario = ?";
 
     float saldo = 0;
@@ -134,14 +141,15 @@ public class BankAccountModelDAO {
 
       ResultSet rs = stmt.executeQuery();
       if (rs.next()) {
-
         senha_transacao_bd = rs.getString("senha_transacao");
       } else {
 
         System.out.println("Senha não encontrada");
       }
 
-
+    rs.close();
+    stmt.close();
+    dbConnect.closeConnection();
     } catch (SQLException e) {
 
       e.printStackTrace();
@@ -150,16 +158,15 @@ public class BankAccountModelDAO {
       boolean validacao = false;
 
     if (senha_transacao.equals(senha_transacao_bd)) {
-
       validacao = true;
     } else System.out.println("Senha inválida");
-
     return validacao;
+
   }
 
-  public void saldoUpdate (float saldo_restante, String id_usuarioOut) {
+  public void atualizarSaldo (float saldo_restante, String id_usuarioOut, int id_instituicao) {
 
-    String query = "UPDATE conta SET saldo_usuario = ? WHERE id_usuario = ?";
+    String query = "UPDATE conta SET saldo_usuario = ? WHERE id_usuario = ? and id_instituicao = ?";
 
     if (saldo_restante != 0) {
       try {
@@ -170,6 +177,8 @@ public class BankAccountModelDAO {
         PreparedStatement stmt = dbConnect.getConnection().prepareStatement(query);
         stmt.setFloat(1, saldo_restante);
         stmt.setString(2, id_usuarioOut);
+        stmt.setInt(3, id_instituicao);
+
 
         stmt.executeUpdate();
 
@@ -180,9 +189,9 @@ public class BankAccountModelDAO {
     }
   }
 
-  public void limiteUpdate (float saldo_restante, String id_usuarioOut) {
+  public void atualizarLimite (float saldo_restante, String id_usuarioOut, int id_instituicao) {
 
-    String query = "UPDATE conta SET limite = ? WHERE id_usuario = ?";
+    String query = "UPDATE conta SET limite = ? WHERE id_usuario = ? and id_instituicao = ?";
 
     if (saldo_restante != 0) {
       try {
@@ -193,7 +202,7 @@ public class BankAccountModelDAO {
         PreparedStatement stmt = dbConnect.getConnection().prepareStatement(query);
         stmt.setFloat(1, saldo_restante);
         stmt.setString(2, id_usuarioOut);
-
+        stmt.setInt(3, id_instituicao);
         stmt.executeUpdate();
 
       } catch (SQLException e) {

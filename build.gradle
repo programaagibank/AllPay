@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'application'
-    id 'org.openjfx.javafxplugin' version '0.0.11'  // Plugin JavaFX
+    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 repositories {
@@ -10,19 +10,44 @@ repositories {
 
 dependencies {
     implementation 'mysql:mysql-connector-java:8.0.33'
-    implementation 'org.openjfx:javafx-controls:17'
+
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+    testImplementation("org.mockito:mockito-junit-jupiter:5.8.0")
+
+    implementation 'org.openjfx:javafx-controls:17.0.2'
+    implementation 'org.openjfx:javafx-fxml:17.0.2'
+    implementation 'org.openjfx:javafx-media:17.0.2'
+
+    implementation 'org.mindrot:jbcrypt:0.4'
+    // Dependências do Apache Batik
+    implementation 'batik:batik-transcoder:1.6-1'
+    implementation 'batik:batik-bridge:1.6-1'
+    implementation 'batik:batik-awt-util:1.6-1'
 }
 
 application {
-    mainClass = 'com.allpay.projeto.Main'  // Sua classe principal
+    mainClass = 'com.allpay.projeto.Main'
 }
 
 javafx {
-    version = "17"  // Versão do JavaFX
-    modules = ['javafx.controls', 'javafx.fxml']  // Módulos que você usará
+    version = "17.0.2"
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.media']
 }
 
 test {
     useJUnitPlatform()
+}
+
+dependencies {
+    // HttpClient para fazer a requisição HTTP
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+
+    // Jackson para deserializar JSON
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
+
+    implementation 'org.apache.pdfbox:pdfbox:2.0.27'
+
+    implementation 'org.apache.pdfbox:pdfbox-tools:2.0.27'
 }
